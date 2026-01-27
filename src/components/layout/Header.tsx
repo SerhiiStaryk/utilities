@@ -34,7 +34,7 @@ export const Header = ({ open, handleDrawerOpen }: HeaderProps) => (
         noWrap
         component='div'
       >
-        Utility
+        Комуналка
       </Typography>
     </Toolbar>
   </AppBarUI>

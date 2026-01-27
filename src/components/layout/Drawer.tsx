@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material/styles';
-import { Divider, IconButton } from '@mui/material';
+import { Box, Divider, IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -9,6 +9,7 @@ import { DrawerUI } from '../ui/DrawerUI';
 import { DrawerHeaderUI } from '../ui/DrawerHeaderUI';
 import { MenuList } from './MenuList';
 import React from 'react';
+import logo from '../../assets/logo.png';
 
 type DrawerProps = {
   open: boolean;
@@ -35,7 +36,25 @@ export const Drawer = ({ open, handleDrawerClose }: DrawerProps) => {
       variant='permanent'
       open={open}
     >
-      <DrawerHeaderUI>
+      <DrawerHeaderUI
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          px: 2,
+        }}
+      >
+        {open && (
+          <Box
+            component='img'
+            src={logo}
+            alt='Logo'
+            sx={{
+              height: 64,
+            }}
+          />
+        )}
+
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
