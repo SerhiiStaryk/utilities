@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "Комунальні послуги"
+  },
+  "nav": {
+    "dashboard": "Дашборд",
+    "addresses": "Каталоги",
+    "settings": "Налаштування",
+    "login": "Вхід",
+    "logout": "Вийти"
+  },
+  "dashboard": {
+    "title": "Дашборд",
+    "overview": "Огляд для {{address}}",
+    "all_addresses": "Всі Адреси",
+    "current_address": "Поточна Адреса",
+    "new_address": "Нова Адреса",
+    "add_utility": "Додати Послугу",
+    "stats": {
+      "total_users": "Всього Користувачів",
+      "revenue": "Дохід",
+      "active_sessions": "Активні Сесії",
+      "conversion_rate": "Конверсія"
+    },
+    "charts": {
+      "performance": "Огляд Продуктивності",
+      "device_distribution": "Розподіл Пристроїв",
+      "sales_category": "Продажі за Категоріями",
+      "monthly_trends": "Місячні Тренди"
+    }
+  },
+  "address": {
+    "list_title": "Список Адрес",
+    "details_title": "Деталі Адреси: {{id}}",
+    "year_archive": "Архів Років",
+    "create": {
+      "title": "Створити Нову Адресу",
+      "id_label": "Унікальний ID",
+      "city": "Місто",
+      "street": "Вулиця",
+      "house": "Номер Будинку",
+      "flat": "Номер Квартири",
+      "submit": "Створити",
+      "cancel": "Скасувати"
+    }
+  },
+  "utility": {
+    "add_title": "Додати Послугу для {{address}}",
+    "config": "Конфігурація",
+    "monthly": "Місячне Споживання",
+    "year": "Рік",
+    "service": "Послуга",
+    "currency": "Валюта",
+    "account": "Номер Рахунку",
+    "submit": "Зберегти",
+    "months": {
+      "january": "Січень",
+      "february": "Лютий",
+      "march": "Березень",
+      "april": "Квітень",
+      "may": "Травень",
+      "june": "Червень",
+      "july": "Липень",
+      "august": "Серпень",
+      "september": "Вересень",
+      "october": "Жовтень",
+      "november": "Листопад",
+      "december": "Грудень"
+    }
+  },
+  "settings": {
+    "title": "Налаштування",
+    "account": "Обліковий запис",
+    "profile": "Інформація профілю",
+    "profile_desc": "Оновіть свої особисті дані",
+    "sign_out": "Вийти",
+    "edit": "Редагувати",
+    "preferences": "Вподобання",
+    "notifications": "Сповіщення",
+    "notifications_desc": "Керуйте email та push сповіщеннями",
+    "dark_mode": "Темна тема",
+    "dark_mode_desc": "Перемкнути темну/світлу тему",
+    "language": "Мова",
+    "language_desc": "Виберіть бажану мову"
+  }
+}

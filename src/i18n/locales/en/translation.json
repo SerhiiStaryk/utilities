@@ -1,0 +1,86 @@
+{
+  "app": {
+    "title": "Utilities"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "addresses": "Directories",
+    "settings": "Settings",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview for {{address}}",
+    "all_addresses": "All Addresses",
+    "current_address": "Current Address",
+    "new_address": "New Address",
+    "add_utility": "Add Utility",
+    "stats": {
+      "total_users": "Total Users",
+      "revenue": "Revenue",
+      "active_sessions": "Active Sessions",
+      "conversion_rate": "Conversion Rate"
+    },
+    "charts": {
+      "performance": "Performance Overview",
+      "device_distribution": "Device Distribution",
+      "sales_category": "Sales by Category",
+      "monthly_trends": "Monthly Trends"
+    }
+  },
+  "address": {
+    "list_title": "Address List",
+    "details_title": "Address Details: {{id}}",
+    "year_archive": "Years Archive",
+    "create": {
+      "title": "Create New Address",
+      "id_label": "Unique ID (Slug)",
+      "city": "City",
+      "street": "Street",
+      "house": "House Number",
+      "flat": "Flat Number",
+      "submit": "Create",
+      "cancel": "Cancel"
+    }
+  },
+  "utility": {
+    "add_title": "Add Utility for {{address}}",
+    "config": "Configuration",
+    "monthly": "Monthly Usage",
+    "year": "Year",
+    "service": "Service",
+    "currency": "Currency",
+    "account": "Account Number",
+    "submit": "Save Utility",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "profile": "Profile Information",
+    "profile_desc": "Update your personal details",
+    "sign_out": "Sign Out",
+    "edit": "Edit",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "notifications_desc": "Manage email and push notifications",
+    "dark_mode": "Dark Mode",
+    "dark_mode_desc": "Toggle dark/light theme",
+    "language": "Language",
+    "language_desc": "Select your preferred language"
+  }
+}
