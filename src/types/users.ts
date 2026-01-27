@@ -1,4 +1,4 @@
-import { Timestamp } from './common';
+import { Timestamp } from "./common";
 
 export interface UserProfile {
   uid: string;

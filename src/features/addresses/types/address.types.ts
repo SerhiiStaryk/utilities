@@ -1,4 +1,4 @@
-import { ID, Timestamp } from '../../../types/common';
+import { ID, Timestamp } from "../../../types/common";
 
 export interface Address {
   id: ID; // Firestore document ID

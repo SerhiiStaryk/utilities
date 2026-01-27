@@ -1,6 +1,6 @@
-import { useModalApi, useModalData } from '../../controller/modal.controller';
-import { PropsWithChildren } from 'react';
-import { GenericModal } from './GenericModal';
+import { useModalApi, useModalData } from "../../controller/modal.controller";
+import { PropsWithChildren } from "react";
+import { GenericModal } from "./GenericModal";
 
 export type ModalProps = PropsWithChildren & {
   title: string;
@@ -21,4 +21,3 @@ export const Modal = ({ title, children, open, onClose }: ModalProps) => {
     </GenericModal>
   );
 };
-

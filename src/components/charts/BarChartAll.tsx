@@ -1,4 +1,4 @@
-import { BarChart } from '@mui/x-charts/BarChart';
+import { BarChart } from "@mui/x-charts/BarChart";
 
 const gasData = {
   January: 0,
@@ -16,18 +16,18 @@ const gasData = {
 };
 
 const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function BarChartAll() {
@@ -36,14 +36,14 @@ export default function BarChartAll() {
       xAxis={[
         {
           data: months,
-          scaleType: 'band',
-          label: 'Місяць',
+          scaleType: "band",
+          label: "Місяць",
         },
       ]}
       series={[
         {
-          data: months.map(month => gasData[month as keyof typeof gasData]),
-          label: 'Газ',
+          data: months.map((month) => gasData[month as keyof typeof gasData]),
+          label: "Газ",
         },
       ]}
       height={300}

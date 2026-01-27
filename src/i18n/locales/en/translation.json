@@ -33,6 +33,7 @@
     "list_title": "Address List",
     "details_title": "Address Details: {{id}}",
     "year_archive": "Years Archive",
+    "actions": "Actions",
     "create": {
       "title": "Create New Address",
       "id_label": "Unique ID (Slug)",
@@ -53,6 +54,11 @@
     "currency": "Currency",
     "account": "Account Number",
     "submit": "Save Utility",
+    "month": "Month",
+    "amount": "Amount",
+    "reporting_for": "Reporting for",
+    "quick_entry": "Quick Entry",
+    "enter_current_month": "Enter Current Month",
     "months": {
       "january": "January",
       "february": "February",
@@ -77,6 +83,8 @@
     "edit": "Edit",
     "preferences": "Preferences",
     "notifications": "Notifications",
+    "hide_delete": "Hide delete buttons",
+    "hide_delete_desc": "Hide all delete buttons throughout the application",
     "notifications_desc": "Manage email and push notifications",
     "dark_mode": "Dark Mode",
     "dark_mode_desc": "Toggle dark/light theme",

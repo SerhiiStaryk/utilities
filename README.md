@@ -4,38 +4,38 @@ A comprehensive personal finance and utility management application built with *
 
 ## 🚀 Key Features
 
-*   **📊 Interactive Dashboard**:
-    *   Visual analytics using [Recharts](https://recharts.org/).
-    *   Track revenue, user stats, and monthly trends.
-    *   Dynamic context switching between different property addresses.
-*   **🏠 Address Management**:
-    *   Create and manage multiple property profiles.
-    *   Store detailed address information (City, Street, House/Flat numbers).
-*   **🧾 Utility Tracking**:
-    *   Record monthly payments for various services (Rent, Internet, Gas, etc.).
-    *   Support for different currencies.
-    *   Historical year archives.
-*   **🌍 Internationalization (i18n)**:
-    *   Full support for **English** and **Ukrainian** languages.
-    *   Instant language switching via Settings.
-*   **🎨 UI/UX**:
-    *   Modern, responsive design using **Material-UI (MUI)**.
-    *   Dark Mode support (customizable theme).
-    *   Seamless modal-based interactions for data entry.
-*   **🔐 Security**:
-    *   Authentication powered by **Firebase Auth**.
-    *   Secure data storage with **Cloud Firestore**.
+- **📊 Interactive Dashboard**:
+  - Visual analytics using [Recharts](https://recharts.org/).
+  - Track revenue, user stats, and monthly trends.
+  - Dynamic context switching between different property addresses.
+- **🏠 Address Management**:
+  - Create and manage multiple property profiles.
+  - Store detailed address information (City, Street, House/Flat numbers).
+- **🧾 Utility Tracking**:
+  - Record monthly payments for various services (Rent, Internet, Gas, etc.).
+  - Support for different currencies.
+  - Historical year archives.
+- **🌍 Internationalization (i18n)**:
+  - Full support for **English** and **Ukrainian** languages.
+  - Instant language switching via Settings.
+- **🎨 UI/UX**:
+  - Modern, responsive design using **Material-UI (MUI)**.
+  - Dark Mode support (customizable theme).
+  - Seamless modal-based interactions for data entry.
+- **🔐 Security**:
+  - Authentication powered by **Firebase Auth**.
+  - Secure data storage with **Cloud Firestore**.
 
 ## 🛠️ Tech Stack
 
-*   **Frontend**: React (Vite), TypeScript
-*   **UI Framework**: Material UI (MUI)
-*   **State Management**: React Hooks & Context API
-*   **Database**: Firebase Firestore
-*   **Auth**: Firebase Auth
-*   **Charts**: Recharts
-*   **I18n**: i18next, react-i18next
-*   **Forms**: React Hook Form
+- **Frontend**: React (Vite), TypeScript
+- **UI Framework**: Material UI (MUI)
+- **State Management**: React Hooks & Context API
+- **Database**: Firebase Firestore
+- **Auth**: Firebase Auth
+- **Charts**: Recharts
+- **I18n**: i18next, react-i18next
+- **Forms**: React Hook Form
 
 ## 📂 Project Structure
 
@@ -56,25 +56,27 @@ src/
 
 ### Prerequisites
 
-*   Node.js (v16+)
-*   npm or yarn
+- Node.js (v16+)
+- npm or yarn
 
 ### Installation
 
 1.  Clone the repository:
+
     ```bash
     git clone <repository-url>
     cd utilities
     ```
 
 2.  Install dependencies:
+
     ```bash
     npm install
     ```
 
 3.  **Firebase Configuration**:
-    *   Ensure you have a `firebaseConfig` set up in `src/firebase/firebase.config.ts`.
-    *   *Note: You may need to create a project in the [Firebase Console](https://console.firebase.google.com/) and enable Firestore and Auth.*
+    - Ensure you have a `firebaseConfig` set up in `src/firebase/firebase.config.ts`.
+    - _Note: You may need to create a project in the [Firebase Console](https://console.firebase.google.com/) and enable Firestore and Auth._
 
 4.  Run the development server:
     ```bash

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login as firebaseLogin } from '../firebase/auth';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login as firebaseLogin } from "../firebase/auth";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -12,9 +12,9 @@ export const useLogin = () => {
     setError(null);
     try {
       await firebaseLogin(email, password);
-      navigate('/');
+      navigate("/");
     } catch (err: any) {
-      setError(err.message || 'Failed to login');
+      setError(err.message || "Failed to login");
     } finally {
       setLoading(false);
     }

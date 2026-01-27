@@ -1,4 +1,4 @@
-import { LineChart as LineChartMui } from '@mui/x-charts/LineChart';
+import { LineChart as LineChartMui } from "@mui/x-charts/LineChart";
 
 const gasData = {
   January: 0,
@@ -16,18 +16,18 @@ const gasData = {
 };
 
 const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export const LineChart = () => {
@@ -36,14 +36,14 @@ export const LineChart = () => {
       xAxis={[
         {
           data: months,
-          scaleType: 'point',
-          label: 'Місяць',
+          scaleType: "point",
+          label: "Місяць",
         },
       ]}
       series={[
         {
-          data: months.map(month => gasData[month as keyof typeof gasData]),
-          label: 'Газ',
+          data: months.map((month) => gasData[month as keyof typeof gasData]),
+          label: "Газ",
         },
       ]}
       height={300}

@@ -1,16 +1,16 @@
-import React, { useContext, useMemo, useReducer } from 'react';
+import React, { useContext, useMemo, useReducer } from "react";
 
 type State = { openned: boolean };
 
 const defaultState: State = { openned: false };
 
-type Action = { type: 'open' | 'close' };
+type Action = { type: "open" | "close" };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'open':
+    case "open":
       return { ...state, openned: true };
-    case 'close':
+    case "close":
       return { ...state, openned: false };
   }
 };
@@ -34,15 +34,15 @@ export const ModalController = ({ children }: { children: React.ReactNode }) => 
     () => ({
       openned: state.openned,
     }),
-    [state]
+    [state],
   );
 
   const api = useMemo(
     () => ({
-      open: () => dispatch({ type: 'open' }),
-      close: () => dispatch({ type: 'close' }),
+      open: () => dispatch({ type: "open" }),
+      close: () => dispatch({ type: "close" }),
     }),
-    []
+    [],
   );
 
   return (

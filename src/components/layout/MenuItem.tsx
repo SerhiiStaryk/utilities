@@ -1,6 +1,6 @@
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { listMenuType } from './Drawer';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
+import { listMenuType } from "./Drawer";
 
 type MenuItemProps = {
   item: listMenuType;
@@ -10,16 +10,13 @@ type MenuItemProps = {
 export const MenuItem: React.FC<MenuItemProps> = ({ item, open }) => {
   return (
     <Link
-      to={item.route || ''}
+      to={item.route || ""}
       style={{
-        color: 'inherit',
-        textDecoration: 'none',
+        color: "inherit",
+        textDecoration: "none",
       }}
     >
-      <ListItem
-        disablePadding
-        sx={{ display: 'block' }}
-      >
+      <ListItem disablePadding sx={{ display: "block" }}>
         <ListItemButton
           sx={[
             {
@@ -28,10 +25,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({ item, open }) => {
             },
             open
               ? {
-                  justifyContent: 'initial',
+                  justifyContent: "initial",
                 }
               : {
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 },
           ]}
         >
@@ -39,17 +36,14 @@ export const MenuItem: React.FC<MenuItemProps> = ({ item, open }) => {
             sx={[
               {
                 minWidth: 0,
-                justifyContent: 'center',
+                justifyContent: "center",
               },
-              open ? { mr: 3 } : { mr: 'auto' },
+              open ? { mr: 3 } : { mr: "auto" },
             ]}
           >
             {item.icon}
           </ListItemIcon>
-          <ListItemText
-            primary={item.name}
-            sx={[open ? { opacity: 1 } : { opacity: 0 }]}
-          />
+          <ListItemText primary={item.name} sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
         </ListItemButton>
       </ListItem>
     </Link>

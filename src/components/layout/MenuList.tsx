@@ -1,6 +1,6 @@
-import { List } from '@mui/material';
-import { MenuItem } from './MenuItem';
-import { listMenuType } from './Drawer';
+import { List } from "@mui/material";
+import { MenuItem } from "./MenuItem";
+import { listMenuType } from "./Drawer";
 
 type MenuListProps = {
   open: boolean;
@@ -11,11 +11,7 @@ export const MenuList: React.FC<MenuListProps> = ({ list, open }) => {
   return (
     <List>
       {list.map((item, index) => (
-        <MenuItem
-          key={index}
-          item={item}
-          open={open}
-        />
+        <MenuItem key={index} item={item} open={open} />
       ))}
     </List>
   );

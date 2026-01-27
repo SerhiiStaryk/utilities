@@ -1,6 +1,6 @@
-import { Month } from '../../../constants/months';
-import { UtilityType } from '../../../constants/utilities';
-import { ID, Timestamp } from '../../../types/common';
+import { Month } from "../../../constants/months";
+import { UtilityType } from "../../../constants/utilities";
+import { ID, Timestamp } from "../../../types/common";
 
 export interface MonthlyPayment {
   month: Month;

@@ -1,6 +1,6 @@
-import { Backdrop, Modal as ModalUI, Fade, Typography } from '@mui/material';
-import { PropsWithChildren } from 'react';
-import { StyledModalContent } from './styles';
+import { Backdrop, Modal as ModalUI, Fade, Typography } from "@mui/material";
+import { PropsWithChildren } from "react";
+import { StyledModalContent } from "./styles";
 
 export type GenericModalProps = PropsWithChildren & {
   title: string;
@@ -23,12 +23,7 @@ export const GenericModal = ({ title, open, onClose, children }: GenericModalPro
     >
       <Fade in={open}>
         <StyledModalContent>
-          <Typography
-            id='transition-modal-title'
-            variant='h6'
-            component='h2'
-            mb={2}
-          >
+          <Typography id="transition-modal-title" variant="h6" component="h2" mb={2}>
             {title}
           </Typography>
           {children}

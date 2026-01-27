@@ -33,6 +33,7 @@
     "list_title": "Список Адрес",
     "details_title": "Деталі Адреси: {{id}}",
     "year_archive": "Архів Років",
+    "actions": "Дії",
     "create": {
       "title": "Створити Нову Адресу",
       "id_label": "Унікальний ID",
@@ -53,6 +54,11 @@
     "currency": "Валюта",
     "account": "Номер Рахунку",
     "submit": "Зберегти",
+    "month": "Місяць",
+    "amount": "Сума",
+    "reporting_for": "Звітність за",
+    "quick_entry": "Швидке Введення",
+    "enter_current_month": "Ввести Поточний Місяць",
     "months": {
       "january": "Січень",
       "february": "Лютий",
@@ -77,6 +83,8 @@
     "edit": "Редагувати",
     "preferences": "Вподобання",
     "notifications": "Сповіщення",
+    "hide_delete": "Приховати кнопки видалення",
+    "hide_delete_desc": "Приховати всі кнопки видалення в додатку",
     "notifications_desc": "Керуйте email та push сповіщеннями",
     "dark_mode": "Темна тема",
     "dark_mode_desc": "Перемкнути темну/світлу тему",

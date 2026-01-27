@@ -1,9 +1,9 @@
-import { Button, Stack, Box } from '@mui/material';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import { GenericModal } from './GenericModal';
-import { Input } from '../Input';
-import { addAddress } from '../../firebase/firestore';
-import { useTranslation } from 'react-i18next';
+import { Button, Stack, Box } from "@mui/material";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { GenericModal } from "./GenericModal";
+import { Input } from "../Input";
+import { addAddress } from "../../firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 interface CreateAddressModalProps {
   open: boolean;
@@ -23,11 +23,11 @@ export const CreateAddressModal = ({ open, onClose, onSuccess }: CreateAddressMo
   const { t } = useTranslation();
   const { control, handleSubmit, reset } = useForm<AddressFormValues>({
     defaultValues: {
-      id: '',
-      city: '',
-      street: '',
-      houseNumber: '',
-      flatNumber: '',
+      id: "",
+      city: "",
+      street: "",
+      houseNumber: "",
+      flatNumber: "",
     },
   });
 
@@ -43,46 +43,54 @@ export const CreateAddressModal = ({ open, onClose, onSuccess }: CreateAddressMo
       onClose();
       if (onSuccess) onSuccess();
     } catch (error) {
-        console.error("Failed to create address", error);
+      console.error("Failed to create address", error);
     }
   };
 
   return (
-    <GenericModal title={t('address.create.title')} open={open} onClose={onClose}>
-      <Stack component='form' onSubmit={handleSubmit(onSubmit)} gap={3}>
+    <GenericModal title={t("address.create.title")} open={open} onClose={onClose}>
+      <Stack component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
         <Controller
-          name='id'
+          name="id"
           control={control}
           render={({ field }) => (
-            <Input {...field} label={t('address.create.id_label')} placeholder="e.g. MyNewApartment" />
+            <Input
+              {...field}
+              label={t("address.create.id_label")}
+              placeholder="e.g. MyNewApartment"
+            />
           )}
         />
         <Controller
-          name='city'
+          name="city"
           control={control}
-          render={({ field }) => <Input {...field} label={t('address.create.city')} />}
+          render={({ field }) => <Input {...field} label={t("address.create.city")} />}
         />
         <Controller
-          name='street'
+          name="street"
           control={control}
-          render={({ field }) => <Input {...field} label={t('address.create.street')} />}
+          render={({ field }) => <Input {...field} label={t("address.create.street")} />}
         />
         <Box display="flex" gap={2}>
-            <Controller
-            name='houseNumber'
+          <Controller
+            name="houseNumber"
             control={control}
-            render={({ field }) => <Input {...field} label={t('address.create.house')} />}
-            />
-            <Controller
-            name='flatNumber'
+            render={({ field }) => <Input {...field} label={t("address.create.house")} />}
+          />
+          <Controller
+            name="flatNumber"
             control={control}
-            render={({ field }) => <Input {...field} label={t('address.create.flat')} />}
-            />
+            render={({ field }) => <Input {...field} label={t("address.create.flat")} />}
+          />
         </Box>
 
         <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button onClick={onClose} color="inherit">{t('address.create.cancel')}</Button>
-          <Button variant='contained' type='submit'>{t('address.create.submit')}</Button>
+          <Button onClick={onClose} color="inherit">
+            {t("address.create.cancel")}
+          </Button>
+          <Button variant="contained" type="submit">
+            {t("address.create.submit")}
+          </Button>
         </Box>
       </Stack>
     </GenericModal>
