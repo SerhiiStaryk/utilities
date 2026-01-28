@@ -7,11 +7,13 @@ import { AppBarUI } from "../ui/AppBarUI";
 type HeaderProps = {
   open: boolean;
   handleDrawerOpen: () => void;
+  isMobile?: boolean;
 };
 
-export const Header = ({ open, handleDrawerOpen }: HeaderProps) => (
-  <AppBarUI position="fixed" open={open}>
+export const Header = ({ open, handleDrawerOpen, isMobile }: HeaderProps) => (
+  <AppBarUI position="fixed" open={open} isMobile={isMobile}>
     <Toolbar>
+
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -19,9 +21,9 @@ export const Header = ({ open, handleDrawerOpen }: HeaderProps) => (
         edge="start"
         sx={[
           {
-            marginRight: 5,
+            marginRight: { xs: 2, sm: 5 },
           },
-          open && { display: "none" },
+          !isMobile && open && { display: "none" },
         ]}
       >
         <MenuIcon />
@@ -32,3 +34,4 @@ export const Header = ({ open, handleDrawerOpen }: HeaderProps) => (
     </Toolbar>
   </AppBarUI>
 );
+

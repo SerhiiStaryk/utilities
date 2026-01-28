@@ -12,17 +12,26 @@ interface UtilityFormProps {
   initialValues?: DefaultValuesUtilityForm;
   onSubmit: (data: unknown) => void;
   onCancel: () => void;
+  showActions?: boolean;
+  id?: string;
 }
 
-export const UtilityForm = ({ initialValues, onSubmit, onCancel }: UtilityFormProps) => {
+export const UtilityForm = ({
+  initialValues,
+  onSubmit,
+  onCancel,
+  showActions = true,
+  id,
+}: UtilityFormProps) => {
   const { t } = useTranslation();
   const { control, handleSubmit } = useForm({
     defaultValues: initialValues || defaultValuesUtilityForm,
   });
 
   return (
-    <Stack component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
+    <Stack id={id} component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
       <Grid2 container spacing={3}>
+        {/* ... (grid body remains same) */}
         <Grid2 size={12}>
           <Typography variant="subtitle2" gutterBottom color="primary">
             {t("utility.monthly")}
@@ -82,15 +91,18 @@ export const UtilityForm = ({ initialValues, onSubmit, onCancel }: UtilityFormPr
           </Stack>
         </Grid2>
       </Grid2>
-      {/* TODO: movebuttons to form footer */}
-      <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-        <Button onClick={onCancel} color="inherit">
-          {t("address.create.cancel")}
-        </Button>
-        <Button variant="contained" type="submit">
-          {t("utility.submit")}
-        </Button>
-      </Box>
+
+      {showActions && (
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <Button onClick={onCancel} color="inherit">
+            {t("address.create.cancel")}
+          </Button>
+          <Button variant="contained" type="submit">
+            {t("utility.submit")}
+          </Button>
+        </Box>
+      )}
     </Stack>
   );
 };
+

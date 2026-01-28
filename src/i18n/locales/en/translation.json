@@ -17,21 +17,21 @@
     "new_address": "New Address",
     "add_utility": "Add Utility",
     "stats": {
-      "total_users": "Total Users",
-      "revenue": "Revenue",
-      "active_sessions": "Active Sessions",
-      "conversion_rate": "Conversion Rate"
+      "total_spent": "Total Spent",
+      "year_spent": "Spent latest year",
+      "avg_monthly": "Avg Monthly",
+      "last_month": "Last Month"
     },
     "charts": {
-      "performance": "Performance Overview",
-      "device_distribution": "Device Distribution",
-      "sales_category": "Sales by Category",
-      "monthly_trends": "Monthly Trends"
+      "performance": "Spending Dynamics",
+      "device_distribution": "Service Distribution",
+      "sales_category": "Total by Service",
+      "monthly_trends": "Monthly Statistics"
     }
   },
   "address": {
     "list_title": "Address List",
-    "details_title": "Address Details: {{id}}",
+    "details_title": "Details for {{address}}",
     "year_archive": "Years Archive",
     "actions": "Actions",
     "create": {
@@ -43,7 +43,19 @@
       "flat": "Flat Number",
       "submit": "Create",
       "cancel": "Cancel"
+    },
+    "configure_services": "Configure Services",
+    "services_list": "Services List",
+    "edit": {
+      "title": "Edit Address"
     }
+  },
+  "year": {
+    "create": "New Year",
+    "create_title": "Create New Year"
+  },
+  "common": {
+    "back": "Back"
   },
   "utility": {
     "add_title": "Add Utility for {{address}}",

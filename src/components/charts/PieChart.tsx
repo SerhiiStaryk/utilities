@@ -1,14 +1,36 @@
 import { PieChart as PieChartMui } from "@mui/x-charts/PieChart";
 
-const pieData = [
-  { id: 0, value: 1161.81, label: "Газ" },
-  { id: 1, value: 99.08, label: "Доставка газу" },
-  { id: 2, value: 138.95, label: "Квартплата" },
-  { id: 3, value: 163.92, label: "Світло" },
-  { id: 4, value: 177.59, label: "Холодна вода" },
-  { id: 5, value: 58.17, label: "Водовідведення" },
-];
+interface PieChartProps {
+  data: { id: number | string; value: number; label: string }[];
+}
 
-export const PieChart = () => {
-  return <PieChartMui series={[{ data: pieData }]} height={300} />;
+export const PieChart = ({ data }: PieChartProps) => {
+  return (
+    <PieChartMui
+      series={[
+        {
+          data,
+          highlightScope: { faded: "global", highlighted: "item" },
+          faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+          paddingAngle: 2,
+          cornerRadius: 4,
+        },
+      ]}
+      height={350}
+      margin={{ top: 10, bottom: 100, left: 10, right: 10 }}
+      slotProps={{
+        legend: {
+          direction: "row",
+          position: { vertical: "bottom", horizontal: "middle" },
+          padding: 0,
+
+          labelStyle: {
+            fontSize: 12,
+          },
+        },
+      }}
+    />
+  );
 };
+
+

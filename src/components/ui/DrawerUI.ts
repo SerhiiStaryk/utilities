@@ -25,23 +25,36 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-export const DrawerUI = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
-  width: drawerWidth,
+export const DrawerUI = styled(MuiDrawer)(({ theme }) => ({
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
   variants: [
     {
-      props: ({ open }) => open,
+      props: ({ variant }) => variant === "permanent",
+      style: {
+        width: drawerWidth,
+      },
+    },
+    {
+      props: ({ variant }) => variant === "temporary",
+      style: {
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+          backgroundColor: theme.palette.background.paper,
+        },
+      },
+    },
+    {
+      props: ({ open, variant }) => open && variant !== "temporary",
       style: {
         ...openedMixin(theme),
         "& .MuiDrawer-paper": openedMixin(theme),
       },
     },
     {
-      props: ({ open }) => !open,
+      props: ({ open, variant }) => !open && variant !== "temporary",
       style: {
         ...closedMixin(theme),
         "& .MuiDrawer-paper": closedMixin(theme),
@@ -49,3 +62,6 @@ export const DrawerUI = styled(MuiDrawer, {
     },
   ],
 }));
+
+
+

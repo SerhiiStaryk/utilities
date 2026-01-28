@@ -5,17 +5,20 @@ import { listMenuType } from "./Drawer";
 type MenuItemProps = {
   item: listMenuType;
   open: boolean;
+  handleDrawerClose?: () => void;
 };
 
-export const MenuItem: React.FC<MenuItemProps> = ({ item, open }) => {
+export const MenuItem: React.FC<MenuItemProps> = ({ item, open, handleDrawerClose }) => {
   return (
     <Link
       to={item.route || ""}
+      onClick={handleDrawerClose}
       style={{
         color: "inherit",
         textDecoration: "none",
       }}
     >
+
       <ListItem disablePadding sx={{ display: "block" }}>
         <ListItemButton
           sx={[

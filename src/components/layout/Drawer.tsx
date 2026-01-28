@@ -14,6 +14,7 @@ import logo from "../../assets/logo.png";
 type DrawerProps = {
   open: boolean;
   handleDrawerClose: () => void;
+  isMobile?: boolean;
 };
 
 export type listMenuType = {
@@ -30,11 +31,22 @@ const listMenu2: listMenuType[] = [
   { name: "Налаштуваня", route: "settings", icon: <SettingsIcon /> },
 ];
 
-export const Drawer = ({ open, handleDrawerClose }: DrawerProps) => {
+export const Drawer = ({
+  open,
+  handleDrawerClose,
+  isMobile,
+}: DrawerProps) => {
   const theme = useTheme();
 
   return (
-    <DrawerUI variant="permanent" open={open}>
+    <DrawerUI
+      variant={isMobile ? "temporary" : "permanent"}
+      open={open}
+      onClose={isMobile ? handleDrawerClose : undefined}
+      ModalProps={{
+        keepMounted: true, // Better open performance on mobile.
+      }}
+    >
       <DrawerHeaderUI
         sx={{
           display: "flex",
@@ -43,13 +55,13 @@ export const Drawer = ({ open, handleDrawerClose }: DrawerProps) => {
           px: 2,
         }}
       >
-        {open && (
+        {(open || isMobile) && (
           <Box
             component="img"
             src={logo}
             alt="Logo"
             sx={{
-              height: 64,
+              height: 48,
             }}
           />
         )}
@@ -59,9 +71,20 @@ export const Drawer = ({ open, handleDrawerClose }: DrawerProps) => {
         </IconButton>
       </DrawerHeaderUI>
       <Divider />
-      <MenuList open={open} list={listMenu1} />
+      <MenuList
+        open={!!(open || isMobile)}
+        list={listMenu1}
+        handleDrawerClose={isMobile ? handleDrawerClose : undefined}
+      />
       <Divider />
-      <MenuList open={open} list={listMenu2} />
+      <MenuList
+        open={!!(open || isMobile)}
+        list={listMenu2}
+        handleDrawerClose={isMobile ? handleDrawerClose : undefined}
+      />
     </DrawerUI>
+
+
   );
 };
+

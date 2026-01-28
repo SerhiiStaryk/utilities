@@ -1,14 +1,15 @@
 import { useModalApi, useModalData } from "../../controller/modal.controller";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import { GenericModal } from "./GenericModal";
 
 export type ModalProps = PropsWithChildren & {
   title: string;
   open?: boolean;
   onClose?: () => void;
+  footer?: ReactNode;
 };
 
-export const Modal = ({ title, children, open, onClose }: ModalProps) => {
+export const Modal = ({ title, children, open, onClose, footer }: ModalProps) => {
   const { openned } = useModalData();
   const { close } = useModalApi();
 
@@ -16,8 +17,9 @@ export const Modal = ({ title, children, open, onClose }: ModalProps) => {
   const handleClose = onClose || close;
 
   return (
-    <GenericModal title={title} open={isOpen} onClose={handleClose}>
+    <GenericModal title={title} open={isOpen} onClose={handleClose} footer={footer}>
       {children}
     </GenericModal>
   );
 };
+

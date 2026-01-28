@@ -17,21 +17,21 @@
     "new_address": "Нова Адреса",
     "add_utility": "Додати Послугу",
     "stats": {
-      "total_users": "Всього Користувачів",
-      "revenue": "Дохід",
-      "active_sessions": "Активні Сесії",
-      "conversion_rate": "Конверсія"
+      "total_spent": "Всього витрачено",
+      "year_spent": "Витрачено за останній рік",
+      "avg_monthly": "Середнє за місяць",
+      "last_month": "Останній місяць"
     },
     "charts": {
-      "performance": "Огляд Продуктивності",
-      "device_distribution": "Розподіл Пристроїв",
-      "sales_category": "Продажі за Категоріями",
-      "monthly_trends": "Місячні Тренди"
+      "performance": "Динаміка витрат",
+      "device_distribution": "Співвідношення послуг",
+      "sales_category": "Всього за послугою",
+      "monthly_trends": "Місячна статистика"
     }
   },
   "address": {
     "list_title": "Список Адрес",
-    "details_title": "Деталі Адреси: {{id}}",
+    "details_title": "Деталі {{address}}",
     "year_archive": "Архів Років",
     "actions": "Дії",
     "create": {
@@ -43,7 +43,20 @@
       "flat": "Номер Квартири",
       "submit": "Створити",
       "cancel": "Скасувати"
+    },
+    "configure_services": "Налаштувати Послуги",
+    "services_list": "Список Послуг",
+    "edit": {
+      "title": "Редагувати Адресу"
     }
+  },
+  "year": {
+    "create": "Новий Рік",
+    "create_title": "Створити Новий Рік"
+  },
+  "common": {
+    "back": "Назад",
+    "all": "Всі"
   },
   "utility": {
     "add_title": "Додати Послугу для {{address}}",

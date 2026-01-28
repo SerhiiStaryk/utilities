@@ -1,4 +1,5 @@
-import { createTheme, ThemeOptions } from "@mui/material";
+import { createTheme, ThemeOptions, responsiveFontSizes } from "@mui/material";
+
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -83,6 +84,8 @@ export const themeOptions: ThemeOptions = {
   },
 };
 
-const theme = createTheme(themeOptions);
+const themeInstance = createTheme(themeOptions);
+const theme = responsiveFontSizes(themeInstance);
 
 export { theme };
+

@@ -1,3 +1,4 @@
+import React, { forwardRef } from "react";
 import { FormControl, InputLabel, Input as MuiInput, FormHelperText } from "@mui/material";
 
 type InputProps = React.ComponentProps<typeof MuiInput> & {
@@ -6,10 +7,13 @@ type InputProps = React.ComponentProps<typeof MuiInput> & {
   helperText?: string;
 };
 
-export const Input = ({ label, helperText, error, ...inputProps }: InputProps) => (
-  <FormControl error={error} fullWidth variant="standard">
-    <InputLabel>{label}</InputLabel>
-    <MuiInput {...inputProps} />
-    {helperText && <FormHelperText>{helperText}</FormHelperText>}
-  </FormControl>
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, helperText, error, ...inputProps }, ref) => (
+    <FormControl error={error} fullWidth variant="standard">
+      <InputLabel>{label}</InputLabel>
+      <MuiInput {...inputProps} inputRef={ref} />
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </FormControl>
+  ),
 );
+

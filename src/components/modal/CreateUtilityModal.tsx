@@ -87,8 +87,18 @@ export const CreateUtilityModal = ({
       title={t("utility.add_title", { address: addressId })}
       open={open}
       onClose={onClose}
+      footer={
+        <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Button onClick={onClose} color="inherit">
+            {t("address.create.cancel")}
+          </Button>
+          <Button variant="contained" type="submit" form="create-utility-form">
+            {t("utility.submit")}
+          </Button>
+        </Box>
+      }
     >
-      <Stack component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
+      <Stack id="create-utility-form" component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
         <Grid2 container spacing={3}>
           {/* General Info Column */}
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -145,16 +155,8 @@ export const CreateUtilityModal = ({
             </Grid2>
           </Grid2>
         </Grid2>
-
-        <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button onClick={onClose} color="inherit">
-            {t("address.create.cancel")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("utility.submit")}
-          </Button>
-        </Box>
       </Stack>
     </GenericModal>
   );
 };
+

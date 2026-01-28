@@ -6,9 +6,24 @@ export const StyledModalContent = styled(Paper)(({ theme }) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "100%",
+  width: "calc(100% - 32px)",
   maxWidth: 1100,
+  maxHeight: "calc(100% - 32px)",
+  display: "flex",
+  flexDirection: "column",
   boxShadow: theme.shadows[24],
-  padding: theme.spacing(4),
   outline: "none",
+  overflow: "hidden", // Parent doesn't scroll, children do
+  [theme.breakpoints.down("sm")]: {
+    top: 0,
+    left: 0,
+    transform: "none",
+    width: "100%",
+    height: "100%",
+    maxHeight: "100%",
+    borderRadius: 0,
+  },
 }));
+
+
+

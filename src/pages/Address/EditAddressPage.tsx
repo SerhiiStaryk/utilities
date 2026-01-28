@@ -97,17 +97,23 @@ export const EditAddressPage = () => {
 
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        mb={4}
+        gap={2}
+      >
         <Typography variant="h4" fontWeight="bold">
           {t("address.edit.title", "Edit Address")}
         </Typography>
-        <Button onClick={() => navigate(-1)} variant="outlined">
+        <Button onClick={() => navigate(-1)} variant="outlined" fullWidth={{ xs: true, sm: false } as any}>
           {t("common.back", "Back")}
         </Button>
       </Stack>
 
       <Card>
-        <CardContent>
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {error}
@@ -189,19 +195,20 @@ export const EditAddressPage = () => {
               </Grid>
 
               <Grid size={12}>
-                <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-                  <Button onClick={() => navigate("/address-list")} color="inherit">
+                <Stack direction={{ xs: "column-reverse", sm: "row" }} justifyContent="flex-end" gap={2} mt={2}>
+                  <Button onClick={() => navigate("/address-list")} color="inherit" fullWidth={{ xs: true, sm: false } as any}>
                     {t("address.create.cancel")}
                   </Button>
-                  <Button variant="contained" type="submit" disabled={loading}>
+                  <Button variant="contained" type="submit" disabled={loading} fullWidth={{ xs: true, sm: false } as any}>
                     {loading ? "Saving..." : "Save Changes"}
                   </Button>
-                </Box>
+                </Stack>
               </Grid>
             </Grid>
           </form>
         </CardContent>
       </Card>
+
     </Box>
   );
 };

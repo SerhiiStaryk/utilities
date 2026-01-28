@@ -6,10 +6,11 @@ const drawerWidth = DRAWER_WIDTH;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
+  isMobile?: boolean;
 }
 
 export const AppBarUI = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== "open" && prop !== "isMobile",
 })<AppBarProps>(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
@@ -18,7 +19,7 @@ export const AppBarUI = styled(MuiAppBar, {
   }),
   variants: [
     {
-      props: ({ open }) => open,
+      props: ({ open, isMobile }) => open && !isMobile,
       style: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
@@ -30,3 +31,4 @@ export const AppBarUI = styled(MuiAppBar, {
     },
   ],
 }));
+

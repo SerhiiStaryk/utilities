@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import {
   Card,
   Box,
@@ -11,45 +11,53 @@ import {
   FormControl,
   InputLabel,
   Select as MuiSelect,
+  CircularProgress,
 } from "@mui/material";
 import { BarChart } from "../../components/charts/BarChart";
 import { LineChart } from "../../components/charts/LineChart";
 import { PieChart } from "../../components/charts/PieChart";
 import BarChartAll from "../../components/charts/BarChartAll";
-import { Add, HomeWork } from "@mui/icons-material";
-import { CreateAddressModal } from "../../components/modal/CreateAddressModal";
+import { Add } from "@mui/icons-material";
 import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
 import { getAddresses } from "../../firebase/firestore";
 import { AddressDoc } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
 import Grid from "@mui/material/Grid2";
+import { useDashboardData } from "../../hooks/useDashboardData";
+import { MONTHS } from "../../constants/months";
 
-const StatCard = ({ title, value }: { title: string; value: string }) => (
+const StatCard = ({ title, value, loading }: { title: string; value: string | number; loading?: boolean }) => (
   <Card sx={{ height: "100%" }}>
     <CardContent>
       <Typography color="textSecondary" gutterBottom variant="overline">
         {title}
       </Typography>
-      <Typography component="div" variant="h4">
-        {value}
-      </Typography>
+      {loading ? (
+        <CircularProgress size={24} sx={{ mt: 1 }} />
+      ) : (
+        <Typography component="div" variant="h4">
+          {value}
+        </Typography>
+      )}
     </CardContent>
   </Card>
 );
 
 export const DashboardPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>("all");
+  const [selectedService, setSelectedService] = useState<string>("all");
 
-  const [createAddressOpen, setCreateAddressOpen] = useState(false);
+  const { stats, chartData, availableYears, availableServices, loading: dataLoading } = 
+    useDashboardData(selectedAddress, selectedYear, selectedService);
+
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
 
   const fetchAddresses = async () => {
     try {
       const list = await getAddresses();
-
       setAddresses(list);
       if (list.length > 0 && !selectedAddress) {
         setSelectedAddress(list[0].id);
@@ -62,6 +70,19 @@ export const DashboardPage = () => {
   useEffect(() => {
     fetchAddresses();
   }, []);
+
+  // Reset year/service when address changes
+  useEffect(() => {
+    setSelectedYear("all");
+    setSelectedService("all");
+  }, [selectedAddress]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: "UAH",
+    }).format(value);
+  };
 
   return (
     <Box>
@@ -83,8 +104,14 @@ export const DashboardPage = () => {
           </Typography>
         </Box>
 
-        <Stack direction="row" gap={2} alignItems="center">
-          <FormControl size="small" sx={{ minWidth: 200 }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          gap={2}
+          alignItems="center"
+          sx={{ width: { xs: "100%", sm: "auto" } }}
+        >
+          {/* Address Filter */}
+          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
             <InputLabel>{t("dashboard.current_address")}</InputLabel>
             <MuiSelect
               value={selectedAddress}
@@ -96,40 +123,51 @@ export const DashboardPage = () => {
                   {addr.data.street} {addr.data.house_number}, {addr.data.city}
                 </MenuItem>
               ))}
-              {addresses.length === 0 && (
-                <MenuItem value="" disabled>
-                  No Addresses Found
-                </MenuItem>
-              )}
             </MuiSelect>
           </FormControl>
 
-          <Button
-            variant="outlined"
-            startIcon={<HomeWork />}
-            onClick={() => navigate("/address-list/create")}
-          >
-            {t("dashboard.new_address")}
-          </Button>
+          {/* Year Filter */}
+          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 120 } }}>
+            <InputLabel>{t("utility.year")}</InputLabel>
+            <MuiSelect
+              value={selectedYear}
+              label={t("utility.year")}
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              <MenuItem value="all">{t("common.all")}</MenuItem>
+              {availableYears.map((y) => (
+                <MenuItem key={y} value={y}>{y}</MenuItem>
+              ))}
+            </MuiSelect>
+          </FormControl>
+
+          {/* Service Filter */}
+          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
+            <InputLabel>{t("utility.service")}</InputLabel>
+            <MuiSelect
+              value={selectedService}
+              label={t("utility.service")}
+              onChange={(e) => setSelectedService(e.target.value)}
+            >
+              <MenuItem value="all">{t("common.all")}</MenuItem>
+              {availableServices.map((s) => (
+                <MenuItem key={s} value={s}>{s}</MenuItem>
+              ))}
+            </MuiSelect>
+          </FormControl>
+
           <Button
             variant="contained"
             startIcon={<Add />}
             disabled={!selectedAddress}
             onClick={() => setCreateUtilityOpen(true)}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
           >
             {t("dashboard.add_utility")}
           </Button>
         </Stack>
       </Stack>
 
-      {/* Modals */}
-      <CreateAddressModal
-        open={createAddressOpen}
-        onClose={() => setCreateAddressOpen(false)}
-        onSuccess={() => {
-          fetchAddresses();
-        }}
-      />
       <CreateUtilityModal
         open={createUtilityOpen}
         onClose={() => setCreateUtilityOpen(false)}
@@ -138,16 +176,32 @@ export const DashboardPage = () => {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard title={t("dashboard.stats.total_users")} value="1,234" />
+          <StatCard
+            title={t("dashboard.stats.total_spent")}
+            value={formatCurrency(stats.totalSpent)}
+            loading={dataLoading}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard title={t("dashboard.stats.revenue")} value="$45,678" />
+          <StatCard
+            title={selectedYear === "all" ? t("dashboard.stats.filtered_spent", "Filtered Total") : t("dashboard.stats.year_spent")}
+            value={formatCurrency(stats.filteredSpent)}
+            loading={dataLoading}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard title={t("dashboard.stats.active_sessions")} value="890" />
+          <StatCard
+            title={t("dashboard.stats.avg_monthly")}
+            value={formatCurrency(stats.avgMonthly)}
+            loading={dataLoading}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard title={t("dashboard.stats.conversion_rate")} value="12.5%" />
+          <StatCard
+            title={t("dashboard.stats.last_month")}
+            value={formatCurrency(stats.lastMonthSpent)}
+            loading={dataLoading}
+          />
         </Grid>
       </Grid>
 
@@ -155,10 +209,24 @@ export const DashboardPage = () => {
         <Grid size={{ xs: 12, md: 8 }}>
           <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.performance")} ({selectedAddress})
+              {t("dashboard.charts.performance")} {selectedService !== "all" ? `(${selectedService})` : ""}
             </Typography>
             <Box sx={{ height: 350 }}>
-              <LineChart />
+              {dataLoading ? (
+                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                  <CircularProgress />
+                </Box>
+              ) : chartData.lineData.length > 0 ? (
+                <LineChart
+                  data={chartData.lineData}
+                  labels={MONTHS.map((m) => t(`utility.months.${m}`))}
+                  seriesLabel={selectedService !== "all" ? selectedService : t("utility.amount")}
+                />
+              ) : (
+                <Typography variant="body2" color="textSecondary" textAlign="center" mt={10}>
+                  No data available for charts
+                </Typography>
+              )}
             </Box>
           </Card>
         </Grid>
@@ -175,7 +243,15 @@ export const DashboardPage = () => {
                 justifyContent: "center",
               }}
             >
-              <PieChart />
+              {dataLoading ? (
+                <CircularProgress />
+              ) : chartData.pieData.length > 0 ? (
+                <PieChart data={chartData.pieData} />
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No data
+                </Typography>
+              )}
             </Box>
           </Card>
         </Grid>
@@ -185,7 +261,15 @@ export const DashboardPage = () => {
               {t("dashboard.charts.sales_category")}
             </Typography>
             <Box sx={{ height: 350 }}>
-              <BarChart />
+              {dataLoading ? (
+                <CircularProgress />
+              ) : chartData.barData.length > 0 ? (
+                <BarChart data={chartData.barData} label={t("utility.service")} />
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No data
+                </Typography>
+              )}
             </Box>
           </Card>
         </Grid>
@@ -195,7 +279,19 @@ export const DashboardPage = () => {
               {t("dashboard.charts.monthly_trends")}
             </Typography>
             <Box sx={{ height: 350 }}>
-              <BarChartAll />
+              {dataLoading ? (
+                <CircularProgress />
+              ) : chartData.monthlyTrend.length > 0 ? (
+                <BarChartAll
+                  data={chartData.monthlyTrend}
+                  labels={MONTHS.map((m) => t(`utility.months.${m}`))}
+                  seriesLabel={t("utility.amount")}
+                />
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No data
+                </Typography>
+              )}
             </Box>
           </Card>
         </Grid>
@@ -203,3 +299,5 @@ export const DashboardPage = () => {
     </Box>
   );
 };
+
+

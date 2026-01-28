@@ -11,6 +11,8 @@ type QuickEntryFormProps = {
   onCancel: () => void;
   currentMonth: string;
   services: { name: string; accountNumber: string }[];
+  showActions?: boolean;
+  id?: string;
 };
 
 export const QuickEntryForm = ({
@@ -18,8 +20,11 @@ export const QuickEntryForm = ({
   onCancel,
   currentMonth,
   services,
+  showActions = true,
+  id,
 }: QuickEntryFormProps) => {
   const { t } = useTranslation();
+  // ... (useForm hook unchanged)
   const { control, handleSubmit } = useForm({
     defaultValues: {
       month: currentMonth,
@@ -49,7 +54,8 @@ export const QuickEntryForm = ({
   }));
 
   return (
-    <Stack component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
+    <Stack id={id} component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
+      {/* ... (form body remains same) */}
       <Box>
         <Controller
           name="month"
@@ -99,14 +105,17 @@ export const QuickEntryForm = ({
         ))}
       </Grid2>
 
-      <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-        <Button onClick={onCancel} color="inherit">
-          {t("address.create.cancel")}
-        </Button>
-        <Button variant="contained" type="submit">
-          {t("utility.submit")}
-        </Button>
-      </Box>
+      {showActions && (
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <Button onClick={onCancel} color="inherit">
+            {t("address.create.cancel")}
+          </Button>
+          <Button variant="contained" type="submit">
+            {t("utility.submit")}
+          </Button>
+        </Box>
+      )}
     </Stack>
   );
 };
+

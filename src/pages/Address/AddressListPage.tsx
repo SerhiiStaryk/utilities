@@ -30,14 +30,27 @@ export const AddressListPage = () => {
 
   return (
     <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        mb={4}
+        gap={2}
+      >
         <Typography variant="h4" fontWeight="bold">
           {t("nav.addresses")}
         </Typography>
-        <Button component={Link} to="create" variant="contained" startIcon={<AddIcon />}>
+        <Button
+          component={Link}
+          to="create"
+          variant="contained"
+          startIcon={<AddIcon />}
+          fullWidth={{ xs: true, sm: false } as any}
+        >
           {t("dashboard.new_address")}
         </Button>
       </Stack>
+
 
       <Grid container spacing={3}>
         <Grid size={12}>
@@ -54,9 +67,9 @@ export const AddressListPage = () => {
                         <LocationOnIcon color="secondary" />
                       </ListItemIcon>
                       <ListItemText
-                        primary={`${addr.data.street} ${addr.data.house_number}`}
-                        secondary={addr.data.city}
+                        primary={`${addr.data.city}, ${addr.data.street} ${addr.data.house_number}${addr.data.flat_number ? `, кв. ${addr.data.flat_number}` : ""}`}
                       />
+
                     </ListItemButton>
                   </ListItem>
                 ))}

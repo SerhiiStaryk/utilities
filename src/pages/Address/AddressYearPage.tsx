@@ -15,6 +15,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
+  useMediaQuery,
+  Stack,
 } from "@mui/material";
 import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -39,6 +42,8 @@ export const AddressYearPage = () => {
   const { id, year } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { hideDeleteButtons } = useSettings();
   const [services, setServices] = useState<UtilityService[]>([]);
   const [address, setAddress] = useState<AddressDoc | null>(null);
@@ -46,9 +51,16 @@ export const AddressYearPage = () => {
   const [quickEntryOpen, setQuickEntryOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
 
+  useEffect(() => {
+    if (isMobile) {
+      setViewMode("cards");
+    }
+  }, [isMobile]);
+
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" }).toLowerCase();
 
   const fetchServices = () => {
+
     if (id && year) {
       getAllUtilityServicesForYear(id, year).then(setServices).catch(console.error);
     }
@@ -137,13 +149,19 @@ export const AddressYearPage = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={4}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        justifyContent="space-between"
+        mb={4}
+        gap={2}
+      >
         <Box display="flex" alignItems="center">
-          <IconButton onClick={() => navigate(`/address-list/${id}`)} sx={{ mr: 2 }}>
+          <IconButton onClick={() => navigate(`/address-list/${id}`)} sx={{ mr: { xs: 1, sm: 2 } }}>
             <ArrowBack />
           </IconButton>
           <Box>
-            <Typography variant="h4" fontWeight="bold">
+            <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold" noWrap sx={{ maxWidth: { xs: '70vw', sm: '100%' } }}>
               {addressDisplay}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
@@ -151,27 +169,39 @@ export const AddressYearPage = () => {
             </Typography>
           </Box>
         </Box>
-        <Box display="flex" gap={2} alignItems="center">
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={(_, newMode) => {
-              if (newMode !== null) setViewMode(newMode);
-            }}
-            size="small"
+        <Stack
+          direction="row"
+          gap={2}
+          alignItems="center"
+          sx={{ width: { xs: "100%", sm: "auto" }, justifyContent: "space-between" }}
+        >
+          {!isMobile && (
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={(_, newMode) => {
+                if (newMode !== null) setViewMode(newMode);
+              }}
+              size="small"
+            >
+              <ToggleButton value="cards" aria-label="card view">
+                <ViewModule />
+              </ToggleButton>
+              <ToggleButton value="table" aria-label="table view">
+                <ViewList />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          )}
+          <Button
+            variant="contained"
+            onClick={() => setQuickEntryOpen(true)}
+            fullWidth={isMobile}
           >
-            <ToggleButton value="cards" aria-label="card view">
-              <ViewModule />
-            </ToggleButton>
-            <ToggleButton value="table" aria-label="table view">
-              <ViewList />
-            </ToggleButton>
-          </ToggleButtonGroup>
-          <Button variant="contained" onClick={() => setQuickEntryOpen(true)}>
             {t("utility.enter_current_month", "Enter Current Month")}
           </Button>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
+
 
       {viewMode === "cards" ? (
         <Grid container spacing={3}>
@@ -316,8 +346,20 @@ export const AddressYearPage = () => {
           title={editingService.name}
           open={!!editingService}
           onClose={() => setEditingService(null)}
+          footer={
+            <Box display="flex" justifyContent="flex-end" gap={2}>
+              <Button onClick={() => setEditingService(null)} color="inherit">
+                {t("address.create.cancel")}
+              </Button>
+              <Button variant="contained" type="submit" form="edit-utility-form">
+                {t("utility.submit")}
+              </Button>
+            </Box>
+          }
         >
           <UtilityForm
+            id="edit-utility-form"
+            showActions={false}
             initialValues={{
               currency: Object.values(editingService.monthly_payments || {})[0]?.currency || "",
               accountNumber: editingService.account_number,
@@ -339,8 +381,20 @@ export const AddressYearPage = () => {
         title={t("utility.quick_entry", "Quick Entry")}
         open={quickEntryOpen}
         onClose={() => setQuickEntryOpen(false)}
+        footer={
+          <Box display="flex" justifyContent="flex-end" gap={2}>
+            <Button onClick={() => setQuickEntryOpen(false)} color="inherit">
+              {t("address.create.cancel")}
+            </Button>
+            <Button variant="contained" type="submit" form="quick-entry-form">
+              {t("utility.submit")}
+            </Button>
+          </Box>
+        }
       >
         <QuickEntryForm
+          id="quick-entry-form"
+          showActions={false}
           currentMonth={currentMonth}
           services={services.map((s) => ({
             name: s.name,
@@ -350,6 +404,7 @@ export const AddressYearPage = () => {
           onCancel={() => setQuickEntryOpen(false)}
         />
       </Modal>
+
     </Box>
   );
 };

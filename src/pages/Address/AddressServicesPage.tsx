@@ -11,7 +11,10 @@ import {
   IconButton,
   Paper,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
+
 import { Add, ArrowBack, Delete } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -22,7 +25,10 @@ import { AddressDoc } from "../../types/firestore";
 export const AddressServicesPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { t } = useTranslation();
+
   const { hideDeleteButtons } = useSettings();
 
   const [address, setAddress] = useState<AddressDoc | null>(null);
@@ -86,18 +92,18 @@ export const AddressServicesPage = () => {
     );
 
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
-      <Box display="flex" alignItems="center" mb={4}>
-        <IconButton onClick={() => navigate(-1)} sx={{ mr: 2 }}>
+    <Box sx={{ maxWidth: 800, mx: "auto", mt: { xs: 2, sm: 4 } }}>
+      <Stack direction="row" alignItems="center" mb={4} gap={1}>
+        <IconButton onClick={() => navigate(-1)} sx={{ mr: { xs: 0, sm: 1 } }}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4" fontWeight="bold">
+        <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold">
           {t("address.configure_services", "Configure Services")}
         </Typography>
-      </Box>
+      </Stack>
 
       <Card>
-        <CardContent>
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
           <Typography variant="h6" gutterBottom>
             {t("address.services_list", "Services List")}
           </Typography>
@@ -106,7 +112,7 @@ export const AddressServicesPage = () => {
             will be automatically added when you create a new year.
           </Typography>
 
-          <Stack direction="row" gap={2} mb={3} alignItems="flex-start">
+          <Stack direction={{ xs: "column", sm: "row" }} gap={2} mb={3} alignItems="stretch">
             <TextField
               label="New Service Name"
               value={newServiceName}
@@ -132,6 +138,7 @@ export const AddressServicesPage = () => {
               startIcon={<Add />}
               onClick={handleAddService}
               disabled={!newServiceName.trim()}
+              fullWidth={isMobile}
             >
               Add
             </Button>
@@ -160,14 +167,15 @@ export const AddressServicesPage = () => {
             )}
           </Paper>
 
-          <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
-            <Button onClick={() => navigate(-1)}>Cancel</Button>
-            <Button variant="contained" onClick={handleSave} disabled={saving}>
+          <Stack mt={4} direction={{ xs: "column-reverse", sm: "row" }} justifyContent="flex-end" gap={2}>
+            <Button onClick={() => navigate(-1)} fullWidth={isMobile}>Cancel</Button>
+            <Button variant="contained" onClick={handleSave} disabled={saving} fullWidth={isMobile}>
               {saving ? "Saving..." : "Save Configuration"}
             </Button>
-          </Box>
+          </Stack>
         </CardContent>
       </Card>
+
     </Box>
   );
 };
