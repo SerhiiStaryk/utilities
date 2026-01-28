@@ -48,7 +48,7 @@ export const UtilityForm = ({
                       <Input
                         name={name}
                         value={value !== undefined && value !== null ? String(value) : ""}
-                        onChange={(e) => onChange(Number((e.target as HTMLInputElement).value))}
+                        onChange={(e) => onChange(e.target.value)}
                         onBlur={onBlur}
                         ref={ref}
                         type="number"
@@ -70,7 +70,6 @@ export const UtilityForm = ({
             ))}
           </Grid2>
         </Grid2>
-
         <Grid2 size={12}>
           <Typography variant="subtitle2" gutterBottom color="primary">
             {t("utility.config")}
@@ -105,4 +104,3 @@ export const UtilityForm = ({
     </Stack>
   );
 };
-
