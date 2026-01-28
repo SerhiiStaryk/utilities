@@ -23,16 +23,16 @@ import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-materi
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  getAllUtilityServicesForYear,
-  updateUtilityService,
-  deleteUtilityService,
+  getAllMeterReadingsForYear,
+  updateMeterReading,
+  deleteMeterReading,
   getAddress,
 } from "../../firebase/firestore";
-import { UtilityService, AddressDoc } from "../../types/firestore";
+import { MeterReadingService, AddressDoc } from "../../types/firestore";
 import { Modal } from "../../components/modal/Modal";
 import { ConfirmModal } from "../../components/modal/ConfirmModal";
-import { UtilityForm } from "../../components/forms/UtilityForm";
-import { QuickEntryForm } from "../../components/forms/QuickEntryForm";
+import { ReadingForm } from "../../components/forms/ReadingForm";
+import { QuickReadingForm } from "../../components/forms/QuickReadingForm";
 import Grid from "@mui/material/Grid2";
 import { MONTHS } from "../../constants/months";
 import { useSettings } from "../../app/providers/SettingsProvider";
@@ -40,7 +40,7 @@ import { useAuth } from "../../app/providers/AuthProvider";
 
 type ViewMode = "cards" | "table";
 
-export const AddressYearPage = () => {
+export const AddressReadingPage = () => {
   const { id, year } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -49,11 +49,11 @@ export const AddressYearPage = () => {
   const { hideDeleteButtons } = useSettings();
   const { role } = useAuth();
   const isAdmin = role === "admin";
-  const [services, setServices] = useState<UtilityService[]>([]);
+  const [readings, setReadings] = useState<MeterReadingService[]>([]);
 
   const [address, setAddress] = useState<AddressDoc | null>(null);
-  const [editingService, setEditingService] = useState<UtilityService | null>(null);
-  const [deletingService, setDeletingService] = useState<UtilityService | null>(null);
+  const [editingReading, setEditingReading] = useState<MeterReadingService | null>(null);
+  const [deletingReading, setDeletingReading] = useState<MeterReadingService | null>(null);
   const [quickEntryOpen, setQuickEntryOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
 
@@ -65,10 +65,9 @@ export const AddressYearPage = () => {
 
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" }).toLowerCase();
 
-  const fetchServices = () => {
-
+  const fetchReadings = () => {
     if (id && year) {
-      getAllUtilityServicesForYear(id, year).then(setServices).catch(console.error);
+      getAllMeterReadingsForYear(id, year).then(setReadings).catch(console.error);
     }
   };
 
@@ -79,74 +78,75 @@ export const AddressYearPage = () => {
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchReadings();
     fetchAddress();
   }, [id, year]);
 
   const handleUpdate = async (data: any) => {
-    if (!id || !year || !editingService) return;
+    if (!id || !year || !editingReading) return;
 
-    // Prepare payload for update
     const payload: any = {
-      monthly_payments: {},
-      account_number: data.accountNumber,
-      currency: data.currency,
+      name: editingReading.name,
+      meter_number: editingReading.meter_number,
+      monthly_readings: {},
     };
 
     MONTHS.forEach((month) => {
       if (data[month]) {
-        payload.monthly_payments[month] = {
-          amount: Number(data[month]),
-          currency: data.currency,
+        payload.monthly_readings[month] = {
+          value: data[month],
         };
       }
     });
 
     try {
-      await updateUtilityService(id, year, editingService.id || editingService.name, payload);
-      setEditingService(null);
-      fetchServices();
+      const docId = `${editingReading.name}_${editingReading.meter_number}`.replace(/\s+/g, "_");
+      await updateMeterReading(id, year, docId, payload);
+      setEditingReading(null);
+      fetchReadings();
     } catch (e) {
-      console.error("Failed to update service", e);
+      console.error("Failed to update reading", e);
     }
   };
 
   const handleDelete = async () => {
-    if (!id || !year || !deletingService) return;
+    if (!id || !year || !deletingReading) return;
     try {
-      await deleteUtilityService(id, year, deletingService.id || deletingService.name);
-      setDeletingService(null);
-      fetchServices();
+      const docId = `${deletingReading.name}_${deletingReading.meter_number}`.replace(/\s+/g, "_");
+      await deleteMeterReading(id, year, docId);
+      setDeletingReading(null);
+      fetchReadings();
     } catch (e) {
-      console.error("Failed to delete service", e);
+      console.error("Failed to delete reading", e);
     }
   };
 
   const handleQuickEntrySubmit = async (data: any) => {
     if (!id || !year) return;
 
-    const updates = data.payments
-      .filter((p: any) => p.amount && parseFloat(p.amount) > 0)
-      .map((p: any) => {
+    const updates = data.readings
+      .filter((r: any) => r.value)
+      .map((r: any) => {
         const payload: any = {
-          monthly_payments: {
+          monthly_readings: {
             [data.month]: {
-              amount: p.amount,
-              currency: p.currency,
+              value: r.value,
             },
           },
         };
-        return updateUtilityService(id, year, p.serviceId, payload);
+        const docId = `${r.serviceId}_${r.meterNumber}`.replace(/\s+/g, "_");
+        return updateMeterReading(id, year, docId, payload);
       });
 
     try {
       await Promise.all(updates);
       setQuickEntryOpen(false);
-      fetchServices();
+      fetchReadings();
     } catch (e) {
-      console.error("Failed to batch update", e);
+      console.error("Failed to batch update readings", e);
     }
   };
+
 
   const addressDisplay = address
     ? `${address.street}, ${address.house_number}${address.flat_number ? `/${address.flat_number}` : ""}, ${address.city}`
@@ -170,7 +170,7 @@ export const AddressYearPage = () => {
               {addressDisplay}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {t("utility.payments", "Payments")} - {year} {t("common.year_short", "year")}
+              {t("utility.meter_readings", "Meter Readings")} - {year} {t("common.year_short", "year")}
             </Typography>
           </Box>
         </Box>
@@ -209,29 +209,28 @@ export const AddressYearPage = () => {
         </Stack>
       </Stack>
 
-
       {viewMode === "cards" ? (
         <Grid container spacing={3}>
-          {services.map((service) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={service.id || service.name}>
+          {readings.map((reading) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={reading.id || reading.name}>
               <Card>
                 <CardContent>
                   <Box display="flex" justifyContent="space-between" alignItems="start">
                     <Box>
-                      <Typography variant="h6" gutterBottom color="primary">
-                        {service.name}
+                      <Typography variant="h6" gutterBottom color="secondary">
+                        {reading.name}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {t("utility.account_short", "Account")}: {service.account_number}
+                        #{reading.meter_number}
                       </Typography>
                     </Box>
                     {isAdmin && (
                       <Box>
-                        <IconButton size="small" onClick={() => setEditingService(service)}>
+                        <IconButton size="small" onClick={() => setEditingReading(reading)}>
                           <Edit fontSize="small" />
                         </IconButton>
                         {!hideDeleteButtons && (
-                          <IconButton size="small" onClick={() => setDeletingService(service)} color="error">
+                          <IconButton size="small" onClick={() => setDeletingReading(reading)} color="error">
                             <Delete fontSize="small" />
                           </IconButton>
                         )}
@@ -239,21 +238,19 @@ export const AddressYearPage = () => {
                     )}
                   </Box>
                   <Box mt={2}>
-                    {Object.entries(service.monthly_payments)
+                    {Object.entries(reading.monthly_readings || {})
                       .sort(([monthA], [monthB]) => {
                         const indexA = MONTHS.indexOf(monthA as any);
                         const indexB = MONTHS.indexOf(monthB as any);
-
                         return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
                       })
-                      .map(([month, payment]) => (
+                      .map(([month, r]) => (
                         <Box key={month} display="flex" justifyContent="space-between" my={0.5}>
                           <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
-                            {month}:
+                            {t(`utility.months.${month}`, month)}:
                           </Typography>
-
                           <Typography variant="body2" fontWeight="bold">
-                            {payment.amount} {payment.currency}
+                            {r.value}
                           </Typography>
                         </Box>
                       ))}
@@ -263,11 +260,11 @@ export const AddressYearPage = () => {
             </Grid>
           ))}
 
-          {services.length === 0 && (
+          {readings.length === 0 && (
             <Grid size={12}>
               <Paper sx={{ p: 4, textAlign: "center" }}>
                 <Typography variant="body1" color="textSecondary">
-                  No utility services found for this year.
+                  {t("utility.no_readings", "No meter readings found for this year.")}
                 </Typography>
               </Paper>
             </Grid>
@@ -282,7 +279,7 @@ export const AddressYearPage = () => {
                   <strong>{t("utility.service", "Service")}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>{t("utility.account", "Account Number")}</strong>
+                  <strong>{t("utility.meter_number", "Meter #")}</strong>
                 </TableCell>
                 {MONTHS.map((month) => (
                   <TableCell key={month} align="right">
@@ -290,44 +287,40 @@ export const AddressYearPage = () => {
                   </TableCell>
                 ))}
                 <TableCell align="center">
-                  <strong>{t("address.create.cancel", "Actions")}</strong>
+                  <strong>{t("common.actions", "Actions")}</strong>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {services.length === 0 ? (
+              {readings.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={15} align="center">
+                  <TableCell colSpan={14} align="center">
                     <Typography variant="body1" color="textSecondary">
-                      {t("utility.no_services", "No utility services found for this year.")}
+                      {t("utility.no_readings", "No meter readings found for this year.")}
                     </Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                services.map((service) => (
-                  <TableRow key={service.id || service.name}>
+                readings.map((reading) => (
+                  <TableRow key={reading.id || reading.name}>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold">
-                        {service.name}
+                        {reading.name}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="textSecondary">
-                        {service.account_number}
+                        {reading.meter_number}
                       </Typography>
                     </TableCell>
                     {MONTHS.map((month) => {
-                      const payment = service.monthly_payments[month];
+                      const r = reading.monthly_readings?.[month];
                       return (
                         <TableCell key={month} align="right">
-                          {payment ? (
-                            <Typography variant="body2">
-                              {payment.amount} {payment.currency}
-                            </Typography>
+                          {r ? (
+                            <Typography variant="body2">{r.value}</Typography>
                           ) : (
-                            <Typography variant="body2" color="textSecondary">
-                              -
-                            </Typography>
+                            <Typography variant="body2" color="textSecondary">-</Typography>
                           )}
                         </TableCell>
                       );
@@ -335,18 +328,17 @@ export const AddressYearPage = () => {
                     <TableCell align="center">
                       {isAdmin && (
                         <>
-                          <IconButton size="small" onClick={() => setEditingService(service)}>
+                          <IconButton size="small" onClick={() => setEditingReading(reading)}>
                             <Edit fontSize="small" />
                           </IconButton>
                           {!hideDeleteButtons && (
-                            <IconButton size="small" onClick={() => setDeletingService(service)} color="error">
+                            <IconButton size="small" onClick={() => setDeletingReading(reading)} color="error">
                               <Delete fontSize="small" />
                             </IconButton>
                           )}
                         </>
                       )}
                     </TableCell>
-
                   </TableRow>
                 ))
               )}
@@ -355,50 +347,52 @@ export const AddressYearPage = () => {
         </TableContainer>
       )}
 
-      {editingService && (
+      {editingReading && (
         <Modal
-          title={editingService.name}
-          open={!!editingService}
-          onClose={() => setEditingService(null)}
+          title={editingReading.name}
+          open={!!editingReading}
+          onClose={() => setEditingReading(null)}
           footer={
             <Box display="flex" justifyContent="flex-end" gap={2}>
-              <Button onClick={() => setEditingService(null)} color="inherit">
+              <Button onClick={() => setEditingReading(null)} color="inherit">
                 {t("address.create.cancel")}
               </Button>
-              <Button variant="contained" type="submit" form="edit-utility-form">
+              <Button variant="contained" type="submit" form="edit-reading-form">
                 {t("utility.submit")}
               </Button>
             </Box>
           }
         >
-          <UtilityForm
-            id="edit-utility-form"
+          <ReadingForm
+            id="edit-reading-form"
             showActions={false}
             initialValues={{
-              currency: Object.values(editingService.monthly_payments || {})[0]?.currency || "",
-              accountNumber: editingService.account_number,
-              ...Object.entries(editingService.monthly_payments || {}).reduce(
+              serviceId: editingReading.name,
+              meter_number: editingReading.meter_number,
+              ...Object.entries(editingReading.monthly_readings || {}).reduce(
                 (acc: any, [month, val]) => {
-                  acc[month] = val.amount;
+                  acc[month] = val.value;
                   return acc;
                 },
                 {},
               ),
             }}
+
             onSubmit={handleUpdate}
-            onCancel={() => setEditingService(null)}
+            onCancel={() => setEditingReading(null)}
           />
         </Modal>
       )}
 
       <ConfirmModal
-        open={!!deletingService}
-        onClose={() => setDeletingService(null)}
+        open={!!deletingReading}
+        onClose={() => setDeletingReading(null)}
         onConfirm={handleDelete}
         title={t("common.delete_confirm_title", "Confirm Deletion")}
-        message={t("utility.delete_service_confirm", { 
-          name: deletingService?.name,
-          defaultValue: "Are you sure you want to delete this service? All data for this service will be lost."
+        message={t("utility.delete_reading_confirm", { 
+          name: deletingReading?.name, 
+          number: deletingReading?.meter_number,
+          defaultValue: "Are you sure you want to delete this meter reading? All data for this meter will be lost."
         })}
       />
 
@@ -411,25 +405,24 @@ export const AddressYearPage = () => {
             <Button onClick={() => setQuickEntryOpen(false)} color="inherit">
               {t("address.create.cancel")}
             </Button>
-            <Button variant="contained" type="submit" form="quick-entry-form">
+            <Button variant="contained" type="submit" form="quick-reading-form">
               {t("utility.submit")}
             </Button>
           </Box>
         }
       >
-        <QuickEntryForm
-          id="quick-entry-form"
+        <QuickReadingForm
+          id="quick-reading-form"
           showActions={false}
           currentMonth={currentMonth}
-          services={services.map((s) => ({
+          services={readings.map((s) => ({
             name: s.name,
-            accountNumber: s.account_number,
+            meter_number: s.meter_number,
           }))}
           onSubmit={handleQuickEntrySubmit}
           onCancel={() => setQuickEntryOpen(false)}
         />
       </Modal>
-
     </Box>
   );
 };

@@ -5,5 +5,8 @@ export interface UserProfile {
   email: string;
   displayName?: string;
   photoURL?: string;
+  role?: 'admin' | 'user';
+  allowedAddresses?: string[];
   createdAt: Timestamp | Date;
 }
+

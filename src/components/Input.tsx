@@ -3,9 +3,10 @@ import { FormControl, InputLabel, Input as MuiInput, FormHelperText } from "@mui
 
 type InputProps = React.ComponentProps<typeof MuiInput> & {
   label: string;
-  value: string;
+  value?: string;
   helperText?: string;
 };
+
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, helperText, error, ...inputProps }, ref) => (

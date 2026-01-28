@@ -10,6 +10,7 @@ import { DrawerHeaderUI } from "../ui/DrawerHeaderUI";
 import { MenuList } from "./MenuList";
 import React from "react";
 import logo from "../../assets/logo.png";
+import { useTranslation } from "react-i18next";
 
 type DrawerProps = {
   open: boolean;
@@ -23,20 +24,21 @@ export type listMenuType = {
   route?: string;
 };
 
-const listMenu1: listMenuType[] = [
-  { name: "Dashboard", route: "/", icon: <DashboardIcon /> },
-  { name: "Адреси", route: "address-list", icon: <HouseIcon /> },
-];
-const listMenu2: listMenuType[] = [
-  { name: "Налаштуваня", route: "settings", icon: <SettingsIcon /> },
-];
-
 export const Drawer = ({
   open,
   handleDrawerClose,
   isMobile,
 }: DrawerProps) => {
   const theme = useTheme();
+  const { t } = useTranslation();
+
+  const listMenu1: listMenuType[] = [
+    { name: t("nav.dashboard", "Dashboard"), route: "/", icon: <DashboardIcon /> },
+    { name: t("nav.addresses", "Addresses"), route: "address-list", icon: <HouseIcon /> },
+  ];
+  const listMenu2: listMenuType[] = [
+    { name: t("nav.settings", "Settings"), route: "settings", icon: <SettingsIcon /> },
+  ];
 
   return (
     <DrawerUI
@@ -83,8 +85,5 @@ export const Drawer = ({
         handleDrawerClose={isMobile ? handleDrawerClose : undefined}
       />
     </DrawerUI>
-
-
   );
 };
-

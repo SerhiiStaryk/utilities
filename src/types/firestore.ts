@@ -57,3 +57,50 @@ export interface UtilityDataPayload {
   december: string;
   currency: string;
 }
+
+export interface MonthReading {
+  value: string;
+}
+
+export interface MonthlyReadings {
+  january: MonthReading;
+  february: MonthReading;
+  march: MonthReading;
+  april: MonthReading;
+  may: MonthReading;
+  june: MonthReading;
+  july: MonthReading;
+  august: MonthReading;
+  september: MonthReading;
+  october: MonthReading;
+  november: MonthReading;
+  december: MonthReading;
+}
+
+export interface MeterReadingService {
+  id?: string;
+  name: string;
+  meter_number: string;
+  monthly_readings: MonthlyReadings;
+}
+
+export interface ReadingDataPayload {
+  addressId: string;
+  yearId: string;
+  serviceId: string;
+  meter_number: string;
+  january: string;
+  february: string;
+  march: string;
+  april: string;
+  may: string;
+  june: string;
+  july: string;
+  august: string;
+  september: string;
+  october: string;
+  november: string;
+  december: string;
+}
+
+

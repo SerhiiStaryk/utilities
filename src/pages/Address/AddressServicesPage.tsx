@@ -108,20 +108,19 @@ export const AddressServicesPage = () => {
             {t("address.services_list", "Services List")}
           </Typography>
           <Typography variant="body2" color="textSecondary" mb={3}>
-            Define the default utility services for this address (e.g., Gas, Water, Internet). These
-            will be automatically added when you create a new year.
+            {t("address.services_desc", "Define the default utility services for this address (e.g., Gas, Water, Internet). These will be automatically added when you create a new year.")}
           </Typography>
 
           <Stack direction={{ xs: "column", sm: "row" }} gap={2} mb={3} alignItems="stretch">
             <TextField
-              label="New Service Name"
+              label={t("address.new_service_name", "New Service Name")}
               value={newServiceName}
               onChange={(e) => setNewServiceName(e.target.value)}
               size="small"
               sx={{ flex: 1 }}
             />
             <TextField
-              label="Account Number (Optional)"
+              label={t("address.account_number_optional", "Account Number (Optional)")}
               value={newAccountNumber}
               onChange={(e) => setNewAccountNumber(e.target.value)}
               size="small"
@@ -140,14 +139,14 @@ export const AddressServicesPage = () => {
               disabled={!newServiceName.trim()}
               fullWidth={isMobile}
             >
-              Add
+              {t("common.add", "Add")}
             </Button>
           </Stack>
 
           <Paper variant="outlined" sx={{ p: 2, minHeight: 100 }}>
             {services.length === 0 ? (
               <Typography color="textSecondary" textAlign="center">
-                No services configured yet.
+                {t("address.no_services_configured", "No services configured yet.")}
               </Typography>
             ) : (
               <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -168,9 +167,11 @@ export const AddressServicesPage = () => {
           </Paper>
 
           <Stack mt={4} direction={{ xs: "column-reverse", sm: "row" }} justifyContent="flex-end" gap={2}>
-            <Button onClick={() => navigate(-1)} fullWidth={isMobile}>Cancel</Button>
+            <Button onClick={() => navigate(-1)} fullWidth={isMobile}>
+              {t("address.create.cancel")}
+            </Button>
             <Button variant="contained" onClick={handleSave} disabled={saving} fullWidth={isMobile}>
-              {saving ? "Saving..." : "Save Configuration"}
+              {saving ? t("common.saving") : t("address.save_config", "Save Configuration")}
             </Button>
           </Stack>
         </CardContent>

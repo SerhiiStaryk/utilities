@@ -7,7 +7,16 @@ import {
   setDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { AddressDoc, UtilityDataPayload, UtilityService, YearDoc } from "../types/firestore";
+import { toast } from "react-toastify";
+import {
+  AddressDoc,
+
+  UtilityDataPayload,
+  UtilityService,
+  YearDoc,
+  ReadingDataPayload,
+  MeterReadingService,
+} from "../types/firestore";
 
 const db = getFirestore();
 
@@ -17,9 +26,10 @@ export async function addAddress(id: string, data: AddressDoc) {
   try {
     const addressRef = doc(db, "addresses", id);
     await setDoc(addressRef, data, { merge: true });
-    alert(`Address ${id} created/updated successfully`);
+    toast.success(`Address ${id} created/updated successfully`);
   } catch (error) {
     console.error("Error adding address:", error);
+    toast.error(`Error adding address: ${id}`);
     throw error;
   }
 }
@@ -84,12 +94,73 @@ export async function addUtilityData({
     };
 
     await setDoc(serviceRef, payload);
-    alert(`Utility data for ${serviceId} in ${yearId} added/updated successfully`);
+    toast.success(`Utility data for ${serviceId} in ${yearId} added/updated successfully`);
   } catch (error) {
     console.error("Error adding utility data: ", error);
+    toast.error("Error adding utility data");
     throw error;
   }
 }
+
+export async function addMeterReadingData({
+  addressId,
+  yearId,
+  serviceId,
+  meter_number,
+  january,
+  february,
+  march,
+  april,
+  may,
+  june,
+  july,
+  august,
+  september,
+  october,
+  november,
+  december,
+}: ReadingDataPayload) {
+  try {
+    const docId = `${serviceId}_${meter_number}`.replace(/\s+/g, "_");
+    const readingRef = doc(
+      db,
+      "addresses",
+      addressId,
+      "years",
+      yearId,
+      "meter_readings",
+      docId,
+    );
+
+    const payload = {
+      name: serviceId,
+      meter_number,
+      monthly_readings: {
+        january: { value: january },
+        february: { value: february },
+        march: { value: march },
+        april: { value: april },
+        may: { value: may },
+        june: { value: june },
+        july: { value: july },
+        august: { value: august },
+        september: { value: september },
+        october: { value: october },
+        november: { value: november },
+        december: { value: december },
+      },
+    };
+
+    await setDoc(readingRef, payload);
+    toast.success(`Meter reading for ${serviceId} (#${meter_number}) added successfully`);
+  } catch (error) {
+    console.error("Error adding meter reading data: ", error);
+    toast.error("Error adding meter reading data");
+    throw error;
+  }
+}
+
+
 
 // --- Read ---
 
@@ -149,6 +220,43 @@ export async function getSpecificUtilityServiceData(
   }
 }
 
+export async function getAllMeterReadingsForYear(
+  addressId: string,
+  yearId: string,
+): Promise<MeterReadingService[]> {
+  const readingsCol = collection(db, "addresses", addressId, "years", yearId, "meter_readings");
+  const snapshot = await getDocs(readingsCol);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as MeterReadingService[];
+}
+
+export async function getSpecificMeterReadingData(
+  addressId: string,
+  yearId: string,
+  serviceId: string,
+): Promise<MeterReadingService | null> {
+  const readingRef = doc(
+    db,
+    "addresses",
+    addressId,
+    "years",
+    yearId,
+    "meter_readings",
+    serviceId,
+  );
+  const snapshot = await getDoc(readingRef);
+
+  if (snapshot.exists()) {
+    return { id: snapshot.id, ...snapshot.data() } as MeterReadingService;
+  } else {
+    console.warn(`No reading found: ${serviceId}`);
+    return null;
+  }
+}
+
+
 // --- Delete ---
 
 export async function deleteUtilityService(addressId: string, yearId: string, serviceId: string) {
@@ -163,9 +271,10 @@ export async function deleteUtilityService(addressId: string, yearId: string, se
       serviceId,
     );
     await deleteDoc(serviceRef);
-    alert(`Deleted service: ${serviceId}`);
+    toast.success(`Deleted service: ${serviceId}`);
   } catch (error) {
     console.error("Error deleting service:", error);
+    toast.error(`Error deleting service: ${serviceId}`);
     throw error;
   }
 }
@@ -189,9 +298,10 @@ export async function deleteYearAndServices(addressId: string, yearId: string) {
     // 3. Delete the year document itself
     const yearRef = doc(db, "addresses", addressId, "years", yearId);
     await deleteDoc(yearRef);
-    alert(`Deleted year: ${yearId}`);
+    toast.success(`Deleted year: ${yearId}`);
   } catch (error) {
     console.error("Error deleting year:", error);
+    toast.error(`Error deleting year: ${yearId}`);
     throw error;
   }
 }
@@ -209,9 +319,10 @@ export async function deleteAddress(id: string) {
   try {
     const addressRef = doc(db, "addresses", id);
     await deleteDoc(addressRef);
-    alert(`Address ${id} deleted`);
+    toast.success(`Address ${id} deleted`);
   } catch (error) {
     console.error("Error deleting address:", error);
+    toast.error(`Error deleting address: ${id}`);
     throw error;
   }
 }
@@ -233,12 +344,59 @@ export async function updateUtilityService(
       serviceId,
     );
     await setDoc(serviceRef, data, { merge: true });
-    alert(`Service ${serviceId} updated successfully`);
+    toast.success(`Service ${serviceId} updated successfully`);
   } catch (error) {
     console.error("Error updating service:", error);
+    toast.error(`Error updating service: ${serviceId}`);
     throw error;
   }
 }
+
+export async function updateMeterReading(
+  addressId: string,
+  yearId: string,
+  serviceId: string,
+  data: Partial<MeterReadingService>,
+) {
+  try {
+    const readingRef = doc(
+      db,
+      "addresses",
+      addressId,
+      "years",
+      yearId,
+      "meter_readings",
+      serviceId,
+    );
+    await setDoc(readingRef, data, { merge: true });
+    toast.success(`Meter reading ${serviceId} updated successfully`);
+  } catch (error) {
+    console.error("Error updating meter reading:", error);
+    toast.error("Error updating meter reading");
+    throw error;
+  }
+}
+
+export async function deleteMeterReading(addressId: string, yearId: string, serviceId: string) {
+  try {
+    const readingRef = doc(
+      db,
+      "addresses",
+      addressId,
+      "years",
+      yearId,
+      "meter_readings",
+      serviceId,
+    );
+    await deleteDoc(readingRef);
+    toast.success(`Deleted reading for: ${serviceId}`);
+  } catch (error) {
+    console.error("Error deleting meter reading:", error);
+    toast.error("Error deleting meter reading");
+    throw error;
+  }
+}
+
 export async function createYearWithServices(
   addressId: string,
   yearId: string,
@@ -273,9 +431,80 @@ export async function createYearWithServices(
     });
 
     await Promise.all(promises);
-    alert(`Year ${yearId} created with services`);
+    toast.success(`Year ${yearId} created with services`);
   } catch (error) {
     console.error("Error creating year with services:", error);
+    toast.error(`Error creating year: ${yearId}`);
     throw error;
   }
 }
+
+// --- User Management ---
+
+export async function getUsers(): Promise<{ id: string; role: string; email: string; allowedAddresses?: string[] }[]> {
+  const usersCol = collection(db, "users");
+  const snapshot = await getDocs(usersCol);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as { role: string; email: string; allowedAddresses?: string[] }),
+  }));
+}
+
+
+export async function updateUserRole(uid: string, role: "admin" | "user") {
+  try {
+    const userRef = doc(db, "users", uid);
+    await setDoc(userRef, { role }, { merge: true });
+    toast.success(`User role updated to ${role}`);
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    toast.error("Error updating user role");
+    throw error;
+  }
+}
+
+export async function updateAllowedAddresses(uid: string, addresses: string[]) {
+  try {
+    const userRef = doc(db, "users", uid);
+    await setDoc(userRef, { allowedAddresses: addresses }, { merge: true });
+  } catch (error) {
+    console.error("Error updating allowed addresses:", error);
+    throw error;
+  }
+}
+
+
+export async function syncUserProfile(uid: string, data: { displayName?: string; photoURL?: string }) {
+  try {
+    const userRef = doc(db, "users", uid);
+    await setDoc(userRef, data, { merge: true });
+  } catch (error) {
+    console.error("Error syncing user profile:", error);
+    throw error;
+  }
+}
+
+export async function getUserSettings(uid: string) {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      return userDoc.data().settings || null;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching user settings:", error);
+    return null;
+  }
+}
+
+export async function updateUserSettings(uid: string, settings: any) {
+  try {
+    const userRef = doc(db, "users", uid);
+    await setDoc(userRef, { settings }, { merge: true });
+  } catch (error) {
+    console.error("Error updating user settings:", error);
+    throw error;
+  }
+}
+

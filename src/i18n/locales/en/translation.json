@@ -9,6 +9,12 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "dash": {
+    "expenses": "Expenses",
+    "readings": "Readings",
+    "total_usage": "Total Consumption",
+    "year_usage": "Yearly Consumption"
+  },
   "dashboard": {
     "title": "Dashboard",
     "overview": "Overview for {{address}}",
@@ -20,13 +26,15 @@
       "total_spent": "Total Spent",
       "year_spent": "Spent latest year",
       "avg_monthly": "Avg Monthly",
-      "last_month": "Last Month"
+      "last_month": "Last Month",
+      "filtered_spent": "Filtered Total"
     },
     "charts": {
       "performance": "Spending Dynamics",
       "device_distribution": "Service Distribution",
       "sales_category": "Total by Service",
-      "monthly_trends": "Monthly Statistics"
+      "monthly_trends": "Monthly Statistics",
+      "no_data": "No data available for charts"
     }
   },
   "address": {
@@ -34,6 +42,13 @@
     "details_title": "Details for {{address}}",
     "year_archive": "Years Archive",
     "actions": "Actions",
+    "delete_title": "Delete Address",
+    "delete_confirm": "Are you sure you want to delete address {{address}}? This action cannot be undone.",
+    "services_desc": "Define the default utility services for this address (e.g., Gas, Water, Internet). These will be automatically added when you create a new year.",
+    "new_service_name": "New Service Name",
+    "account_number_optional": "Account Number (Optional)",
+    "no_services_configured": "No services configured yet.",
+    "save_config": "Save Configuration",
     "create": {
       "title": "Create New Address",
       "id_label": "Unique ID (Slug)",
@@ -52,25 +67,61 @@
   },
   "year": {
     "create": "New Year",
-    "create_title": "Create New Year"
+    "create_title": "Create New Year",
+    "create_desc": "Enter the year (e.g., 2026). This will create a new archive and automatically add the configured services for this address.",
+    "no_data": "No years found. Add utility data to create a year.",
+    "delete_title": "Delete Year Archive",
+    "delete_confirm": "Are you sure you want to delete the archive for {{year}}? All associated utility data will be lost."
   },
   "common": {
-    "back": "Back"
+    "back": "Back",
+    "all": "All",
+    "email": "Email",
+    "role": "Role",
+    "role_user": "User",
+    "role_admin": "Admin",
+    "actions": "Actions",
+    "add": "Add",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "saving": "Saving...",
+    "no_data": "No data",
+    "year_short": "year",
+    "delete_confirm_title": "Confirm Deletion"
+  },
+  "profile": {
+    "save_success": "Profile updated successfully",
+    "save_error": "Failed to update profile",
+    "display_name": "Display Name",
+    "photo_url": "Photo URL"
   },
   "utility": {
     "add_title": "Add Utility for {{address}}",
+    "payments": "Payments",
     "config": "Configuration",
     "monthly": "Monthly Usage",
     "year": "Year",
     "service": "Service",
     "currency": "Currency",
     "account": "Account Number",
+    "account_short": "Account",
     "submit": "Save Utility",
     "month": "Month",
     "amount": "Amount",
     "reporting_for": "Reporting for",
     "quick_entry": "Quick Entry",
     "enter_current_month": "Enter Current Month",
+    "meter_readings": "Meter Readings",
+    "monthly_readings": "Monthly Readings",
+    "meter_number": "Meter Number",
+    "no_readings": "No meter readings found for this year.",
+    "no_services": "No utility services found for this year.",
+    "summary": "Summary",
+    "current_reading": "Current Reading",
+    "difference": "Difference",
+    "add_reading_error": "Failed to add meter reading",
+    "delete_reading_confirm": "Are you sure you want to delete meter reading {{name}} (#{{number}})? All data for this meter will be lost.",
+    "delete_service_confirm": "Are you sure you want to delete service {{name}}? All data for this service will be lost.",
     "months": {
       "january": "January",
       "february": "February",
@@ -94,13 +145,16 @@
     "sign_out": "Sign Out",
     "edit": "Edit",
     "preferences": "Preferences",
-    "notifications": "Notifications",
     "hide_delete": "Hide delete buttons",
     "hide_delete_desc": "Hide all delete buttons throughout the application",
-    "notifications_desc": "Manage email and push notifications",
     "dark_mode": "Dark Mode",
     "dark_mode_desc": "Toggle dark/light theme",
     "language": "Language",
-    "language_desc": "Select your preferred language"
+    "language_desc": "Select your preferred language",
+    "admin_tools": "Admin Tools",
+    "user_management": "User Management",
+    "user_management_desc": "Manage user roles and permissions",
+    "open": "Open",
+    "authorized_addresses": "Authorized Addresses"
   }
 }

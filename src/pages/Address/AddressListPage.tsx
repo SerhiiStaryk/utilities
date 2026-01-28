@@ -19,14 +19,26 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 import { getAddresses } from "../../firebase/firestore";
 import { AddressDoc } from "../../types/firestore";
+import { useAuth } from "../../app/providers/AuthProvider";
 
 export const AddressListPage = () => {
   const { t } = useTranslation();
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
+  const { role, allowedAddresses } = useAuth();
+  const isAdmin = role === "admin";
 
   useEffect(() => {
-    getAddresses().then(setAddresses).catch(console.error);
-  }, []);
+    getAddresses().then((allAddresses) => {
+      if (isAdmin) {
+        setAddresses(allAddresses);
+      } else {
+        const filtered = allAddresses.filter(addr => allowedAddresses?.includes(addr.id));
+        setAddresses(filtered);
+      }
+    }).catch(console.error);
+  }, [isAdmin, allowedAddresses]);
+
+
 
   return (
     <Box>
@@ -40,15 +52,17 @@ export const AddressListPage = () => {
         <Typography variant="h4" fontWeight="bold">
           {t("nav.addresses")}
         </Typography>
-        <Button
-          component={Link}
-          to="create"
-          variant="contained"
-          startIcon={<AddIcon />}
-          fullWidth={{ xs: true, sm: false } as any}
-        >
-          {t("dashboard.new_address")}
-        </Button>
+        {isAdmin && (
+          <Button
+            component={Link}
+            to="create"
+            variant="contained"
+            startIcon={<AddIcon />}
+            fullWidth={{ xs: true, sm: false } as any}
+          >
+            {t("dashboard.new_address")}
+          </Button>
+        )}
       </Stack>
 
 

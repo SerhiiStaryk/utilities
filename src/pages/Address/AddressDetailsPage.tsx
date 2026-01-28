@@ -18,9 +18,12 @@ import {
 import { ArrowBack, Edit, Delete, CalendarToday } from "@mui/icons-material";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Modal } from "../../components/modal/Modal";
+import { ConfirmModal } from "../../components/modal/ConfirmModal";
 import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
+import { CreateReadingModal } from "../../components/modal/CreateReadingModal";
 import {
   deleteAddress,
+
   getYearsForAddress,
   createYearWithServices,
   getAddress,
@@ -31,7 +34,10 @@ import { Settings } from "@mui/icons-material";
 import { Input } from "../../components/Input";
 import { useTranslation } from "react-i18next";
 import { useSettings } from "../../app/providers/SettingsProvider";
+import { useAuth } from "../../app/providers/AuthProvider";
 
+
+import { toast } from "react-toastify";
 
 export const AddressDetailsPage = () => {
   const { id } = useParams();
@@ -41,6 +47,9 @@ export const AddressDetailsPage = () => {
 
   const { t } = useTranslation();
   const { hideDeleteButtons } = useSettings();
+  const { role, allowedAddresses, loading } = useAuth();
+  const isAdmin = role === "admin";
+
   const [addressData, setAddressData] = useState<{ 
     street: string; 
     house_number: string;
@@ -50,6 +59,9 @@ export const AddressDetailsPage = () => {
   const [yearsList, setYearsList] = useState<{ id: string; data: YearDoc }[]>([]);
   const [createYearOpen, setCreateYearOpen] = useState(false);
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
+  const [createReadingOpen, setCreateReadingOpen] = useState(false);
+  const [deleteAddressOpen, setDeleteAddressOpen] = useState(false);
+  const [deletingYear, setDeletingYear] = useState<string | null>(null);
   const [newYear, setNewYear] = useState("");
 
   const fetchData = async () => {
@@ -74,8 +86,13 @@ export const AddressDetailsPage = () => {
   };
 
   useEffect(() => {
+    if (!loading && !isAdmin && allowedAddresses && id && !allowedAddresses.includes(id)) {
+      navigate("/address-list");
+      return;
+    }
     fetchData();
-  }, [id]);
+  }, [id, isAdmin, allowedAddresses, loading]);
+
 
   const fetchYears = () => {
     if (id) {
@@ -100,32 +117,30 @@ export const AddressDetailsPage = () => {
     }
   };
 
-  const handleDeleteYear = async (yearStr: string) => {
-    if (!id) return;
-    if (
-      window.confirm(t("Are you sure you want to delete this year archive? All data will be lost."))
-    ) {
-      try {
-        await deleteYearAndServices(id, yearStr);
-        fetchYears();
-      } catch (e) {
-        console.error(e);
-        alert("Failed to delete year");
-      }
+  const handleDeleteYear = async () => {
+    if (!id || !deletingYear) return;
+    try {
+      await deleteYearAndServices(id, deletingYear);
+      setDeletingYear(null);
+      fetchYears();
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to delete year");
     }
   };
 
   const handleDelete = async () => {
-    if (id && window.confirm(t("Are you sure you want to delete this address?"))) {
-      try {
-        await deleteAddress(id);
-        navigate("/address-list");
-      } catch (e) {
-        console.error(e);
-        alert("Failed to delete address");
-      }
+    if (!id) return;
+    try {
+      await deleteAddress(id);
+      setDeleteAddressOpen(false);
+      navigate("/address-list");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to delete address");
     }
   };
+
 
   const formatFullAddress = () => {
     if (!addressData) return id;
@@ -158,34 +173,38 @@ export const AddressDetailsPage = () => {
 
         </Box>
         <Stack direction="row" gap={1} sx={{ width: { xs: "100%", sm: "auto" }, flexWrap: "wrap" }}>
-          <Button
-            variant="outlined"
-            startIcon={<Settings />}
-            onClick={() => navigate(`/address-list/${id}/services`)}
-            size={isMobile ? "small" : "medium"}
-            sx={{ flexGrow: { xs: 1, sm: 0 } }}
-          >
-            Services
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<Edit />}
-            onClick={() => navigate(`/address-list/edit/${id}`)}
-            size={isMobile ? "small" : "medium"}
-            sx={{ flexGrow: { xs: 1, sm: 0 } }}
-          >
-            Edit
-          </Button>
-          {!hideDeleteButtons && (
+          {isAdmin && (
+            <Button
+              variant="outlined"
+              startIcon={<Settings />}
+              onClick={() => navigate(`/address-list/${id}/services`)}
+              size={isMobile ? "small" : "medium"}
+              sx={{ flexGrow: { xs: 1, sm: 0 } }}
+            >
+              {t("address.configure_services", "Services")}
+            </Button>
+          )}
+          {isAdmin && (
+            <Button
+              variant="outlined"
+              startIcon={<Edit />}
+              onClick={() => navigate(`/address-list/edit/${id}`)}
+              size={isMobile ? "small" : "medium"}
+              sx={{ flexGrow: { xs: 1, sm: 0 } }}
+            >
+              {t("settings.edit", "Edit")}
+            </Button>
+          )}
+          {isAdmin && !hideDeleteButtons && (
             <Button
               variant="outlined"
               color="error"
               startIcon={<Delete />}
-              onClick={handleDelete}
+              onClick={() => setDeleteAddressOpen(true)}
               size={isMobile ? "small" : "medium"}
               sx={{ flexGrow: { xs: 1, sm: 0 } }}
             >
-              Delete
+              {t("common.delete", "Delete")}
             </Button>
           )}
         </Stack>
@@ -201,22 +220,37 @@ export const AddressDetailsPage = () => {
         >
           <Typography variant="h6">{t("address.year_archive", "Years Archive")}</Typography>
           <Stack direction="row" gap={2} sx={{ width: { xs: "100%", sm: "auto" } }}>
-            <Button
-              variant="outlined"
-              onClick={() => setCreateYearOpen(true)}
-              sx={{ flexGrow: 1 }}
-              size={isMobile ? "small" : "medium"}
-            >
-              {t("year.create", "New Year")}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => setCreateUtilityOpen(true)}
-              sx={{ flexGrow: 1 }}
-              size={isMobile ? "small" : "medium"}
-            >
-              {t("dashboard.add_utility")}
-            </Button>
+              {isAdmin && (
+                <Button
+                  variant="outlined"
+                  onClick={() => setCreateYearOpen(true)}
+                  sx={{ flexGrow: 1 }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  {t("year.create", "New Year")}
+                </Button>
+              )}
+              {isAdmin && (
+                <Stack direction="row" gap={1} sx={{ flexGrow: 1 }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setCreateUtilityOpen(true)}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ flexGrow: 1 }}
+                  >
+                    {t("dashboard.add_utility")}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setCreateReadingOpen(true)}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ flexGrow: 1 }}
+                  >
+                    {t("utility.meter_readings")}
+                  </Button>
+                </Stack>
+              )}
           </Stack>
         </Stack>
 
@@ -226,11 +260,11 @@ export const AddressDetailsPage = () => {
               key={year.id}
               disablePadding
               secondaryAction={
-                !hideDeleteButtons && (
+                isAdmin && !hideDeleteButtons && (
                   <IconButton
                     edge="end"
                     aria-label="delete"
-                    onClick={() => handleDeleteYear(year.data.year.toString())}
+                    onClick={() => setDeletingYear(year.data.year.toString())}
                   >
                     <Delete />
                   </IconButton>
@@ -243,11 +277,19 @@ export const AddressDetailsPage = () => {
                 </ListItemIcon>
                 <ListItemText primary={year.data.year} />
               </ListItemButton>
+              <Button
+                size="small"
+                onClick={() => navigate(`year/${year.data.year}/readings`)}
+                sx={{ mr: 7 }}
+              >
+                {t("utility.meter_readings", "Readings")}
+              </Button>
+
             </ListItem>
           ))}
           {yearsList.length === 0 && (
             <Typography variant="body2" color="textSecondary">
-              No years found. Add utility data to create a year.
+              {t("year.no_data", "No years found. Add utility data to create a year.")}
             </Typography>
           )}
         </List>
@@ -259,20 +301,19 @@ export const AddressDetailsPage = () => {
         onClose={() => setCreateYearOpen(false)}
         footer={
           <Box display="flex" justifyContent="flex-end" gap={2}>
-            <Button onClick={() => setCreateYearOpen(false)}>Cancel</Button>
+            <Button onClick={() => setCreateYearOpen(false)}>{t("address.create.cancel")}</Button>
             <Button variant="contained" onClick={handleCreateYear} disabled={!newYear}>
-              Create
+              {t("address.create.submit")}
             </Button>
           </Box>
         }
       >
         <Box>
           <Typography variant="body2" mb={2} color="textSecondary">
-            Enter the year (e.g., 2026). This will create a new archive and automatically add the
-            configured services for this address.
+            {t("year.create_desc", "Enter the year (e.g., 2026). This will create a new archive and automatically add the configured services for this address.")}
           </Typography>
           <Input
-            label="Year"
+            label={t("utility.year", "Year")}
             value={newYear}
             onChange={(e) => setNewYear(e.target.value)}
             type="number"
@@ -287,7 +328,37 @@ export const AddressDetailsPage = () => {
         onSuccess={fetchYears}
       />
 
+      <CreateReadingModal
+        open={createReadingOpen}
+        onClose={() => setCreateReadingOpen(false)}
+        addressId={id || ""}
+        onSuccess={fetchYears}
+      />
 
+
+
+      <ConfirmModal
+        open={deleteAddressOpen}
+        onClose={() => setDeleteAddressOpen(false)}
+        onConfirm={handleDelete}
+        title={t("address.delete_title", "Delete Address")}
+        message={t("address.delete_confirm", { 
+          address: formatFullAddress(),
+          defaultValue: "Are you sure you want to delete this address? This action cannot be undone."
+        })}
+      />
+
+      <ConfirmModal
+        open={!!deletingYear}
+        onClose={() => setDeletingYear(null)}
+        onConfirm={handleDeleteYear}
+        title={t("year.delete_title", "Delete Year Archive")}
+        message={t("year.delete_confirm", { 
+          year: deletingYear,
+          defaultValue: "Are you sure you want to delete the archive for this year? All associated utility data will be lost."
+        })}
+      />
     </Box>
+
   );
 };

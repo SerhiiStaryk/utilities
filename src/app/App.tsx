@@ -1,20 +1,39 @@
-import { ThemeProvider } from "@mui/material";
-import { theme } from "../constants/theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { getAppTheme } from "../constants/theme";
 import AppRouterProvider from "./providers/RouterProvider ";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ModalController } from "../controller/modal.controller";
-import { SettingsProvider } from "./providers/SettingsProvider";
+import { SettingsProvider, useSettings } from "./providers/SettingsProvider";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { themeMode } = useSettings();
+  const theme = getAppTheme(themeMode);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
+  );
+};
 
 const App = () => (
-  <SettingsProvider>
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
+  <AuthProvider>
+    <SettingsProvider>
+      <ThemeWrapper>
         <ModalController>
           <AppRouterProvider />
+          <ToastContainer position="bottom-right" autoClose={3000} />
         </ModalController>
-      </ThemeProvider>
-    </AuthProvider>
-  </SettingsProvider>
+      </ThemeWrapper>
+    </SettingsProvider>
+  </AuthProvider>
 );
+
+
+
 
 export default App;

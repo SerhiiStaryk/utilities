@@ -12,19 +12,22 @@ import {
   InputLabel,
   Select as MuiSelect,
   CircularProgress,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import { BarChart } from "../../components/charts/BarChart";
 import { LineChart } from "../../components/charts/LineChart";
 import { PieChart } from "../../components/charts/PieChart";
 import BarChartAll from "../../components/charts/BarChartAll";
-import { Add } from "@mui/icons-material";
+import { Add, Payment, Speed } from "@mui/icons-material";
 import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
 import { getAddresses } from "../../firebase/firestore";
 import { AddressDoc } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
 import Grid from "@mui/material/Grid2";
-import { useDashboardData } from "../../hooks/useDashboardData";
+import { useDashboardData, DashboardType } from "../../hooks/useDashboardData";
 import { MONTHS } from "../../constants/months";
+import { useAuth } from "../../app/providers/AuthProvider";
 
 const StatCard = ({ title, value, loading }: { title: string; value: string | number; loading?: boolean }) => (
   <Card sx={{ height: "100%" }}>
@@ -47,20 +50,34 @@ export const DashboardPage = () => {
   const { t } = useTranslation();
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const [dashboardType, setDashboardType] = useState<DashboardType>("expenses");
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [selectedService, setSelectedService] = useState<string>("all");
 
+  const { role, allowedAddresses } = useAuth();
+  const isAdmin = role === "admin";
+
   const { stats, chartData, availableYears, availableServices, loading: dataLoading } = 
-    useDashboardData(selectedAddress, selectedYear, selectedService);
+    useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService);
 
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
 
+
   const fetchAddresses = async () => {
     try {
-      const list = await getAddresses();
-      setAddresses(list);
-      if (list.length > 0 && !selectedAddress) {
-        setSelectedAddress(list[0].id);
+      const allAddresses = await getAddresses();
+      let filtered: { id: string; data: AddressDoc }[] = [];
+      
+      if (isAdmin) {
+        filtered = allAddresses;
+      } else {
+        filtered = allAddresses.filter(addr => allowedAddresses?.includes(addr.id));
+      }
+
+      setAddresses(filtered);
+      
+      if (filtered.length > 0 && !selectedAddress) {
+        setSelectedAddress(filtered[0].id);
       }
     } catch (e) {
       console.error("Failed to fetch addresses", e);
@@ -69,18 +86,24 @@ export const DashboardPage = () => {
 
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [isAdmin, allowedAddresses]);
+
 
   // Reset year/service when address changes
   useEffect(() => {
     setSelectedYear("all");
     setSelectedService("all");
-  }, [selectedAddress]);
+  }, [selectedAddress, dashboardType]);
 
-  const formatCurrency = (value: number) => {
+  const formatValue = (value: number) => {
+    if (dashboardType === "expenses") {
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency: "UAH",
+      }).format(value);
+    }
     return new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: "UAH",
+      maximumFractionDigits: 2,
     }).format(value);
   };
 
@@ -98,6 +121,8 @@ export const DashboardPage = () => {
             {t("dashboard.title")}
           </Typography>
           <Typography variant="body2" color="textSecondary">
+            {dashboardType === "expenses" ? t("utility.payments") : t("utility.meter_readings")} 
+            {" — "}
             {t("dashboard.overview", {
               address: selectedAddress || t("dashboard.all_addresses"),
             })}
@@ -110,6 +135,23 @@ export const DashboardPage = () => {
           alignItems="center"
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
+          <ToggleButtonGroup
+            color="primary"
+            value={dashboardType}
+            exclusive
+            onChange={(_, newType) => newType && setDashboardType(newType)}
+            size="small"
+          >
+            <ToggleButton value="expenses">
+              <Payment sx={{ mr: 1 }} fontSize="small" />
+              {t("dash.expenses", "Витрати")}
+            </ToggleButton>
+            <ToggleButton value="readings">
+              <Speed sx={{ mr: 1 }} fontSize="small" />
+              {t("dash.readings", "Споживання")}
+            </ToggleButton>
+          </ToggleButtonGroup>
+
           {/* Address Filter */}
           <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
             <InputLabel>{t("dashboard.current_address")}</InputLabel>
@@ -156,15 +198,17 @@ export const DashboardPage = () => {
             </MuiSelect>
           </FormControl>
 
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            disabled={!selectedAddress}
-            onClick={() => setCreateUtilityOpen(true)}
-            sx={{ width: { xs: "100%", sm: "auto" } }}
-          >
-            {t("dashboard.add_utility")}
-          </Button>
+          {isAdmin && (
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              disabled={!selectedAddress}
+              onClick={() => setCreateUtilityOpen(true)}
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+            >
+              {t("dashboard.add_utility")}
+            </Button>
+          )}
         </Stack>
       </Stack>
 
@@ -177,33 +221,34 @@ export const DashboardPage = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
-            title={t("dashboard.stats.total_spent")}
-            value={formatCurrency(stats.totalSpent)}
+            title={dashboardType === "expenses" ? t("dashboard.stats.total_spent") : t("dash.total_usage", "Разом спожито")}
+            value={formatValue(stats.total)}
             loading={dataLoading}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
-            title={selectedYear === "all" ? t("dashboard.stats.filtered_spent", "Filtered Total") : t("dashboard.stats.year_spent")}
-            value={formatCurrency(stats.filteredSpent)}
+            title={selectedYear === "all" ? t("dashboard.stats.filtered_spent", "Filtered Total") : (dashboardType === "expenses" ? t("dashboard.stats.year_spent") : t("dash.year_usage", "Спожито за рік"))}
+            value={formatValue(stats.filtered)}
             loading={dataLoading}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title={t("dashboard.stats.avg_monthly")}
-            value={formatCurrency(stats.avgMonthly)}
+            value={formatValue(stats.avgMonthly)}
             loading={dataLoading}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title={t("dashboard.stats.last_month")}
-            value={formatCurrency(stats.lastMonthSpent)}
+            value={formatValue(stats.lastMonth)}
             loading={dataLoading}
           />
         </Grid>
       </Grid>
+
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 8 }}>
@@ -224,7 +269,7 @@ export const DashboardPage = () => {
                 />
               ) : (
                 <Typography variant="body2" color="textSecondary" textAlign="center" mt={10}>
-                  No data available for charts
+                  {t("dashboard.charts.no_data", "No data available for charts")}
                 </Typography>
               )}
             </Box>
@@ -249,7 +294,7 @@ export const DashboardPage = () => {
                 <PieChart data={chartData.pieData} />
               ) : (
                 <Typography variant="body2" color="textSecondary">
-                  No data
+                  {t("common.no_data", "No data")}
                 </Typography>
               )}
             </Box>
@@ -267,7 +312,7 @@ export const DashboardPage = () => {
                 <BarChart data={chartData.barData} label={t("utility.service")} />
               ) : (
                 <Typography variant="body2" color="textSecondary">
-                  No data
+                  {t("common.no_data", "No data")}
                 </Typography>
               )}
             </Box>
@@ -289,7 +334,7 @@ export const DashboardPage = () => {
                 />
               ) : (
                 <Typography variant="body2" color="textSecondary">
-                  No data
+                  {t("common.no_data", "No data")}
                 </Typography>
               )}
             </Box>
