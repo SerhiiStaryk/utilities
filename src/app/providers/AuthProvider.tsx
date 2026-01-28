@@ -31,14 +31,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(currentUser);
       
       if (currentUser) {
-        console.log("Checking role for UID:", currentUser.uid);
         try {
           const userDocRef = doc(db, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
           
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            console.log("Firestore User Data:", userData);
             setRole(userData.role || null);
             setAllowedAddresses(userData.allowedAddresses || []);
           } else {
@@ -47,7 +45,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setAllowedAddresses([]);
           }
         } catch (error) {
-          console.error("Error fetching user role:", error);
           setRole(null);
           setAllowedAddresses([]);
         }
