@@ -102,5 +102,3 @@ export interface ReadingDataPayload {
   november: string;
   december: string;
 }
-
-

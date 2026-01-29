@@ -12,14 +12,8 @@ export const MenuList: React.FC<MenuListProps> = ({ list, open, handleDrawerClos
   return (
     <List>
       {list.map((item, index) => (
-        <MenuItem
-          key={index}
-          item={item}
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-        />
+        <MenuItem key={index} item={item} open={open} handleDrawerClose={handleDrawerClose} />
       ))}
     </List>
   );
 };
-

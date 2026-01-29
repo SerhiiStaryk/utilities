@@ -18,7 +18,12 @@ import {
   Checkbox,
   ListItemText,
 } from "@mui/material";
-import { getUsers, updateUserRole, getAddresses, updateAllowedAddresses } from "../../firebase/firestore";
+import {
+  getUsers,
+  updateUserRole,
+  getAddresses,
+  updateAllowedAddresses,
+} from "../../firebase/firestore";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../app/providers/AuthProvider";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +34,9 @@ export const UsersPage = () => {
   const { t } = useTranslation();
   const { role } = useAuth();
   const navigate = useNavigate();
-  const [users, setUsers] = useState<{ id: string; role: string; email: string; allowedAddresses?: string[] }[]>([]);
+  const [users, setUsers] = useState<
+    { id: string; role: string; email: string; allowedAddresses?: string[] }[]
+  >([]);
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,9 +63,7 @@ export const UsersPage = () => {
   const handleRoleChange = async (uid: string, newRole: "admin" | "user") => {
     try {
       await updateUserRole(uid, newRole);
-      setUsers((prev) =>
-        prev.map((u) => (u.id === uid ? { ...u, role: newRole } : u))
-      );
+      setUsers((prev) => prev.map((u) => (u.id === uid ? { ...u, role: newRole } : u)));
     } catch (e) {
       console.error(e);
     }
@@ -68,7 +73,7 @@ export const UsersPage = () => {
     try {
       await updateAllowedAddresses(uid, selectedIds);
       setUsers((prev) =>
-        prev.map((u) => (u.id === uid ? { ...u, allowedAddresses: selectedIds } : u))
+        prev.map((u) => (u.id === uid ? { ...u, allowedAddresses: selectedIds } : u)),
       );
     } catch (e) {
       console.error(e);
@@ -126,17 +131,19 @@ export const UsersPage = () => {
                     size="small"
                     fullWidth
                     value={user.allowedAddresses || []}
-                    onChange={(e) => handleAllowedAddressesChange(user.id, e.target.value as string[])}
+                    onChange={(e) =>
+                      handleAllowedAddressesChange(user.id, e.target.value as string[])
+                    }
                     input={<OutlinedInput size="small" />}
                     renderValue={(selected) => (
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {(selected as string[]).map((value) => {
                           const addr = addresses.find((a) => a.id === value);
                           return (
-                            <Chip 
-                              key={value} 
-                              label={addr ? `${addr.data.street} ${addr.data.house_number}` : value} 
-                              size="small" 
+                            <Chip
+                              key={value}
+                              label={addr ? `${addr.data.street} ${addr.data.house_number}` : value}
+                              size="small"
                             />
                           );
                         })}
@@ -146,7 +153,9 @@ export const UsersPage = () => {
                     {addresses.map((addr) => (
                       <MenuItem key={addr.id} value={addr.id}>
                         <Checkbox checked={(user.allowedAddresses || []).indexOf(addr.id) > -1} />
-                        <ListItemText primary={`${addr.data.street} ${addr.data.house_number}, ${addr.data.city}`} />
+                        <ListItemText
+                          primary={`${addr.data.street} ${addr.data.house_number}, ${addr.data.city}`}
+                        />
                       </MenuItem>
                     ))}
                   </Select>
@@ -155,9 +164,7 @@ export const UsersPage = () => {
                   <Select
                     size="small"
                     value={user.role}
-                    onChange={(e) =>
-                      handleRoleChange(user.id, e.target.value as "admin" | "user")
-                    }
+                    onChange={(e) => handleRoleChange(user.id, e.target.value as "admin" | "user")}
                     sx={{ minWidth: 120 }}
                   >
                     <MenuItem value="user">{t("common.role_user", "User")}</MenuItem>
@@ -172,4 +179,3 @@ export const UsersPage = () => {
     </Box>
   );
 };
-

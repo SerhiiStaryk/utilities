@@ -51,16 +51,13 @@ export const SettingsPage = () => {
                 primary={t("settings.user_management", "User Management")}
                 secondary={t("settings.user_management_desc", "Manage user roles and permissions")}
               />
-              <Button onClick={() => navigate("/users")}>
-                {t("settings.open", "Open")}
-              </Button>
+              <Button onClick={() => navigate("/users")}>{t("settings.open", "Open")}</Button>
             </ListItem>
           </List>
         </Paper>
       )}
 
       <Paper sx={{ mb: 3, overflow: "hidden" }}>
-
         <Typography variant="h6" sx={{ p: 2, bgcolor: "action.hover" }}>
           {t("settings.account")}
         </Typography>
@@ -123,11 +120,10 @@ export const SettingsPage = () => {
               primary={t("settings.dark_mode")}
               secondary={t("settings.dark_mode_desc")}
             />
-            <Switch 
-              checked={themeMode === "dark"} 
-              onChange={(e) => setThemeMode(e.target.checked ? "dark" : "light")} 
+            <Switch
+              checked={themeMode === "dark"}
+              onChange={(e) => setThemeMode(e.target.checked ? "dark" : "light")}
             />
-
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem>

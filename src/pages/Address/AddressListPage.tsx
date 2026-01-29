@@ -28,17 +28,17 @@ export const AddressListPage = () => {
   const isAdmin = role === "admin";
 
   useEffect(() => {
-    getAddresses().then((allAddresses) => {
-      if (isAdmin) {
-        setAddresses(allAddresses);
-      } else {
-        const filtered = allAddresses.filter(addr => allowedAddresses?.includes(addr.id));
-        setAddresses(filtered);
-      }
-    }).catch(console.error);
+    getAddresses()
+      .then((allAddresses) => {
+        if (isAdmin) {
+          setAddresses(allAddresses);
+        } else {
+          const filtered = allAddresses.filter((addr) => allowedAddresses?.includes(addr.id));
+          setAddresses(filtered);
+        }
+      })
+      .catch(console.error);
   }, [isAdmin, allowedAddresses]);
-
-
 
   return (
     <Box>
@@ -65,7 +65,6 @@ export const AddressListPage = () => {
         )}
       </Stack>
 
-
       <Grid container spacing={3}>
         <Grid size={12}>
           <Card sx={{ height: "100%" }}>
@@ -83,7 +82,6 @@ export const AddressListPage = () => {
                       <ListItemText
                         primary={`${addr.data.city}, ${addr.data.street} ${addr.data.house_number}${addr.data.flat_number ? `, кв. ${addr.data.flat_number}` : ""}`}
                       />
-
                     </ListItemButton>
                   </ListItem>
                 ))}

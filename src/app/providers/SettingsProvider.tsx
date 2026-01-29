@@ -12,7 +12,6 @@ interface SettingsContextType {
   loading: boolean;
 }
 
-
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
@@ -55,7 +54,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const setHideDeleteButtons = async (value: boolean) => {
     setHideDeleteButtonsState(value);
     localStorage.setItem("hideDeleteButtons", String(value));
-    
+
     if (user) {
       try {
         await updateUserSettings(user.uid, { hideDeleteButtons: value });
@@ -68,7 +67,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const setThemeMode = async (mode: ThemeMode) => {
     setThemeModeState(mode);
     localStorage.setItem("themeMode", mode);
-    
+
     if (user) {
       try {
         await updateUserSettings(user.uid, { themeMode: mode });
@@ -79,21 +78,19 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <SettingsContext.Provider 
-      value={{ 
-        hideDeleteButtons, 
-        setHideDeleteButtons, 
-        themeMode, 
-        setThemeMode, 
-        loading 
+    <SettingsContext.Provider
+      value={{
+        hideDeleteButtons,
+        setHideDeleteButtons,
+        themeMode,
+        setThemeMode,
+        loading,
       }}
     >
-
       {children}
     </SettingsContext.Provider>
   );
 };
-
 
 export const useSettings = () => {
   const context = useContext(SettingsContext);

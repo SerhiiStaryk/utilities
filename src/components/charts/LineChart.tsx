@@ -25,4 +25,3 @@ export const LineChart = ({ data, labels, seriesLabel = "Selected" }: LineChartP
     />
   );
 };
-

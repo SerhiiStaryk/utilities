@@ -143,5 +143,3 @@ export const Header = ({ open, handleDrawerOpen, isMobile }: HeaderProps) => {
     </AppBarUI>
   );
 };
-
-

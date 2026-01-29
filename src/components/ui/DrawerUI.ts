@@ -62,6 +62,3 @@ export const DrawerUI = styled(MuiDrawer)(({ theme }) => ({
     },
   ],
 }));
-
-
-

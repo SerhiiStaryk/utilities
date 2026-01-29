@@ -29,7 +29,15 @@ import { useDashboardData, DashboardType } from "../../hooks/useDashboardData";
 import { MONTHS } from "../../constants/months";
 import { useAuth } from "../../app/providers/AuthProvider";
 
-const StatCard = ({ title, value, loading }: { title: string; value: string | number; loading?: boolean }) => (
+const StatCard = ({
+  title,
+  value,
+  loading,
+}: {
+  title: string;
+  value: string | number;
+  loading?: boolean;
+}) => (
   <Card sx={{ height: "100%" }}>
     <CardContent>
       <Typography color="textSecondary" gutterBottom variant="overline">
@@ -57,25 +65,29 @@ export const DashboardPage = () => {
   const { role, allowedAddresses } = useAuth();
   const isAdmin = role === "admin";
 
-  const { stats, chartData, availableYears, availableServices, loading: dataLoading } = 
-    useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService);
+  const {
+    stats,
+    chartData,
+    availableYears,
+    availableServices,
+    loading: dataLoading,
+  } = useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService);
 
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
-
 
   const fetchAddresses = async () => {
     try {
       const allAddresses = await getAddresses();
       let filtered: { id: string; data: AddressDoc }[] = [];
-      
+
       if (isAdmin) {
         filtered = allAddresses;
       } else {
-        filtered = allAddresses.filter(addr => allowedAddresses?.includes(addr.id));
+        filtered = allAddresses.filter((addr) => allowedAddresses?.includes(addr.id));
       }
 
       setAddresses(filtered);
-      
+
       if (filtered.length > 0 && !selectedAddress) {
         setSelectedAddress(filtered[0].id);
       }
@@ -87,7 +99,6 @@ export const DashboardPage = () => {
   useEffect(() => {
     fetchAddresses();
   }, [isAdmin, allowedAddresses]);
-
 
   // Reset year/service when address changes
   useEffect(() => {
@@ -121,7 +132,7 @@ export const DashboardPage = () => {
             {t("dashboard.title")}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {dashboardType === "expenses" ? t("utility.payments") : t("utility.meter_readings")} 
+            {dashboardType === "expenses" ? t("utility.payments") : t("utility.meter_readings")}
             {" — "}
             {t("dashboard.overview", {
               address: selectedAddress || t("dashboard.all_addresses"),
@@ -178,7 +189,9 @@ export const DashboardPage = () => {
             >
               <MenuItem value="all">{t("common.all")}</MenuItem>
               {availableYears.map((y) => (
-                <MenuItem key={y} value={y}>{y}</MenuItem>
+                <MenuItem key={y} value={y}>
+                  {y}
+                </MenuItem>
               ))}
             </MuiSelect>
           </FormControl>
@@ -193,7 +206,9 @@ export const DashboardPage = () => {
             >
               <MenuItem value="all">{t("common.all")}</MenuItem>
               {availableServices.map((s) => (
-                <MenuItem key={s} value={s}>{s}</MenuItem>
+                <MenuItem key={s} value={s}>
+                  {s}
+                </MenuItem>
               ))}
             </MuiSelect>
           </FormControl>
@@ -221,14 +236,24 @@ export const DashboardPage = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
-            title={dashboardType === "expenses" ? t("dashboard.stats.total_spent") : t("dash.total_usage", "Разом спожито")}
+            title={
+              dashboardType === "expenses"
+                ? t("dashboard.stats.total_spent")
+                : t("dash.total_usage", "Разом спожито")
+            }
             value={formatValue(stats.total)}
             loading={dataLoading}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
-            title={selectedYear === "all" ? t("dashboard.stats.filtered_spent", "Filtered Total") : (dashboardType === "expenses" ? t("dashboard.stats.year_spent") : t("dash.year_usage", "Спожито за рік"))}
+            title={
+              selectedYear === "all"
+                ? t("dashboard.stats.filtered_spent", "Filtered Total")
+                : dashboardType === "expenses"
+                  ? t("dashboard.stats.year_spent")
+                  : t("dash.year_usage", "Спожито за рік")
+            }
             value={formatValue(stats.filtered)}
             loading={dataLoading}
           />
@@ -249,12 +274,12 @@ export const DashboardPage = () => {
         </Grid>
       </Grid>
 
-
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.performance")} {selectedService !== "all" ? `(${selectedService})` : ""}
+              {t("dashboard.charts.performance")}{" "}
+              {selectedService !== "all" ? `(${selectedService})` : ""}
             </Typography>
             <Box sx={{ height: 350 }}>
               {dataLoading ? (
@@ -344,5 +369,3 @@ export const DashboardPage = () => {
     </Box>
   );
 };
-
-

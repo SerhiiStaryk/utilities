@@ -7,7 +7,6 @@ type InputProps = React.ComponentProps<typeof MuiInput> & {
   helperText?: string;
 };
 
-
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, helperText, error, ...inputProps }, ref) => (
     <FormControl error={error} fullWidth variant="standard">
@@ -17,4 +16,3 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     </FormControl>
   ),
 );
-

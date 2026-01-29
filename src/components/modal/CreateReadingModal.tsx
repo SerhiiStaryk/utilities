@@ -3,7 +3,6 @@ import { Modal } from "./Modal";
 import { ReadingForm } from "../forms/ReadingForm";
 import { Box, Button, TextField } from "@mui/material";
 
-
 import { addMeterReadingData, getAddress } from "../../firebase/firestore";
 import { useTranslation } from "react-i18next";
 
@@ -58,7 +57,6 @@ export const CreateReadingModal = ({
     }
   };
 
-
   return (
     <Modal
       open={open}
@@ -67,12 +65,7 @@ export const CreateReadingModal = ({
       footer={
         <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button onClick={onClose}>{t("address.create.cancel")}</Button>
-          <Button
-            variant="contained"
-            type="submit"
-            form="create-reading-form"
-            disabled={loading}
-          >
+          <Button variant="contained" type="submit" form="create-reading-form" disabled={loading}>
             {loading ? "..." : t("utility.submit")}
           </Button>
         </Box>
@@ -97,4 +90,3 @@ export const CreateReadingModal = ({
     </Modal>
   );
 };
-

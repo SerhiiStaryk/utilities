@@ -24,11 +24,7 @@ const Layout = () => {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <Header open={open} handleDrawerOpen={handleDrawerOpen} isMobile={isMobile} />
-      <Drawer
-        open={open}
-        handleDrawerClose={handleDrawerClose}
-        isMobile={isMobile}
-      />
+      <Drawer open={open} handleDrawerClose={handleDrawerClose} isMobile={isMobile} />
       <Box
         component="main"
         sx={{
@@ -50,4 +46,3 @@ const Layout = () => {
 };
 
 export default Layout;
-

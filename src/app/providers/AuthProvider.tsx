@@ -17,7 +17,6 @@ const AuthContext = createContext<AuthContextValue>({
   loading: true,
 });
 
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -29,12 +28,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      
+
       if (currentUser) {
         try {
           const userDocRef = doc(db, "users", currentUser.uid);
           const userDoc = await getDoc(userDocRef);
-          
+
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setRole(userData.role || null);
@@ -52,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setRole(null);
         setAllowedAddresses(null);
       }
-      
+
       setLoading(false);
     });
 
@@ -65,5 +64,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-
-

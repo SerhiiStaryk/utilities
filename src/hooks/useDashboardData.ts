@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { 
-  getAllUtilityServicesForYear, 
-  getYearsForAddress, 
-  getAllMeterReadingsForYear 
+import {
+  getAllUtilityServicesForYear,
+  getYearsForAddress,
+  getAllMeterReadingsForYear,
 } from "../firebase/firestore";
 import { UtilityService, MeterReadingService } from "../types/firestore";
 import { MONTHS } from "../constants/months";
@@ -13,12 +13,12 @@ export const useDashboardData = (
   addressId: string,
   dashboardType: DashboardType = "expenses",
   selectedYearId: string = "all",
-  selectedServiceId: string = "all"
+  selectedServiceId: string = "all",
 ) => {
   const [loading, setLoading] = useState(false);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
   const [availableServices, setAvailableServices] = useState<string[]>([]);
-  
+
   const [stats, setStats] = useState({
     total: 0,
     filtered: 0,
@@ -48,7 +48,7 @@ export const useDashboardData = (
         setAvailableYears(yearIds);
 
         const targetYears = selectedYearId === "all" ? yearIds : [selectedYearId];
-        
+
         let allFilteredData: (UtilityService | MeterReadingService)[] = [];
         let servicesList: string[] = [];
 
@@ -80,11 +80,20 @@ export const useDashboardData = (
         MONTHS.forEach((m) => (monthlyTotals[m] = 0));
 
         allFilteredData.forEach((item) => {
-          if (selectedServiceId !== "all" && item.id !== selectedServiceId && item.name !== selectedServiceId) return;
+          if (
+            selectedServiceId !== "all" &&
+            item.id !== selectedServiceId &&
+            item.name !== selectedServiceId
+          )
+            return;
 
-          const itemName = item.name + (dashboardType === "readings" ? ` (#${(item as MeterReadingService).meter_number})` : "");
+          const itemName =
+            item.name +
+            (dashboardType === "readings"
+              ? ` (#${(item as MeterReadingService).meter_number})`
+              : "");
           if (!itemTotals[itemName]) itemTotals[itemName] = 0;
-          
+
           if (dashboardType === "expenses") {
             const s = item as UtilityService;
             Object.entries(s.monthly_payments || {}).forEach(([month, p]) => {
@@ -109,12 +118,18 @@ export const useDashboardData = (
         setStats({
           total: filteredTotal,
           filtered: filteredTotal,
-          avgMonthly: activeMonths.length > 0 ? filteredTotal / (activeMonths.length * (selectedYearId === 'all' ? yearIds.length : 1)) : 0,
+          avgMonthly:
+            activeMonths.length > 0
+              ? filteredTotal /
+                (activeMonths.length * (selectedYearId === "all" ? yearIds.length : 1))
+              : 0,
           lastMonth: lastMonth ? monthlyTotals[lastMonth] : 0,
         });
 
         setChartData({
-          lineData: MONTHS.map((m) => monthlyTotals[m] / (selectedYearId === 'all' ? yearIds.length : 1)),
+          lineData: MONTHS.map(
+            (m) => monthlyTotals[m] / (selectedYearId === "all" ? yearIds.length : 1),
+          ),
           pieData: Object.entries(itemTotals).map(([name, val], index) => ({
             id: index,
             value: val,
@@ -126,7 +141,6 @@ export const useDashboardData = (
           })),
           monthlyTrend: MONTHS.map((m) => monthlyTotals[m]),
         });
-
       } catch (e) {
         console.error("Dashboard data fetch error:", e);
       } finally {
@@ -139,5 +153,3 @@ export const useDashboardData = (
 
   return { stats, chartData, availableYears, availableServices, loading };
 };
-
-

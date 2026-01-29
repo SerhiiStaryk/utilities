@@ -63,7 +63,11 @@ export const CreateAddressPage = () => {
         <Typography variant="h4" fontWeight="bold">
           {t("address.create.title")}
         </Typography>
-        <Button onClick={() => navigate(-1)} variant="outlined" fullWidth={{ xs: true, sm: false } as any}>
+        <Button
+          onClick={() => navigate(-1)}
+          variant="outlined"
+          fullWidth={{ xs: true, sm: false } as any}
+        >
           {t("common.back", "Back")}
         </Button>
       </Stack>
@@ -158,11 +162,25 @@ export const CreateAddressPage = () => {
               </Grid>
 
               <Grid size={12}>
-                <Stack direction={{ xs: "column-reverse", sm: "row" }} justifyContent="flex-end" gap={2} mt={2}>
-                  <Button onClick={() => navigate("/address-list")} color="inherit" fullWidth={{ xs: true, sm: false } as any}>
+                <Stack
+                  direction={{ xs: "column-reverse", sm: "row" }}
+                  justifyContent="flex-end"
+                  gap={2}
+                  mt={2}
+                >
+                  <Button
+                    onClick={() => navigate("/address-list")}
+                    color="inherit"
+                    fullWidth={{ xs: true, sm: false } as any}
+                  >
                     {t("address.create.cancel")}
                   </Button>
-                  <Button variant="contained" type="submit" disabled={loading} fullWidth={{ xs: true, sm: false } as any}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={loading}
+                    fullWidth={{ xs: true, sm: false } as any}
+                  >
                     {loading ? "Saving..." : t("address.create.submit")}
                   </Button>
                 </Stack>
@@ -171,7 +189,6 @@ export const CreateAddressPage = () => {
           </form>
         </CardContent>
       </Card>
-
     </Box>
   );
 };

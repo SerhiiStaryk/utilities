@@ -108,7 +108,10 @@ export const AddressServicesPage = () => {
             {t("address.services_list", "Services List")}
           </Typography>
           <Typography variant="body2" color="textSecondary" mb={3}>
-            {t("address.services_desc", "Define the default utility services for this address (e.g., Gas, Water, Internet). These will be automatically added when you create a new year.")}
+            {t(
+              "address.services_desc",
+              "Define the default utility services for this address (e.g., Gas, Water, Internet). These will be automatically added when you create a new year.",
+            )}
           </Typography>
 
           <Stack direction={{ xs: "column", sm: "row" }} gap={2} mb={3} alignItems="stretch">
@@ -158,7 +161,9 @@ export const AddressServicesPage = () => {
                         ? `${service.name} (${service.accountNumber})`
                         : service.name
                     }
-                    onDelete={!hideDeleteButtons ? () => handleRemoveService(service.name) : undefined}
+                    onDelete={
+                      !hideDeleteButtons ? () => handleRemoveService(service.name) : undefined
+                    }
                     deleteIcon={!hideDeleteButtons ? <Delete /> : undefined}
                   />
                 ))}
@@ -166,7 +171,12 @@ export const AddressServicesPage = () => {
             )}
           </Paper>
 
-          <Stack mt={4} direction={{ xs: "column-reverse", sm: "row" }} justifyContent="flex-end" gap={2}>
+          <Stack
+            mt={4}
+            direction={{ xs: "column-reverse", sm: "row" }}
+            justifyContent="flex-end"
+            gap={2}
+          >
             <Button onClick={() => navigate(-1)} fullWidth={isMobile}>
               {t("address.create.cancel")}
             </Button>
@@ -176,7 +186,6 @@ export const AddressServicesPage = () => {
           </Stack>
         </CardContent>
       </Card>
-
     </Box>
   );
 };

@@ -147,7 +147,6 @@ export const AddressReadingPage = () => {
     }
   };
 
-
   const addressDisplay = address
     ? `${address.street}, ${address.house_number}${address.flat_number ? `/${address.flat_number}` : ""}, ${address.city}`
     : id;
@@ -166,11 +165,17 @@ export const AddressReadingPage = () => {
             <ArrowBack />
           </IconButton>
           <Box>
-            <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold" noWrap sx={{ maxWidth: { xs: '70vw', sm: '100%' } }}>
+            <Typography
+              variant={isMobile ? "h5" : "h4"}
+              fontWeight="bold"
+              noWrap
+              sx={{ maxWidth: { xs: "70vw", sm: "100%" } }}
+            >
               {addressDisplay}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {t("utility.meter_readings", "Meter Readings")} - {year} {t("common.year_short", "year")}
+              {t("utility.meter_readings", "Meter Readings")} - {year}{" "}
+              {t("common.year_short", "year")}
             </Typography>
           </Box>
         </Box>
@@ -230,7 +235,11 @@ export const AddressReadingPage = () => {
                           <Edit fontSize="small" />
                         </IconButton>
                         {!hideDeleteButtons && (
-                          <IconButton size="small" onClick={() => setDeletingReading(reading)} color="error">
+                          <IconButton
+                            size="small"
+                            onClick={() => setDeletingReading(reading)}
+                            color="error"
+                          >
                             <Delete fontSize="small" />
                           </IconButton>
                         )}
@@ -320,7 +329,9 @@ export const AddressReadingPage = () => {
                           {r ? (
                             <Typography variant="body2">{r.value}</Typography>
                           ) : (
-                            <Typography variant="body2" color="textSecondary">-</Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              -
+                            </Typography>
                           )}
                         </TableCell>
                       );
@@ -332,7 +343,11 @@ export const AddressReadingPage = () => {
                             <Edit fontSize="small" />
                           </IconButton>
                           {!hideDeleteButtons && (
-                            <IconButton size="small" onClick={() => setDeletingReading(reading)} color="error">
+                            <IconButton
+                              size="small"
+                              onClick={() => setDeletingReading(reading)}
+                              color="error"
+                            >
                               <Delete fontSize="small" />
                             </IconButton>
                           )}
@@ -377,7 +392,6 @@ export const AddressReadingPage = () => {
                 {},
               ),
             }}
-
             onSubmit={handleUpdate}
             onCancel={() => setEditingReading(null)}
           />
@@ -389,10 +403,11 @@ export const AddressReadingPage = () => {
         onClose={() => setDeletingReading(null)}
         onConfirm={handleDelete}
         title={t("common.delete_confirm_title", "Confirm Deletion")}
-        message={t("utility.delete_reading_confirm", { 
-          name: deletingReading?.name, 
+        message={t("utility.delete_reading_confirm", {
+          name: deletingReading?.name,
           number: deletingReading?.meter_number,
-          defaultValue: "Are you sure you want to delete this meter reading? All data for this meter will be lost."
+          defaultValue:
+            "Are you sure you want to delete this meter reading? All data for this meter will be lost.",
         })}
       />
 

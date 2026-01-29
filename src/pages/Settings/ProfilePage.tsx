@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Button,
-  Stack,
-  IconButton,
-  Avatar,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, Paper, Button, Stack, IconButton, Avatar, Divider } from "@mui/material";
 import { ArrowBack, CameraAlt } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers/AuthProvider";
@@ -43,7 +34,6 @@ export const ProfilePage = () => {
     }
   };
 
-
   return (
     <Box maxWidth="sm" mx="auto">
       <Box display="flex" alignItems="center" mb={4}>
@@ -58,10 +48,7 @@ export const ProfilePage = () => {
       <Paper sx={{ p: { xs: 2, sm: 4 } }}>
         <Stack spacing={4} alignItems="center">
           <Box position="relative">
-            <Avatar
-              src={photoURL}
-              sx={{ width: 120, height: 120, fontSize: "3rem" }}
-            >
+            <Avatar src={photoURL} sx={{ width: 120, height: 120, fontSize: "3rem" }}>
               {displayName ? displayName[0].toUpperCase() : user?.email?.[0].toUpperCase()}
             </Avatar>
             <IconButton
@@ -109,11 +96,7 @@ export const ProfilePage = () => {
             <Button onClick={() => navigate("/settings")} color="inherit">
               {t("address.create.cancel")}
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleSave}
-              disabled={saving}
-            >
+            <Button variant="contained" onClick={handleSave} disabled={saving}>
               {saving ? t("common.saving", "Saving...") : t("utility.submit")}
             </Button>
           </Box>

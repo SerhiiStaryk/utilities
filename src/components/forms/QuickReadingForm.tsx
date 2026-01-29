@@ -1,13 +1,5 @@
 import { useForm, useFieldArray } from "react-hook-form";
-import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-  MenuItem,
-  TextField,
-  Divider,
-} from "@mui/material";
+import { Box, Button, Stack, Typography, MenuItem, TextField, Divider } from "@mui/material";
 import { Input } from "../Input";
 import { MONTHS } from "../../constants/months";
 import { useTranslation } from "react-i18next";
@@ -95,7 +87,6 @@ export const QuickReadingForm = ({
             </Box>
           ))}
         </Stack>
-
 
         {showActions && (
           <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>

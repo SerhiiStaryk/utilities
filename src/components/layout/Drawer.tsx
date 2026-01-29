@@ -24,11 +24,7 @@ export type listMenuType = {
   route?: string;
 };
 
-export const Drawer = ({
-  open,
-  handleDrawerClose,
-  isMobile,
-}: DrawerProps) => {
+export const Drawer = ({ open, handleDrawerClose, isMobile }: DrawerProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
 

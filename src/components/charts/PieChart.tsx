@@ -32,5 +32,3 @@ export const PieChart = ({ data }: PieChartProps) => {
     />
   );
 };
-
-

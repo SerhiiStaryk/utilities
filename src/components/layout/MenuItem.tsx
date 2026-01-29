@@ -18,7 +18,6 @@ export const MenuItem: React.FC<MenuItemProps> = ({ item, open, handleDrawerClos
         textDecoration: "none",
       }}
     >
-
       <ListItem disablePadding sx={{ display: "block" }}>
         <ListItemButton
           sx={[

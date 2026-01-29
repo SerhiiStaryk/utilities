@@ -14,7 +14,7 @@ interface CreateUtilityModalProps {
   onClose: () => void;
   addressId: string; // The ID of the address we are adding data to
   onSuccess?: () => void;
-  addressData: {
+  addressData?: {
     street: string;
     house_number: string;
     flat_number: string;

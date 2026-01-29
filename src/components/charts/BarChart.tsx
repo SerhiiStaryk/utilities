@@ -14,4 +14,3 @@ export const BarChart = ({ data, label }: BarChartProps) => {
     />
   );
 };
-

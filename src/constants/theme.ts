@@ -1,7 +1,5 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
-
-
 declare module "@mui/material/styles" {
   interface Palette {
     meter: {
@@ -94,5 +92,3 @@ export const getAppTheme = (mode: "light" | "dark") => {
 
   return responsiveFontSizes(themeInstance);
 };
-
-
