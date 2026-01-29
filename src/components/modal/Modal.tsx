@@ -7,9 +7,17 @@ export type ModalProps = PropsWithChildren & {
   open?: boolean;
   onClose?: () => void;
   footer?: ReactNode;
+  additionalStyles?: object;
 };
 
-export const Modal = ({ title, children, open, onClose, footer }: ModalProps) => {
+export const Modal = ({
+  title,
+  children,
+  open,
+  onClose,
+  footer,
+  additionalStyles = {},
+}: ModalProps) => {
   const { openned } = useModalData();
   const { close } = useModalApi();
 
@@ -17,9 +25,14 @@ export const Modal = ({ title, children, open, onClose, footer }: ModalProps) =>
   const handleClose = onClose || close;
 
   return (
-    <GenericModal title={title} open={isOpen} onClose={handleClose} footer={footer}>
+    <GenericModal
+      additionalStyles={additionalStyles}
+      title={title}
+      open={isOpen}
+      onClose={handleClose}
+      footer={footer}
+    >
       {children}
     </GenericModal>
   );
 };
-

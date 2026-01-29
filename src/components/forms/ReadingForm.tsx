@@ -33,7 +33,6 @@ export const ReadingForm = ({
         return acc;
       }, {}),
     },
-
   });
 
   const selectedService = watch("serviceId");
@@ -68,7 +67,6 @@ export const ReadingForm = ({
         <Typography variant="subtitle1" fontWeight="bold">
           {t("utility.monthly", "Monthly Readings")}
         </Typography>
-
 
         <Grid container spacing={2}>
           {MONTHS.map((month) => (

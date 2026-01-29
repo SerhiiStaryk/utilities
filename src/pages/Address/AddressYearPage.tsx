@@ -56,6 +56,7 @@ export const AddressYearPage = () => {
   const [deletingService, setDeletingService] = useState<UtilityService | null>(null);
   const [quickEntryOpen, setQuickEntryOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
+  const [disableSubmit, setDisabledSubmit] = useState(false);
 
   useEffect(() => {
     if (isMobile) {
@@ -102,11 +103,14 @@ export const AddressYearPage = () => {
     });
 
     try {
+      setDisabledSubmit(true);
       await updateUtilityService(id, year, editingService.id || editingService.name, payload);
       setEditingService(null);
       fetchServices();
     } catch (e) {
       console.error("Failed to update service", e);
+    } finally {
+      setDisabledSubmit(false);
     }
   };
 
@@ -258,7 +262,7 @@ export const AddressYearPage = () => {
                       .map(([month, payment]) => (
                         <Box key={month} display="flex" justifyContent="space-between" my={0.5}>
                           <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
-                            {month}:
+                            {t(`utility.months.${month}`, month)}:
                           </Typography>
 
                           <Typography variant="body2" fontWeight="bold">
@@ -377,7 +381,12 @@ export const AddressYearPage = () => {
               <Button onClick={() => setEditingService(null)} color="inherit">
                 {t("address.create.cancel")}
               </Button>
-              <Button variant="contained" type="submit" form="edit-utility-form">
+              <Button
+                variant="contained"
+                type="submit"
+                form="edit-utility-form"
+                disabled={disableSubmit}
+              >
                 {t("utility.submit")}
               </Button>
             </Box>
@@ -385,7 +394,6 @@ export const AddressYearPage = () => {
         >
           <UtilityForm
             id="edit-utility-form"
-            showActions={false}
             initialValues={{
               currency: Object.values(editingService.monthly_payments || {})[0]?.currency || "",
               accountNumber: editingService.account_number,

@@ -135,7 +135,9 @@
       "october": "October",
       "november": "November",
       "december": "December"
-    }
+    },
+    "service_placeholder": "Enter service name",
+    "year_placeholder": "Enter year (e.g., 2026)"
   },
   "settings": {
     "title": "Settings",

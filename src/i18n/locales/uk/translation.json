@@ -136,7 +136,8 @@
       "november": "Листопад",
       "december": "Грудень"
     },
-    "service_placeholder": "Введіть назву послуги"
+    "service_placeholder": "Введіть назву послуги",
+    "year_placeholder": "Введіть рік (наприклад, 2026)"
   },
   "settings": {
     "title": "Налаштування",

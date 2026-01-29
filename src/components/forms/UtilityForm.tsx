@@ -1,4 +1,4 @@
-import { Button, Box, Stack, Grid2, Typography } from "@mui/material";
+import { Stack, Grid2, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Input } from "../Input";
@@ -16,13 +16,7 @@ interface UtilityFormProps {
   id?: string;
 }
 
-export const UtilityForm = ({
-  initialValues,
-  onSubmit,
-  onCancel,
-  showActions = true,
-  id,
-}: UtilityFormProps) => {
+export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) => {
   const { t } = useTranslation();
   const { control, handleSubmit } = useForm({
     defaultValues: initialValues || defaultValuesUtilityForm,
@@ -90,17 +84,6 @@ export const UtilityForm = ({
           </Stack>
         </Grid2>
       </Grid2>
-
-      {showActions && (
-        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-          <Button onClick={onCancel} color="inherit">
-            {t("address.create.cancel")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("utility.submit")}
-          </Button>
-        </Box>
-      )}
     </Stack>
   );
 };

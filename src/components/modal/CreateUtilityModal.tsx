@@ -4,10 +4,10 @@ import { GenericModal } from "./GenericModal";
 import { Input } from "../Input";
 import { Select } from "../Select";
 import { addUtilityData } from "../../firebase/firestore";
-import { years, currencies } from "../../constants";
 import { UtilityDataPayload } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { currencies } from "../../constants";
 
 interface CreateUtilityModalProps {
   open: boolean;
@@ -66,8 +66,6 @@ export const CreateUtilityModal = ({
     },
   });
 
-  const [customService, setCustomService] = useState("");
-
   const onSubmit: SubmitHandler<{
     yearId: string;
     serviceId: string;
@@ -87,13 +85,7 @@ export const CreateUtilityModal = ({
     december: string;
   }> = async (data) => {
     try {
-      const { yearId, serviceId: selectedServiceId, currency, accountNumber, ...monthsData } = data;
-      const serviceId = customService.trim() || selectedServiceId.trim();
-
-      if (!serviceId) {
-        alert("Please select or create a service before submitting.");
-        throw new Error("Service ID is required. Please select or create a service.");
-      }
+      const { yearId, serviceId, currency, accountNumber, ...monthsData } = data;
 
       const payload: UtilityDataPayload = {
         addressId,
@@ -110,10 +102,11 @@ export const CreateUtilityModal = ({
         ...monthsData,
       };
 
+      console.log("Payload to be sent:", payload);
+
       await addUtilityData(payload);
 
       reset();
-      setCustomService("");
       onClose();
       if (onSuccess) onSuccess();
     } catch (e) {
@@ -149,14 +142,24 @@ export const CreateUtilityModal = ({
                 name="yearId"
                 control={control}
                 render={({ field }) => (
-                  <Select {...field} label={t("utility.year")} options={years} />
+                  <Input
+                    {...field}
+                    type="number"
+                    label={t("utility.year")}
+                    placeholder={t("utility.year_placeholder")}
+                  />
                 )}
               />
-              <Input
-                value={customService}
-                onChange={(e) => setCustomService(e.target.value)}
-                label={t("utility.service")}
-                placeholder={t("utility.service_placeholder")}
+              <Controller
+                name="serviceId"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label={t("utility.service")}
+                    placeholder={t("utility.service_placeholder")}
+                  />
+                )}
               />
               <Controller
                 name="currency"
@@ -185,7 +188,7 @@ export const CreateUtilityModal = ({
                     name={month}
                     control={control}
                     render={({ field }) => (
-                      <Input {...field} label={t(`utility.months.${month}`)} />
+                      <Input {...field} type="number" label={t(`utility.months.${month}`)} />
                     )}
                   />
                 </Grid2>

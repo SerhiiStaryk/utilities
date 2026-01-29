@@ -1,4 +1,14 @@
-import { Backdrop, Modal as ModalUI, Fade, Typography, useTheme, useMediaQuery, Box, IconButton } from "@mui/material";
+import {
+  Backdrop,
+  Modal as ModalUI,
+  Fade,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  Box,
+  IconButton,
+  SxProps,
+} from "@mui/material";
 
 import { Close } from "@mui/icons-material";
 import { PropsWithChildren, ReactNode } from "react";
@@ -9,9 +19,17 @@ export type GenericModalProps = PropsWithChildren & {
   open: boolean;
   onClose: () => void;
   footer?: ReactNode;
+  additionalStyles?: SxProps;
 };
 
-export const GenericModal = ({ title, open, onClose, children, footer }: GenericModalProps) => {
+export const GenericModal = ({
+  title,
+  open,
+  onClose,
+  children,
+  footer,
+  additionalStyles = {},
+}: GenericModalProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -29,7 +47,7 @@ export const GenericModal = ({ title, open, onClose, children, footer }: Generic
       }}
     >
       <Fade in={open}>
-        <StyledModalContent>
+        <StyledModalContent sx={additionalStyles}>
           {/* Fixed Header */}
           <Box
             sx={{
@@ -50,7 +68,6 @@ export const GenericModal = ({ title, open, onClose, children, footer }: Generic
               <Close />
             </IconButton>
           </Box>
-
 
           {/* Scrollable Content */}
           <Box
@@ -84,4 +101,3 @@ export const GenericModal = ({ title, open, onClose, children, footer }: Generic
     </ModalUI>
   );
 };
-

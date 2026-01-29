@@ -62,6 +62,8 @@ export const AddressDetailsPage = () => {
   const [deletingYear, setDeletingYear] = useState<string | null>(null);
   const [newYear, setNewYear] = useState("");
 
+  const [disabledSubmit, setDisabledSubmit] = useState(false);
+
   const fetchData = async () => {
     if (id) {
       try {
@@ -100,6 +102,7 @@ export const AddressDetailsPage = () => {
   const handleCreateYear = async () => {
     if (!id || !newYear) return;
     try {
+      setDisabledSubmit(true);
       const addressDoc = await getAddress(id);
       const servicesStart = addressDoc?.services || [];
       // If no services configured, maybe warn user? or just create empty year?
@@ -111,6 +114,8 @@ export const AddressDetailsPage = () => {
       fetchYears();
     } catch (e) {
       console.error(e);
+    } finally {
+      setDisabledSubmit(false);
     }
   };
 
@@ -289,13 +294,18 @@ export const AddressDetailsPage = () => {
       </Paper>
 
       <Modal
+        additionalStyles={{ maxWidth: 400 }}
         title={t("year.create_title", "Create New Year")}
         open={createYearOpen}
         onClose={() => setCreateYearOpen(false)}
         footer={
           <Box display="flex" justifyContent="flex-end" gap={2}>
             <Button onClick={() => setCreateYearOpen(false)}>{t("address.create.cancel")}</Button>
-            <Button variant="contained" onClick={handleCreateYear} disabled={!newYear}>
+            <Button
+              variant="contained"
+              onClick={handleCreateYear}
+              disabled={!newYear || disabledSubmit}
+            >
               {t("address.create.submit")}
             </Button>
           </Box>
