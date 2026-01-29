@@ -33,17 +33,13 @@ export const ConfirmModal = ({
       open={open}
       onClose={onClose}
       title={title}
+      additionalStyles={{ minWidth: 400 }}
       footer={
         <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button onClick={onClose} color="inherit" disabled={loading}>
             {cancelText || t("address.create.cancel", "Cancel")}
           </Button>
-          <Button
-            variant="contained"
-            color={confirmColor}
-            onClick={onConfirm}
-            disabled={loading}
-          >
+          <Button variant="contained" color={confirmColor} onClick={onConfirm} disabled={loading}>
             {loading ? "..." : confirmText || t("common.confirm", "Confirm")}
           </Button>
         </Box>

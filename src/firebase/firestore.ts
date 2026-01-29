@@ -96,7 +96,7 @@ export async function addUtilityData({
       Object.entries(monthlyPayments)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .filter(([_, amount]) => amount !== "" && amount !== undefined)
-        .map(([month, amount]) => [month, { amount: amount, currency }]),
+        .map(([month, amount]) => [month, { amount: Number(amount), currency }]),
     );
 
     const payload = {

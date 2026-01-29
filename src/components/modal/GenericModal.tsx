@@ -28,7 +28,7 @@ export const GenericModal = ({
   onClose,
   children,
   footer,
-  additionalStyles = {},
+  additionalStyles,
 }: GenericModalProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

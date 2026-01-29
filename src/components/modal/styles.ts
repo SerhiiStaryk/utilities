@@ -6,11 +6,13 @@ export const StyledModalContent = styled(Paper)(({ theme }) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "calc(100% - 32px)",
+  width: "auto",
+  boxSizing: "border-box",
   maxWidth: 1100,
   maxHeight: "calc(100% - 32px)",
   display: "flex",
   flexDirection: "column",
+  minWidth: 0,
   boxShadow: theme.shadows[24],
   outline: "none",
   overflow: "hidden", // Parent doesn't scroll, children do
@@ -24,6 +26,3 @@ export const StyledModalContent = styled(Paper)(({ theme }) => ({
     borderRadius: 0,
   },
 }));
-
-
-

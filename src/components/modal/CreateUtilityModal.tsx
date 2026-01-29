@@ -6,8 +6,8 @@ import { Select } from "../Select";
 import { addUtilityData } from "../../firebase/firestore";
 import { UtilityDataPayload } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import { currencies } from "../../constants";
+import { useState } from "react";
 
 interface CreateUtilityModalProps {
   open: boolean;
@@ -44,6 +44,8 @@ export const CreateUtilityModal = ({
   onSuccess,
   addressData,
 }: CreateUtilityModalProps) => {
+  const [disabledSubmit, setDisabledSubmit] = useState(false);
+
   const { t } = useTranslation();
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -85,6 +87,7 @@ export const CreateUtilityModal = ({
     december: string;
   }> = async (data) => {
     try {
+      setDisabledSubmit(true);
       const { yearId, serviceId, currency, accountNumber, ...monthsData } = data;
 
       const payload: UtilityDataPayload = {
@@ -102,8 +105,6 @@ export const CreateUtilityModal = ({
         ...monthsData,
       };
 
-      console.log("Payload to be sent:", payload);
-
       await addUtilityData(payload);
 
       reset();
@@ -111,6 +112,8 @@ export const CreateUtilityModal = ({
       if (onSuccess) onSuccess();
     } catch (e) {
       console.error("Error adding utility", e);
+    } finally {
+      setDisabledSubmit(false);
     }
   };
 
@@ -124,7 +127,12 @@ export const CreateUtilityModal = ({
           <Button onClick={onClose} color="inherit">
             {t("address.create.cancel")}
           </Button>
-          <Button variant="contained" type="submit" form="create-utility-form">
+          <Button
+            variant="contained"
+            type="submit"
+            form="create-utility-form"
+            disabled={disabledSubmit}
+          >
             {t("utility.submit")}
           </Button>
         </Box>
