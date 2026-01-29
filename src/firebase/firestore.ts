@@ -77,23 +77,32 @@ export async function addUtilityData({
       serviceId,
     );
 
+    const monthlyPayments = {
+      january,
+      february,
+      march,
+      april,
+      may,
+      june,
+      july,
+      august,
+      september,
+      october,
+      november,
+      december,
+    };
+
+    const monthly_payments = Object.fromEntries(
+      Object.entries(monthlyPayments)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([_, amount]) => amount !== "" && amount !== undefined)
+        .map(([month, amount]) => [month, { amount: amount, currency }]),
+    );
+
     const payload = {
       name: serviceId,
       account_number: accountNumber,
-      monthly_payments: {
-        january: { amount: january, currency },
-        february: { amount: february, currency },
-        march: { amount: march, currency },
-        april: { amount: april, currency },
-        may: { amount: may, currency },
-        june: { amount: june, currency },
-        july: { amount: july, currency },
-        august: { amount: august, currency },
-        september: { amount: september, currency },
-        october: { amount: october, currency },
-        november: { amount: november, currency },
-        december: { amount: december, currency },
-      },
+      monthly_payments,
     };
 
     await setDoc(serviceRef, payload);
