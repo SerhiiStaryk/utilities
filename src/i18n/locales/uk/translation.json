@@ -135,7 +135,8 @@
       "october": "Жовтень",
       "november": "Листопад",
       "december": "Грудень"
-    }
+    },
+    "service_placeholder": "Введіть назву послуги"
   },
   "settings": {
     "title": "Налаштування",

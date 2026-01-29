@@ -66,7 +66,6 @@ export const AddressYearPage = () => {
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" }).toLowerCase();
 
   const fetchServices = () => {
-
     if (id && year) {
       getAllUtilityServicesForYear(id, year).then(setServices).catch(console.error);
     }
@@ -152,6 +151,8 @@ export const AddressYearPage = () => {
     ? `${address.street}, ${address.house_number}${address.flat_number ? `/${address.flat_number}` : ""}, ${address.city}`
     : id;
 
+  console.log(addressDisplay);
+
   return (
     <Box>
       <Stack
@@ -166,7 +167,12 @@ export const AddressYearPage = () => {
             <ArrowBack />
           </IconButton>
           <Box>
-            <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold" noWrap sx={{ maxWidth: { xs: '70vw', sm: '100%' } }}>
+            <Typography
+              variant={isMobile ? "h5" : "h4"}
+              fontWeight="bold"
+              noWrap
+              sx={{ maxWidth: { xs: "70vw", sm: "100%" } }}
+            >
               {addressDisplay}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
@@ -209,7 +215,6 @@ export const AddressYearPage = () => {
         </Stack>
       </Stack>
 
-
       {viewMode === "cards" ? (
         <Grid container spacing={3}>
           {services.map((service) => (
@@ -231,7 +236,11 @@ export const AddressYearPage = () => {
                           <Edit fontSize="small" />
                         </IconButton>
                         {!hideDeleteButtons && (
-                          <IconButton size="small" onClick={() => setDeletingService(service)} color="error">
+                          <IconButton
+                            size="small"
+                            onClick={() => setDeletingService(service)}
+                            color="error"
+                          >
                             <Delete fontSize="small" />
                           </IconButton>
                         )}
@@ -339,14 +348,17 @@ export const AddressYearPage = () => {
                             <Edit fontSize="small" />
                           </IconButton>
                           {!hideDeleteButtons && (
-                            <IconButton size="small" onClick={() => setDeletingService(service)} color="error">
+                            <IconButton
+                              size="small"
+                              onClick={() => setDeletingService(service)}
+                              color="error"
+                            >
                               <Delete fontSize="small" />
                             </IconButton>
                           )}
                         </>
                       )}
                     </TableCell>
-
                   </TableRow>
                 ))
               )}
@@ -396,9 +408,10 @@ export const AddressYearPage = () => {
         onClose={() => setDeletingService(null)}
         onConfirm={handleDelete}
         title={t("common.delete_confirm_title", "Confirm Deletion")}
-        message={t("utility.delete_service_confirm", { 
+        message={t("utility.delete_service_confirm", {
           name: deletingService?.name,
-          defaultValue: "Are you sure you want to delete this service? All data for this service will be lost."
+          defaultValue:
+            "Are you sure you want to delete this service? All data for this service will be lost.",
         })}
       />
 
@@ -429,7 +442,6 @@ export const AddressYearPage = () => {
           onCancel={() => setQuickEntryOpen(false)}
         />
       </Modal>
-
     </Box>
   );
 };

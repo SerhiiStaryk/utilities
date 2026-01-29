@@ -10,7 +10,6 @@ import {
 import { toast } from "react-toastify";
 import {
   AddressDoc,
-
   UtilityDataPayload,
   UtilityService,
   YearDoc,
@@ -55,6 +54,10 @@ export async function addUtilityData({
   currency,
 }: UtilityDataPayload) {
   try {
+    if (!addressId || !yearId || !serviceId) {
+      throw new Error("Missing required parameters: addressId, yearId, or serviceId");
+    }
+
     // 1. Create/Update Address Document
     const addressRef = doc(db, "addresses", addressId);
     await setDoc(addressRef, addressDoc, { merge: true });
@@ -122,15 +125,7 @@ export async function addMeterReadingData({
 }: ReadingDataPayload) {
   try {
     const docId = `${serviceId}_${meter_number}`.replace(/\s+/g, "_");
-    const readingRef = doc(
-      db,
-      "addresses",
-      addressId,
-      "years",
-      yearId,
-      "meter_readings",
-      docId,
-    );
+    const readingRef = doc(db, "addresses", addressId, "years", yearId, "meter_readings", docId);
 
     const payload = {
       name: serviceId,
@@ -159,8 +154,6 @@ export async function addMeterReadingData({
     throw error;
   }
 }
-
-
 
 // --- Read ---
 
@@ -237,15 +230,7 @@ export async function getSpecificMeterReadingData(
   yearId: string,
   serviceId: string,
 ): Promise<MeterReadingService | null> {
-  const readingRef = doc(
-    db,
-    "addresses",
-    addressId,
-    "years",
-    yearId,
-    "meter_readings",
-    serviceId,
-  );
+  const readingRef = doc(db, "addresses", addressId, "years", yearId, "meter_readings", serviceId);
   const snapshot = await getDoc(readingRef);
 
   if (snapshot.exists()) {
@@ -255,7 +240,6 @@ export async function getSpecificMeterReadingData(
     return null;
   }
 }
-
 
 // --- Delete ---
 
@@ -439,9 +423,23 @@ export async function createYearWithServices(
   }
 }
 
+export async function addUtilityService(serviceName: string) {
+  try {
+    const serviceRef = doc(db, "utility_services", serviceName);
+    await setDoc(serviceRef, { name: serviceName }, { merge: true });
+    toast.success(`Utility service ${serviceName} added successfully`);
+  } catch (error) {
+    console.error("Error adding utility service: ", error);
+    toast.error("Error adding utility service");
+    throw error;
+  }
+}
+
 // --- User Management ---
 
-export async function getUsers(): Promise<{ id: string; role: string; email: string; allowedAddresses?: string[] }[]> {
+export async function getUsers(): Promise<
+  { id: string; role: string; email: string; allowedAddresses?: string[] }[]
+> {
   const usersCol = collection(db, "users");
   const snapshot = await getDocs(usersCol);
   return snapshot.docs.map((doc) => ({
@@ -449,7 +447,6 @@ export async function getUsers(): Promise<{ id: string; role: string; email: str
     ...(doc.data() as { role: string; email: string; allowedAddresses?: string[] }),
   }));
 }
-
 
 export async function updateUserRole(uid: string, role: "admin" | "user") {
   try {
@@ -473,8 +470,10 @@ export async function updateAllowedAddresses(uid: string, addresses: string[]) {
   }
 }
 
-
-export async function syncUserProfile(uid: string, data: { displayName?: string; photoURL?: string }) {
+export async function syncUserProfile(
+  uid: string,
+  data: { displayName?: string; photoURL?: string },
+) {
   try {
     const userRef = doc(db, "users", uid);
     await setDoc(userRef, data, { merge: true });
@@ -507,4 +506,3 @@ export async function updateUserSettings(uid: string, settings: any) {
     throw error;
   }
 }
-

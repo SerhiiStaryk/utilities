@@ -4,15 +4,22 @@ import { GenericModal } from "./GenericModal";
 import { Input } from "../Input";
 import { Select } from "../Select";
 import { addUtilityData } from "../../firebase/firestore";
-import { utilityServices, years, currencies } from "../../constants";
+import { years, currencies } from "../../constants";
 import { UtilityDataPayload } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 interface CreateUtilityModalProps {
   open: boolean;
   onClose: () => void;
   addressId: string; // The ID of the address we are adding data to
   onSuccess?: () => void;
+  addressData: {
+    street: string;
+    house_number: string;
+    flat_number: string;
+    city: string;
+  } | null;
 }
 
 const MONTHS = [
@@ -35,6 +42,7 @@ export const CreateUtilityModal = ({
   onClose,
   addressId,
   onSuccess,
+  addressData,
 }: CreateUtilityModalProps) => {
   const { t } = useTranslation();
   const { control, handleSubmit, reset } = useForm({
@@ -58,16 +66,46 @@ export const CreateUtilityModal = ({
     },
   });
 
-  const onSubmit: SubmitHandler<any> = async (data) => {
+  const [customService, setCustomService] = useState("");
+
+  const onSubmit: SubmitHandler<{
+    yearId: string;
+    serviceId: string;
+    currency: string;
+    accountNumber: string;
+    january: string;
+    february: string;
+    march: string;
+    april: string;
+    may: string;
+    june: string;
+    july: string;
+    august: string;
+    september: string;
+    october: string;
+    november: string;
+    december: string;
+  }> = async (data) => {
     try {
-      const { yearId, serviceId, currency, accountNumber, ...monthsData } = data;
+      const { yearId, serviceId: selectedServiceId, currency, accountNumber, ...monthsData } = data;
+      const serviceId = customService.trim() || selectedServiceId.trim();
+
+      if (!serviceId) {
+        alert("Please select or create a service before submitting.");
+        throw new Error("Service ID is required. Please select or create a service.");
+      }
 
       const payload: UtilityDataPayload = {
         addressId,
-        yearId: yearId.value,
-        serviceId: serviceId.value,
-        addressDoc: {} as any, // We are not updating address info here
-        currency: currency.value,
+        yearId,
+        serviceId,
+        addressDoc: addressData ?? {
+          street: "",
+          house_number: "",
+          flat_number: "",
+          city: "",
+        },
+        currency,
         accountNumber,
         ...monthsData,
       };
@@ -75,6 +113,7 @@ export const CreateUtilityModal = ({
       await addUtilityData(payload);
 
       reset();
+      setCustomService("");
       onClose();
       if (onSuccess) onSuccess();
     } catch (e) {
@@ -113,12 +152,11 @@ export const CreateUtilityModal = ({
                   <Select {...field} label={t("utility.year")} options={years} />
                 )}
               />
-              <Controller
-                name="serviceId"
-                control={control}
-                render={({ field }) => (
-                  <Select {...field} label={t("utility.service")} options={utilityServices} />
-                )}
+              <Input
+                value={customService}
+                onChange={(e) => setCustomService(e.target.value)}
+                label={t("utility.service")}
+                placeholder={t("utility.service_placeholder")}
               />
               <Controller
                 name="currency"
@@ -159,4 +197,3 @@ export const CreateUtilityModal = ({
     </GenericModal>
   );
 };
-
