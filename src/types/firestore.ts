@@ -22,6 +22,7 @@ export interface UtilityService {
   id?: string;
   name: string;
   account_number: string;
+  currency?: "UAH" | "USD" | "EUR";
   monthly_payments: MonthlyPayments;
 }
 
