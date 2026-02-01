@@ -155,7 +155,17 @@ export const AddressYearPage = () => {
     ? `${address.street}, ${address.house_number}${address.flat_number ? `/${address.flat_number}` : ""}, ${address.city}`
     : id;
 
-  console.log(addressDisplay);
+  const countSumOfService = (service: UtilityService) => {
+    return Object.values(service.monthly_payments || {}).reduce((sum, payment) => {
+      return sum + (payment.amount || 0);
+    }, 0);
+  };
+
+  const countSumOfAllServices = () => {
+    return services.reduce((total, service) => {
+      return total + countSumOfService(service);
+    }, 0);
+  };
 
   return (
     <Box>
@@ -181,6 +191,9 @@ export const AddressYearPage = () => {
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
               {t("utility.payments", "Payments")} - {year} {t("common.year_short", "year")}
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              {`Сума за рік: ${countSumOfAllServices().toFixed(2)} ${services[0]?.currency ?? ""}`}
             </Typography>
           </Box>
         </Box>
@@ -232,6 +245,10 @@ export const AddressYearPage = () => {
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
                         {t("utility.account_short", "Account")}: {service.account_number}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Cума: {countSumOfService(service).toFixed(2)}
+                        {Object.values(service.monthly_payments || {})[0]?.currency || ""}
                       </Typography>
                     </Box>
                     {isAdmin && (
