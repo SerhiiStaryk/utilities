@@ -10,7 +10,6 @@ import {
   Typography,
   IconButton,
   Paper,
-  CircularProgress,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
