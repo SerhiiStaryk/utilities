@@ -5,6 +5,7 @@ import { Box, Button, Card, CardContent, Stack, Typography, Alert } from "@mui/m
 import Grid from "@mui/material/Grid2";
 import { useTranslation } from "react-i18next";
 import { Input } from "../../components/Input";
+import { Loader } from "../../components/Loader";
 import { addAddress } from "../../firebase/firestore";
 
 interface AddressFormValues {
@@ -181,7 +182,7 @@ export const CreateAddressPage = () => {
                     disabled={loading}
                     fullWidth={{ xs: true, sm: false } as any}
                   >
-                    {loading ? "Saving..." : t("address.create.submit")}
+                    {loading ? <Loader button /> : t("address.create.submit")}
                   </Button>
                 </Stack>
               </Grid>

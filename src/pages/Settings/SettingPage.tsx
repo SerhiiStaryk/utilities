@@ -10,8 +10,14 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { Logout, Person, DarkMode, Language, DeleteForever, People } from "@mui/icons-material";
+import { Logout, Person, DarkMode, Language, DeleteForever, People, Download, Upload } from "@mui/icons-material";
 import { logout } from "../../firebase/auth";
+import {
+  getGlobalBackupData,
+  restoreGlobalFromBackup,
+} from "../../firebase/firestore";
+import { toast } from "react-toastify";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettings } from "../../app/providers/SettingsProvider";
 import { useAuth } from "../../app/providers/AuthProvider";
@@ -25,9 +31,57 @@ export const SettingsPage = () => {
   const isAdmin = role === "admin";
   const navigate = useNavigate();
 
+  const [isBackingUp, setIsBackingUp] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+
   const changeLanguage = () => {
     const newLang = i18n.language === "en" ? "uk" : "en";
     i18n.changeLanguage(newLang);
+  };
+
+  const handleGlobalBackup = async () => {
+    setIsBackingUp(true);
+    try {
+      const data = await getGlobalBackupData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `global_backup_${new Date().toISOString().split("T")[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success(t("common.save_success", "Backup downloaded successfully"));
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to create backup");
+    } finally {
+      setIsBackingUp(false);
+    }
+  };
+
+  const handleGlobalRestore = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsRestoring(true);
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const content = e.target?.result as string;
+        const backupData = JSON.parse(content);
+        await restoreGlobalFromBackup(backupData);
+        toast.success(t("common.save_success", "Restored successfully"));
+      } catch (err) {
+        console.error("Restore error:", err);
+        toast.error("Failed to restore backup");
+      } finally {
+        setIsRestoring(false);
+        event.target.value = "";
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -52,6 +106,41 @@ export const SettingsPage = () => {
                 secondary={t("settings.user_management_desc", "Manage user roles and permissions")}
               />
               <Button onClick={() => navigate("/users")}>{t("settings.open", "Open")}</Button>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem>
+              <ListItemIcon>
+                <Download />
+              </ListItemIcon>
+              <ListItemText
+                primary={t("settings.global_backup", "Global Backup")}
+                secondary={t("settings.global_backup_desc", "Export all system data to JSON")}
+              />
+              <Button onClick={handleGlobalBackup} disabled={isBackingUp}>
+                {isBackingUp ? t("common.saving") : t("settings.open")}
+              </Button>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem>
+              <ListItemIcon>
+                <Upload />
+              </ListItemIcon>
+              <ListItemText
+                primary={t("settings.global_restore", "Global Restore")}
+                secondary={t("settings.global_restore_desc", "Restore all system data from JSON")}
+              />
+              <input
+                type="file"
+                accept=".json"
+                id="global-restore-upload"
+                style={{ display: "none" }}
+                onChange={handleGlobalRestore}
+              />
+              <label htmlFor="global-restore-upload">
+                <Button component="span" disabled={isRestoring}>
+                  {isRestoring ? t("common.saving") : t("settings.open")}
+                </Button>
+              </label>
             </ListItem>
           </List>
         </Paper>

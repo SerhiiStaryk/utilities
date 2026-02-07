@@ -7,6 +7,7 @@ interface AuthContextValue {
   user: User | null;
   role: string | null;
   allowedAddresses: string[] | null;
+  allowedPages: string[] | null;
   loading: boolean;
 }
 
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   role: null,
   allowedAddresses: null,
+  allowedPages: null,
   loading: true,
 });
 
@@ -23,6 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [allowedAddresses, setAllowedAddresses] = useState<string[] | null>(null);
+  const [allowedPages, setAllowedPages] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,10 +41,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const userData = userDoc.data();
             setRole(userData.role || null);
             setAllowedAddresses(userData.allowedAddresses || []);
+            setAllowedPages(userData.allowedPages || []);
           } else {
             console.warn("No user document found in 'users' collection for UID:", currentUser.uid);
             setRole(null);
             setAllowedAddresses([]);
+            setAllowedPages([]);
           }
         } catch (error) {
           setRole(null);
@@ -50,6 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setRole(null);
         setAllowedAddresses(null);
+        setAllowedPages(null);
       }
 
       setLoading(false);
@@ -59,7 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, role, allowedAddresses, loading }}>
+    <AuthContext.Provider value={{ user, role, allowedAddresses, allowedPages, loading }}>
       {children}
     </AuthContext.Provider>
   );

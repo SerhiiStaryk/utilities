@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { getAppTheme } from "../constants/theme";
-import AppRouterProvider from "./providers/RouterProvider ";
+import AppRouterProvider from "./providers/RouterProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ModalController } from "../controller/modal.controller";
 import { SettingsProvider, useSettings } from "./providers/SettingsProvider";

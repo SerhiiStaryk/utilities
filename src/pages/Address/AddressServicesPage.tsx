@@ -18,6 +18,7 @@ import {
 import { Add, ArrowBack, Delete } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Loader } from "../../components/Loader";
 import { useSettings } from "../../app/providers/SettingsProvider";
 import { getAddress, addAddress } from "../../firebase/firestore"; // Reusing addAddress for update
 import { AddressDoc } from "../../types/firestore";
@@ -84,12 +85,7 @@ export const AddressServicesPage = () => {
     }
   };
 
-  if (loading)
-    return (
-      <Box p={4} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
-    );
+  if (loading) return <Loader />;
 
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: { xs: 2, sm: 4 } }}>

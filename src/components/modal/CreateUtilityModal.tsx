@@ -7,7 +7,7 @@ import { addUtilityData } from "../../firebase/firestore";
 import { UtilityDataPayload } from "../../types/firestore";
 import { useTranslation } from "react-i18next";
 import { currencies } from "../../constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface CreateUtilityModalProps {
   open: boolean;
@@ -20,6 +20,7 @@ interface CreateUtilityModalProps {
     flat_number: string;
     city: string;
   } | null;
+  initialYear?: string;
 }
 
 const MONTHS = [
@@ -43,6 +44,7 @@ export const CreateUtilityModal = ({
   addressId,
   onSuccess,
   addressData,
+  initialYear,
 }: CreateUtilityModalProps) => {
   const [disabledSubmit, setDisabledSubmit] = useState(false);
 
@@ -67,6 +69,29 @@ export const CreateUtilityModal = ({
       december: "",
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      reset({
+        yearId: initialYear || "",
+        serviceId: "",
+        currency: "UAH",
+        accountNumber: "",
+        january: "",
+        february: "",
+        march: "",
+        april: "",
+        may: "",
+        june: "",
+        july: "",
+        august: "",
+        september: "",
+        october: "",
+        november: "",
+        december: "",
+      });
+    }
+  }, [open, initialYear, reset]);
 
   const onSubmit: SubmitHandler<{
     yearId: string;

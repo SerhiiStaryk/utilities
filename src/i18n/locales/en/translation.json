@@ -7,7 +7,8 @@
     "addresses": "Directories",
     "settings": "Settings",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "info": "Info"
   },
   "dash": {
     "expenses": "Expenses",
@@ -63,7 +64,11 @@
     "services_list": "Services List",
     "edit": {
       "title": "Edit Address"
-    }
+    },
+    "backup": "Backup",
+    "backup_desc": "Download all data for this address as a JSON file.",
+    "restore": "Restore",
+    "restore_desc": "Restore data for this address from a previously downloaded JSON file."
   },
   "year": {
     "create": "New Year",
@@ -71,7 +76,8 @@
     "create_desc": "Enter the year (e.g., 2026). This will create a new archive and automatically add the configured services for this address.",
     "no_data": "No years found. Add utility data to create a year.",
     "delete_title": "Delete Year Archive",
-    "delete_confirm": "Are you sure you want to delete the archive for {{year}}? All associated utility data will be lost."
+    "delete_confirm": "Are you sure you want to delete the archive for {{year}}? All associated utility data will be lost.",
+    "already_exists": "Year archive already exists"
   },
   "common": {
     "back": "Back",
@@ -117,6 +123,8 @@
     "no_readings": "No meter readings found for this year.",
     "no_services": "No utility services found for this year.",
     "summary": "Summary",
+    "monthly_summary": "Monthly Total Summary",
+    "sum_for_year": "Total for year",
     "current_reading": "Current Reading",
     "difference": "Difference",
     "add_reading_error": "Failed to add meter reading",
@@ -157,6 +165,52 @@
     "user_management": "User Management",
     "user_management_desc": "Manage user roles and permissions",
     "open": "Open",
-    "authorized_addresses": "Authorized Addresses"
+    "authorized_addresses": "Authorized Addresses",
+    "authorized_pages": "Authorized Pages"
+  },
+  "rental": {
+    "title": "Rental Management",
+    "status": "Status",
+    "rented": "Rented",
+    "vacant": "Vacant",
+    "tenant_name": "Tenant Name",
+    "tenant_phone": "Tenant Phone",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "monthly_rent": "Monthly Rent",
+    "deposit": "Deposit",
+    "payments": "Rent Payments",
+    "add_payment": "Add Payment",
+    "payment_date": "Payment Date",
+    "amount": "Amount",
+    "status_paid": "Paid",
+    "status_overdue": "Overdue",
+    "status_partial": "Partial",
+    "save_rental_info": "Save Rental Information",
+    "no_rental_data": "No rental data for this address."
+  },
+  "info": {
+    "title": "Info & Services",
+    "nav_title": "Services",
+    "emergency": "Emergency Services",
+    "utility_services": "Utility Services",
+    "emergency_desc": "Phone numbers for emergencies",
+    "utility_desc": "Contacts and hotlines of service providers",
+    "phone": "Phone",
+    "website": "Website",
+    "fire": "Fire Service",
+    "police": "Police",
+    "ambulance": "Ambulance",
+    "gas_emergency": "Emergency Gas Service",
+    "electricity": "Electricity",
+    "electricity_desc": "DTEK / Yasno",
+    "gas": "Gas Supply",
+    "gas_desc": "Naftogaz Ukraine",
+    "water": "Water Supply",
+    "water_desc": "Kyivvodokanal / Local water utility",
+    "heating": "Heating & Hot Water",
+    "heating_desc": "Kyivteploenergo / Local CHP",
+    "internet": "Internet & Communication",
+    "internet_desc": "Kyivstar, Vodafone, Lifecell, Lanet"
   }
 }

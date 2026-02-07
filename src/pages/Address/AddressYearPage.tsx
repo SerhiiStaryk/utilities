@@ -28,11 +28,12 @@ import {
   deleteUtilityService,
   getAddress,
 } from "../../firebase/firestore";
-import { UtilityService, AddressDoc } from "../../types/firestore";
+import { UtilityService, AddressDoc, MonthlyPayments } from "../../types/firestore";
 import { Modal } from "../../components/modal/Modal";
 import { ConfirmModal } from "../../components/modal/ConfirmModal";
 import { UtilityForm } from "../../components/forms/UtilityForm";
 import { QuickEntryForm } from "../../components/forms/QuickEntryForm";
+import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
 import Grid from "@mui/material/Grid2";
 import { MONTHS } from "../../constants/months";
 import { useSettings } from "../../app/providers/SettingsProvider";
@@ -55,6 +56,7 @@ export const AddressYearPage = () => {
   const [editingService, setEditingService] = useState<UtilityService | null>(null);
   const [deletingService, setDeletingService] = useState<UtilityService | null>(null);
   const [quickEntryOpen, setQuickEntryOpen] = useState(false);
+  const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
   const [disableSubmit, setDisabledSubmit] = useState(false);
 
@@ -157,7 +159,7 @@ export const AddressYearPage = () => {
 
   const countSumOfService = (service: UtilityService) => {
     return Object.values(service.monthly_payments || {}).reduce((sum, payment) => {
-      return sum + (payment.amount || 0);
+      return sum + (parseFloat(payment.amount) || 0);
     }, 0);
   };
 
@@ -166,6 +168,20 @@ export const AddressYearPage = () => {
       return total + countSumOfService(service);
     }, 0);
   };
+
+  const monthlySums = MONTHS.reduce(
+    (acc, month) => {
+      const sum = services.reduce((total, service) => {
+        const payment = service.monthly_payments[month as keyof MonthlyPayments];
+        return total + (payment ? parseFloat(payment.amount) || 0 : 0);
+      }, 0);
+      if (sum > 0) {
+        acc[month] = sum;
+      }
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return (
     <Box>
@@ -193,8 +209,37 @@ export const AddressYearPage = () => {
               {t("utility.payments", "Payments")} - {year} {t("common.year_short", "year")}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {`Сума за рік: ${countSumOfAllServices().toFixed(2)} ${services[0]?.currency ?? ""}`}
+              {t("utility.sum_for_year", "Сума за рік")}: {countSumOfAllServices().toFixed(2)}{" "}
+              {services[0]?.currency ?? ""}
             </Typography>
+            {Object.keys(monthlySums).length > 0 && (
+              <Box mt={1}>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ fontWeight: "bold", mb: 0.5 }}
+                >
+                  {t("utility.monthly_summary", "Загальний підсумок по місяцях")}:
+                </Typography>
+                <Box display="flex" flexWrap="wrap" sx={{ gap: { xs: 0.5, sm: 1 } }}>
+                  {MONTHS.map((month) => {
+                    const sum = monthlySums[month];
+                    if (!sum) return null;
+                    return (
+                      <Typography key={month} variant="body2" color="textSecondary" sx={{ mr: 2 }}>
+                        <span style={{ textTransform: "capitalize" }}>
+                          {t(`utility.months.${month}`, month)}
+                        </span>
+                        :{" "}
+                        <strong>
+                          {sum.toFixed(2)} {services[0]?.currency ?? ""}
+                        </strong>
+                      </Typography>
+                    );
+                  })}
+                </Box>
+              </Box>
+            )}
           </Box>
         </Box>
         <Stack
@@ -221,13 +266,22 @@ export const AddressYearPage = () => {
             </ToggleButtonGroup>
           )}
           {isAdmin && (
-            <Button
-              variant="contained"
-              onClick={() => setQuickEntryOpen(true)}
-              fullWidth={isMobile}
-            >
-              {t("utility.enter_current_month", "Enter Current Month")}
-            </Button>
+            <Stack direction={{ xs: "column", sm: "row" }} gap={1} sx={{ width: "100%" }}>
+              <Button
+                variant="outlined"
+                onClick={() => setCreateUtilityOpen(true)}
+                fullWidth={isMobile}
+              >
+                {t("dashboard.add_utility", "Add Service")}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => setQuickEntryOpen(true)}
+                fullWidth={isMobile}
+              >
+                {t("utility.enter_current_month", "Enter Current Month")}
+              </Button>
+            </Stack>
           )}
         </Stack>
       </Stack>
@@ -467,6 +521,15 @@ export const AddressYearPage = () => {
           onCancel={() => setQuickEntryOpen(false)}
         />
       </Modal>
+
+      <CreateUtilityModal
+        addressData={address}
+        open={createUtilityOpen}
+        onClose={() => setCreateUtilityOpen(false)}
+        addressId={id || ""}
+        initialYear={year}
+        onSuccess={fetchServices}
+      />
     </Box>
   );
 };

@@ -13,6 +13,8 @@ import { AddressReadingPage } from "../../pages/Address/AddressReadingPage";
 import { SettingsPage } from "../../pages/Settings/SettingPage";
 import { ProfilePage } from "../../pages/Settings/ProfilePage";
 import { UsersPage } from "../../pages/Users/UsersPage";
+import { RentalManagementPage } from "../../pages/Rental/RentalManagementPage";
+import { InfoPage } from "../../pages/Info/InfoPage";
 import { PrivateRoute } from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -42,6 +44,8 @@ export const router = createBrowserRouter([
       { path: "settings", element: <SettingsPage /> },
       { path: "settings/profile", element: <ProfilePage /> },
       { path: "users", element: <UsersPage /> },
+      { path: "rental", element: <RentalManagementPage /> },
+      { path: "info", element: <InfoPage /> },
     ],
   },
 ]);

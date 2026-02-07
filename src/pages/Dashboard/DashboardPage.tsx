@@ -57,10 +57,21 @@ const StatCard = ({
 export const DashboardPage = () => {
   const { t } = useTranslation();
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<string>("");
-  const [dashboardType, setDashboardType] = useState<DashboardType>("expenses");
-  const [selectedYear, setSelectedYear] = useState<string>("all");
-  const [selectedService, setSelectedService] = useState<string>("all");
+  const [selectedAddress, setSelectedAddress] = useState<string>(
+    localStorage.getItem("dashboard_selectedAddress") || "",
+  );
+  const [dashboardType, setDashboardType] = useState<DashboardType>(
+    (localStorage.getItem("dashboard_dashboardType") as DashboardType) || "expenses",
+  );
+  const [selectedYear, setSelectedYear] = useState<string>(
+    localStorage.getItem("dashboard_selectedYear") || "all",
+  );
+  const [selectedService, setSelectedService] = useState<string>(
+    localStorage.getItem("dashboard_selectedService") || "all",
+  );
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    localStorage.getItem("dashboard_selectedMonth") || "all",
+  );
 
   const { role, allowedAddresses } = useAuth();
   const isAdmin = role === "admin";
@@ -71,7 +82,7 @@ export const DashboardPage = () => {
     availableYears,
     availableServices,
     loading: dataLoading,
-  } = useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService);
+  } = useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService, selectedMonth);
 
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
 
@@ -100,11 +111,13 @@ export const DashboardPage = () => {
     fetchAddresses();
   }, [isAdmin, allowedAddresses]);
 
-  // Reset year/service when address changes
   useEffect(() => {
-    setSelectedYear("all");
-    setSelectedService("all");
-  }, [selectedAddress, dashboardType]);
+    if (selectedAddress) localStorage.setItem("dashboard_selectedAddress", selectedAddress);
+    localStorage.setItem("dashboard_dashboardType", dashboardType);
+    localStorage.setItem("dashboard_selectedYear", selectedYear);
+    localStorage.setItem("dashboard_selectedService", selectedService);
+    localStorage.setItem("dashboard_selectedMonth", selectedMonth);
+  }, [selectedAddress, dashboardType, selectedYear, selectedService, selectedMonth]);
 
   const formatValue = (value: number) => {
     if (dashboardType === "expenses") {
@@ -208,6 +221,22 @@ export const DashboardPage = () => {
               {availableServices.map((s) => (
                 <MenuItem key={s} value={s}>
                   {s}
+                </MenuItem>
+              ))}
+            </MuiSelect>
+          </FormControl>
+          {/* Month Filter */}
+          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
+            <InputLabel>{t("utility.month")}</InputLabel>
+            <MuiSelect
+              value={selectedMonth}
+              label={t("utility.month")}
+              onChange={(e) => setSelectedMonth(e.target.value as string)}
+            >
+              <MenuItem value="all">{t("common.all")}</MenuItem>
+              {MONTHS.map((m) => (
+                <MenuItem key={m} value={m}>
+                  {t(`utility.months.${m}`)}
                 </MenuItem>
               ))}
             </MuiSelect>

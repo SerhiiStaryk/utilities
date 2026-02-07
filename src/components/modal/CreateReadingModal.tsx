@@ -14,6 +14,7 @@ interface CreateReadingModalProps {
 }
 
 import { toast } from "react-toastify";
+import { Loader } from "../Loader";
 
 export const CreateReadingModal = ({
   open,
@@ -66,7 +67,7 @@ export const CreateReadingModal = ({
         <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button onClick={onClose}>{t("address.create.cancel")}</Button>
           <Button variant="contained" type="submit" form="create-reading-form" disabled={loading}>
-            {loading ? "..." : t("utility.submit")}
+            {loading ? <Loader button /> : t("utility.submit")}
           </Button>
         </Box>
       }

@@ -9,8 +9,8 @@ import {
   Stack,
   Typography,
   Alert,
-  CircularProgress,
 } from "@mui/material";
+import { Loader } from "../../components/Loader";
 import Grid from "@mui/material/Grid2";
 import { useTranslation } from "react-i18next";
 import { Input } from "../../components/Input";
@@ -88,11 +88,7 @@ export const EditAddressPage = () => {
   };
 
   if (fetching) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-        <CircularProgress />
-      </Box>
-    );
+    return <Loader />;
   }
 
   return (
@@ -218,7 +214,7 @@ export const EditAddressPage = () => {
                     disabled={loading}
                     fullWidth={{ xs: true, sm: false } as any}
                   >
-                    {loading ? "Saving..." : "Save Changes"}
+                    {loading ? <Loader button /> : "Save Changes"}
                   </Button>
                 </Stack>
               </Grid>

@@ -26,14 +26,6 @@ export interface UtilityService {
   monthly_payments: MonthlyPayments;
 }
 
-export interface AddressDoc {
-  street: string;
-  house_number: string;
-  flat_number: string;
-  city: string;
-  services?: (string | { name: string; accountNumber: string })[];
-}
-
 export interface YearDoc {
   year: number;
 }
@@ -102,4 +94,35 @@ export interface ReadingDataPayload {
   october: string;
   november: string;
   december: string;
+}
+
+export interface RentalPayment {
+  id: string;
+  month: string;
+  year: number;
+  amount: number;
+  date: string;
+  status: "paid" | "overdue" | "partial";
+  comment?: string;
+}
+
+export interface RentalInfo {
+  isRented: boolean;
+  tenantName: string;
+  tenantPhone: string;
+  startDate: string;
+  endDate?: string;
+  monthlyRent: number;
+  deposit: number;
+  currency: string;
+  payments?: RentalPayment[];
+}
+
+export interface AddressDoc {
+  street: string;
+  house_number: string;
+  flat_number: string;
+  city: string;
+  services?: (string | { name: string; accountNumber: string })[];
+  rental_info?: RentalInfo;
 }

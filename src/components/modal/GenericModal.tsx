@@ -36,7 +36,10 @@ export const GenericModal = ({
   return (
     <ModalUI
       open={open}
-      onClose={onClose}
+      onClose={(_, reason) => {
+        if (reason === "backdropClick") return;
+        onClose();
+      }}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       hideBackdrop={isMobile}

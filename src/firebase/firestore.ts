@@ -15,9 +15,48 @@ import {
   YearDoc,
   ReadingDataPayload,
   MeterReadingService,
+  RentalInfo,
+  RentalPayment,
 } from "../types/firestore";
 
 const db = getFirestore();
+
+// --- Rental Management ---
+
+export async function updateRentalInfo(addressId: string, rentalInfo: RentalInfo) {
+  try {
+    const addressRef = doc(db, "addresses", addressId);
+    await setDoc(addressRef, { rental_info: rentalInfo }, { merge: true });
+    toast.success("Rental information updated");
+  } catch (error) {
+    console.error("Error updating rental info:", error);
+    toast.error("Error updating rental info");
+    throw error;
+  }
+}
+
+export async function addRentalPayment(addressId: string, payment: RentalPayment) {
+  try {
+    const addressRef = doc(db, "addresses", addressId);
+    const snapshot = await getDoc(addressRef);
+    if (snapshot.exists()) {
+      const currentData = snapshot.data() as AddressDoc;
+      const currentRental = currentData.rental_info;
+      const updatedPayments = [...(currentRental?.payments || []), payment];
+      await setDoc(
+        addressRef,
+        { rental_info: { ...currentRental, payments: updatedPayments } },
+        { merge: true },
+      );
+      toast.success("Payment added successfully");
+    }
+  } catch (error) {
+    console.error("Error adding rental payment:", error);
+    toast.error("Error adding rental payment");
+    throw error;
+  }
+}
+
 
 // --- Create / Update ---
 
@@ -180,10 +219,12 @@ export async function getYearsForAddress(
 ): Promise<{ id: string; data: YearDoc }[]> {
   const yearsCol = collection(db, "addresses", addressId, "years");
   const snapshot = await getDocs(yearsCol);
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    data: doc.data() as YearDoc,
-  }));
+  return snapshot.docs
+    .map((doc) => ({
+      id: doc.id,
+      data: doc.data() as YearDoc,
+    }))
+    .sort((a, b) => (b.data.year || 0) - (a.data.year || 0));
 }
 
 export async function getAllUtilityServicesForYear(
@@ -308,6 +349,124 @@ export async function getAddress(id: string): Promise<AddressDoc | null> {
   return null;
 }
 
+export async function getAddressBackupData(addressId: string) {
+  const address = await getAddress(addressId);
+  if (!address) return null;
+
+  const years = await getYearsForAddress(addressId);
+  const yearsWithData = await Promise.all(
+    years.map(async (year) => {
+      const services = await getAllUtilityServicesForYear(addressId, year.id);
+      const readings = await getAllMeterReadingsForYear(addressId, year.id);
+      return {
+        ...year.data,
+        id: year.id,
+        utility_services: services,
+        meter_readings: readings,
+      };
+    }),
+  );
+
+  return {
+    ...address,
+    id: addressId,
+    years: yearsWithData,
+    backup_date: new Date().toISOString(),
+  };
+}
+
+export async function restoreAddressFromBackup(backupData: any) {
+  try {
+    const { id, years, backup_date, ...addressInfo } = backupData;
+    if (!id) throw new Error("Invalid backup data: missing address ID");
+
+    // 1. Restore address doc
+    const addressRef = doc(db, "addresses", id);
+    await setDoc(addressRef, addressInfo as AddressDoc, { merge: true });
+
+    // 2. Restore years and their subcollections
+    if (years && Array.isArray(years)) {
+      for (const yearData of years) {
+        const { id: yearId, utility_services, meter_readings, ...yearInfo } = yearData;
+        const yearRef = doc(db, "addresses", id, "years", yearId);
+        await setDoc(yearRef, yearInfo, { merge: true });
+
+        // Restore services
+        if (utility_services && Array.isArray(utility_services)) {
+          for (const service of utility_services) {
+            const { id: serviceId, ...serviceData } = service;
+            const serviceRef = doc(
+              db,
+              "addresses",
+              id,
+              "years",
+              yearId,
+              "utility_services",
+              serviceId || service.name,
+            );
+            await setDoc(serviceRef, serviceData, { merge: true });
+          }
+        }
+
+        // Restore readings
+        if (meter_readings && Array.isArray(meter_readings)) {
+          for (const reading of meter_readings) {
+            const { id: readingId, ...readingData } = reading;
+            const readingRef = doc(
+              db,
+              "addresses",
+              id,
+              "years",
+              yearId,
+              "meter_readings",
+              readingId || `${reading.name}_${reading.meter_number}`.replace(/\s+/g, "_"),
+            );
+            await setDoc(readingRef, readingData, { merge: true });
+          }
+        }
+      }
+    }
+    toast.success(`Address ${id} restored successfully from backup of ${backup_date}`);
+  } catch (error) {
+    console.error("Error restoring from backup:", error);
+    toast.error("Failed to restore from backup");
+    throw error;
+  }
+}
+
+export async function getGlobalBackupData() {
+  const addresses = await getAddresses();
+  const globalData = await Promise.all(
+    addresses.map(async (addr) => {
+      return await getAddressBackupData(addr.id);
+    }),
+  );
+
+  return {
+    addresses: globalData,
+    backup_date: new Date().toISOString(),
+    version: "1.0",
+  };
+}
+
+export async function restoreGlobalFromBackup(backupData: any) {
+  try {
+    const { addresses, backup_date } = backupData;
+    if (!addresses || !Array.isArray(addresses)) {
+      throw new Error("Invalid global backup data");
+    }
+
+    for (const addrData of addresses) {
+      await restoreAddressFromBackup(addrData);
+    }
+    toast.success(`Global backup from ${backup_date} restored successfully`);
+  } catch (error) {
+    console.error("Global restore error:", error);
+    toast.error("Failed to restore global backup");
+    throw error;
+  }
+}
+
 export async function deleteAddress(id: string) {
   try {
     const addressRef = doc(db, "addresses", id);
@@ -396,8 +555,16 @@ export async function createYearWithServices(
   services: (string | { name: string; accountNumber: string })[],
 ) {
   try {
-    // 1. Create/Update Year Document
+    // 1. Check if Year Document already exists
     const yearRef = doc(db, "addresses", addressId, "years", yearId);
+    const yearSnap = await getDoc(yearRef);
+
+    if (yearSnap.exists()) {
+      toast.error(`Рік ${yearId} вже існує`);
+      throw new Error(`Year ${yearId} already exists`);
+    }
+
+    // 2. Create/Update Year Document
     await setDoc(yearRef, { year: parseInt(yearId) }, { merge: true });
 
     // 2. Create Service Documents
@@ -447,13 +614,18 @@ export async function addUtilityService(serviceName: string) {
 // --- User Management ---
 
 export async function getUsers(): Promise<
-  { id: string; role: string; email: string; allowedAddresses?: string[] }[]
+  { id: string; role: string; email: string; allowedAddresses?: string[]; allowedPages?: string[] }[]
 > {
   const usersCol = collection(db, "users");
   const snapshot = await getDocs(usersCol);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
-    ...(doc.data() as { role: string; email: string; allowedAddresses?: string[] }),
+    ...(doc.data() as {
+      role: string;
+      email: string;
+      allowedAddresses?: string[];
+      allowedPages?: string[];
+    }),
   }));
 }
 
@@ -475,6 +647,15 @@ export async function updateAllowedAddresses(uid: string, addresses: string[]) {
     await setDoc(userRef, { allowedAddresses: addresses }, { merge: true });
   } catch (error) {
     console.error("Error updating allowed addresses:", error);
+    throw error;
+  }
+}
+export async function updateAllowedPages(uid: string, pages: string[]) {
+  try {
+    const userRef = doc(db, "users", uid);
+    await setDoc(userRef, { allowedPages: pages }, { merge: true });
+  } catch (error) {
+    console.error("Error updating allowed pages:", error);
     throw error;
   }
 }

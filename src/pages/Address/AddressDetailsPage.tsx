@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-import { ArrowBack, Edit, Delete, CalendarToday } from "@mui/icons-material";
+import { ArrowBack, Edit, Delete, CalendarToday, Download, Upload } from "@mui/icons-material";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Modal } from "../../components/modal/Modal";
 import { ConfirmModal } from "../../components/modal/ConfirmModal";
@@ -27,6 +27,8 @@ import {
   createYearWithServices,
   getAddress,
   deleteYearAndServices,
+  getAddressBackupData,
+  restoreAddressFromBackup,
 } from "../../firebase/firestore";
 import { YearDoc } from "../../types/firestore";
 import { Settings } from "@mui/icons-material";
@@ -63,6 +65,8 @@ export const AddressDetailsPage = () => {
   const [newYear, setNewYear] = useState("");
 
   const [disabledSubmit, setDisabledSubmit] = useState(false);
+  const [isBackingUp, setIsBackingUp] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
 
   const fetchData = async () => {
     if (id) {
@@ -108,6 +112,12 @@ export const AddressDetailsPage = () => {
       // If no services configured, maybe warn user? or just create empty year?
       // For now, allow empty.
 
+      // Check if year already exists
+      if (yearsList.some((y) => y.id === newYear)) {
+        toast.error(t("year.already_exists", "Archive for this year already exists"));
+        return;
+      }
+
       await createYearWithServices(id, newYear, servicesStart);
       setCreateYearOpen(false);
       setNewYear("");
@@ -141,6 +151,63 @@ export const AddressDetailsPage = () => {
       console.error(e);
       toast.error("Failed to delete address");
     }
+  };
+  const handleBackup = async () => {
+    if (!id) return;
+    setIsBackingUp(true);
+    try {
+      const data = await getAddressBackupData(id);
+      if (!data) {
+        toast.error("Failed to gather backup data");
+        return;
+      }
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `backup_${id}_${new Date().toISOString().split("T")[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success("Backup downloaded successfully");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to create backup");
+    } finally {
+      setIsBackingUp(false);
+    }
+  };
+
+  const handleRestore = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !id) return;
+
+    setIsRestoring(true);
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const content = e.target?.result as string;
+        const backupData = JSON.parse(content);
+
+        await restoreAddressFromBackup(backupData);
+        await fetchData(); // Refresh current page data
+        toast.success(t("common.save_success", "Restored successfully"));
+      } catch (err) {
+        console.error("Restore error:", err);
+        toast.error("Failed to parse or restore backup file");
+      } finally {
+        setIsRestoring(false);
+        // Reset input
+        event.target.value = "";
+      }
+    };
+    reader.onerror = () => {
+      toast.error("Failed to read file");
+      setIsRestoring(false);
+    };
+    reader.readAsText(file);
   };
 
   const formatFullAddress = () => {
@@ -192,6 +259,43 @@ export const AddressDetailsPage = () => {
             >
               {t("settings.edit", "Edit")}
             </Button>
+          )}
+          {isAdmin && (
+            <Button
+              variant="outlined"
+              color="info"
+              startIcon={<Download />}
+              onClick={handleBackup}
+              disabled={isBackingUp}
+              size={isMobile ? "small" : "medium"}
+              sx={{ flexGrow: { xs: 1, sm: 0 } }}
+            >
+              {isBackingUp ? t("common.saving", "Saving...") : t("address.backup", "Backup")}
+            </Button>
+          )}
+          {isAdmin && (
+            <>
+              <input
+                type="file"
+                accept=".json"
+                id="restore-backup-upload"
+                style={{ display: "none" }}
+                onChange={handleRestore}
+              />
+              <label htmlFor="restore-backup-upload">
+                <Button
+                  component="span"
+                  variant="outlined"
+                  color="warning"
+                  startIcon={<Upload />}
+                  disabled={isRestoring}
+                  size={isMobile ? "small" : "medium"}
+                  sx={{ flexGrow: { xs: 1, sm: 0 }, height: "100%" }}
+                >
+                  {isRestoring ? t("common.saving", "Saving...") : t("address.restore", "Restore")}
+                </Button>
+              </label>
+            </>
           )}
           {isAdmin && !hideDeleteButtons && (
             <Button

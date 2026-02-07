@@ -14,6 +14,7 @@ export const useDashboardData = (
   dashboardType: DashboardType = "expenses",
   selectedYearId: string = "all",
   selectedServiceId: string = "all",
+  selectedMonth: string = "all",
 ) => {
   const [loading, setLoading] = useState(false);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
@@ -97,6 +98,7 @@ export const useDashboardData = (
           if (dashboardType === "expenses") {
             const s = item as UtilityService;
             Object.entries(s.monthly_payments || {}).forEach(([month, p]) => {
+              if (selectedMonth !== "all" && month !== selectedMonth) return;
               filteredTotal += p.amount || 0;
               itemTotals[itemName] += p.amount || 0;
               monthlyTotals[month] += p.amount || 0;
@@ -104,6 +106,7 @@ export const useDashboardData = (
           } else {
             const r = item as MeterReadingService;
             Object.entries(r.monthly_readings || {}).forEach(([month, rd]) => {
+              if (selectedMonth !== "all" && month !== selectedMonth) return;
               const val = parseFloat(rd.value) || 0;
               filteredTotal += val;
               itemTotals[itemName] += val;
@@ -149,7 +152,7 @@ export const useDashboardData = (
     };
 
     fetchData();
-  }, [addressId, dashboardType, selectedYearId, selectedServiceId]);
+  }, [addressId, dashboardType, selectedYearId, selectedServiceId, selectedMonth]);
 
   return { stats, chartData, availableYears, availableServices, loading };
 };
