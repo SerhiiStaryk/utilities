@@ -25,7 +25,24 @@ import {
   Tooltip,
   LinearProgress,
 } from "@mui/material";
-import { ArrowBack, Edit, Delete, ViewModule, ViewList, ExpandMore, CheckCircle, ErrorOutline } from "@mui/icons-material";
+import {
+  ArrowBack,
+  Edit,
+  Delete,
+  ViewModule,
+  ViewList,
+  ExpandMore,
+  CheckCircle,
+  ErrorOutline,
+  FlashOn as ElectricityIcon,
+  WaterDrop as WaterIcon,
+  Whatshot as GasIcon,
+  Wifi as InternetIcon,
+  Home as HousingIcon,
+  DeleteOutline as WasteIcon,
+  Thermostat as HeatingIcon,
+  QuestionMark as DefaultIcon,
+} from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -65,6 +82,31 @@ export const AddressYearPage = () => {
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
   const [disableSubmit, setDisabledSubmit] = useState(false);
+
+  const getServiceIcon = (name: string) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes("світл") || lowerName.includes("електр") || lowerName.includes("electr"))
+      return <ElectricityIcon sx={{ color: "#fbc02d" }} />;
+    if (lowerName.includes("вод") || lowerName.includes("water") || lowerName.includes("стік"))
+      return <WaterIcon sx={{ color: "#0288d1" }} />;
+    if (lowerName.includes("газ") || lowerName.includes("gas"))
+      return <GasIcon sx={{ color: "#f4511e" }} />;
+    if (lowerName.includes("інтернет") || lowerName.includes("internet") || lowerName.includes("wifi"))
+      return <InternetIcon sx={{ color: "#7b1fa2" }} />;
+    if (lowerName.includes("смітт") || lowerName.includes("waste") || lowerName.includes("trash"))
+      return <WasteIcon sx={{ color: "#689f38" }} />;
+    if (lowerName.includes("опален") || lowerName.includes("тепло") || lowerName.includes("heat"))
+      return <HeatingIcon sx={{ color: "#e64a19" }} />;
+    if (
+      lowerName.includes("утрим") ||
+      lowerName.includes("будинок") ||
+      lowerName.includes("house") ||
+      lowerName.includes("кварт")
+    )
+      return <HousingIcon sx={{ color: "#455a64" }} />;
+
+    return <DefaultIcon sx={{ color: "text.disabled", fontSize: 20 }} />;
+  };
 
   useEffect(() => {
     if (isMobile) {
@@ -334,18 +376,31 @@ export const AddressYearPage = () => {
               <Card>
                 <CardContent>
                   <Box display="flex" justifyContent="space-between" alignItems="start">
-                    <Box>
-                      <Typography variant="h6" gutterBottom color="primary">
-                        {service.name}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {t("utility.account_short", "Account")}: {service.account_number}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Cума: {countSumOfService(service).toFixed(2)}
-                        {Object.values(service.monthly_payments || {})[0]?.currency || ""}
-                      </Typography>
-                      <Box mt={1} display="flex" alignItems="center" gap={1}>
+                    <Box display="flex" gap={1.5}>
+                      <Box
+                        sx={{
+                          bgcolor: "action.hover",
+                          borderRadius: 2,
+                          p: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {getServiceIcon(service.name)}
+                      </Box>
+                      <Box>
+                        <Typography variant="h6" gutterBottom color="primary">
+                          {service.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {t("utility.account_short", "Account")}: {service.account_number}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Cума: {countSumOfService(service).toFixed(2)}
+                          {Object.values(service.monthly_payments || {})[0]?.currency || ""}
+                        </Typography>
+                        <Box mt={1} display="flex" alignItems="center" gap={1}>
                         <Tooltip title={`${Object.keys(service.monthly_payments).length}/12 ${t("utility.months_filled", "місяців заповнено")}`}>
                           <Box sx={{ width: 80 }}>
                             <LinearProgress
@@ -361,7 +416,8 @@ export const AddressYearPage = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
+                  </Box>
+                  <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
                       {isCurrentYear && (
                         service.monthly_payments[currentMonth] ? (
                           <Chip 
@@ -468,20 +524,27 @@ export const AddressYearPage = () => {
                 services.map((service) => (
                   <TableRow key={service.id || service.name}>
                     <TableCell>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="body2" fontWeight="bold">
-                          {service.name}
-                        </Typography>
-                        {isCurrentYear && (
-                          <Tooltip title={service.monthly_payments[currentMonth] ? t("utility.status.paid", "Оплачено") : t("utility.status.pending", "Очікує")}>
-                            {service.monthly_payments[currentMonth] ? (
-                              <CheckCircle color="success" sx={{ fontSize: 16 }} />
-                            ) : (
-                              <ErrorOutline color="warning" sx={{ fontSize: 16 }} />
+                          <Box display="flex" alignItems="center" gap={1.5}>
+                            {getServiceIcon(service.name)}
+                            <Typography variant="body2" fontWeight="bold">
+                              {service.name}
+                            </Typography>
+                            {isCurrentYear && (
+                              <Tooltip
+                                title={
+                                  service.monthly_payments[currentMonth]
+                                    ? t("utility.status.paid", "Оплачено")
+                                    : t("utility.status.pending", "Очікує")
+                                }
+                              >
+                                {service.monthly_payments[currentMonth] ? (
+                                  <CheckCircle color="success" sx={{ fontSize: 16 }} />
+                                ) : (
+                                  <ErrorOutline color="warning" sx={{ fontSize: 16 }} />
+                                )}
+                              </Tooltip>
                             )}
-                          </Tooltip>
-                        )}
-                      </Box>
+                          </Box>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="textSecondary">

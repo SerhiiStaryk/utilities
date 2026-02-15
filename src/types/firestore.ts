@@ -16,6 +16,7 @@ export interface MonthlyPayments {
   october: MonthPayment;
   november: MonthPayment;
   december: MonthPayment;
+  [key: string]: MonthPayment | any;
 }
 
 export interface UtilityService {
@@ -68,6 +69,7 @@ export interface MonthlyReadings {
   october: MonthReading;
   november: MonthReading;
   december: MonthReading;
+  [key: string]: MonthReading | any;
 }
 
 export interface MeterReadingService {
