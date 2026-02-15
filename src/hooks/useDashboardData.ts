@@ -6,6 +6,7 @@ import {
 } from "../firebase/firestore";
 import { UtilityService, MeterReadingService } from "../types/firestore";
 import { MONTHS } from "../constants/months";
+import { useTranslation } from "react-i18next";
 
 export type DashboardType = "expenses" | "readings";
 
@@ -16,6 +17,7 @@ export const useDashboardData = (
   selectedServiceId: string = "all",
   selectedMonth: string = "all",
 ) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
   const [availableServices, setAvailableServices] = useState<string[]>([]);
@@ -129,15 +131,30 @@ export const useDashboardData = (
           lastMonth: lastMonth ? monthlyTotals[lastMonth] : 0,
         });
 
+        const pieDataRaw = Object.entries(itemTotals)
+          .map(([name, val], index) => ({
+            id: index,
+            value: val,
+            label: name,
+          }))
+          .sort((a, b) => b.value - a.value);
+
+        let finalPieData = pieDataRaw;
+        if (pieDataRaw.length > 10) {
+          const topItems = pieDataRaw.slice(0, 8);
+          const otherItems = pieDataRaw.slice(8);
+          const othersValue = otherItems.reduce((acc, curr) => acc + curr.value, 0);
+          finalPieData = [
+            ...topItems,
+            { id: 999, value: othersValue, label: t("common.others", "Інші") },
+          ];
+        }
+
         setChartData({
           lineData: MONTHS.map(
             (m) => monthlyTotals[m] / (selectedYearId === "all" ? yearIds.length : 1),
           ),
-          pieData: Object.entries(itemTotals).map(([name, val], index) => ({
-            id: index,
-            value: val,
-            label: name,
-          })),
+          pieData: finalPieData,
           barData: Object.entries(itemTotals).map(([name, val]) => ({
             category: name,
             value: val,
