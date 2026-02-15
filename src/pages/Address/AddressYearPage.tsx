@@ -21,8 +21,11 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Chip,
+  Tooltip,
+  LinearProgress,
 } from "@mui/material";
-import { ArrowBack, Edit, Delete, ViewModule, ViewList, ExpandMore } from "@mui/icons-material";
+import { ArrowBack, Edit, Delete, ViewModule, ViewList, ExpandMore, CheckCircle, ErrorOutline } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -185,6 +188,7 @@ export const AddressYearPage = () => {
     },
     {} as Record<string, number>,
   );
+  const isCurrentYear = year === new Date().getFullYear().toString();
 
   return (
     <Box>
@@ -341,23 +345,59 @@ export const AddressYearPage = () => {
                         Cума: {countSumOfService(service).toFixed(2)}
                         {Object.values(service.monthly_payments || {})[0]?.currency || ""}
                       </Typography>
-                    </Box>
-                    {isAdmin && (
-                      <Box>
-                        <IconButton size="small" onClick={() => setEditingService(service)}>
-                          <Edit fontSize="small" />
-                        </IconButton>
-                        {!hideDeleteButtons && (
-                          <IconButton
-                            size="small"
-                            onClick={() => setDeletingService(service)}
-                            color="error"
-                          >
-                            <Delete fontSize="small" />
-                          </IconButton>
-                        )}
+                      <Box mt={1} display="flex" alignItems="center" gap={1}>
+                        <Tooltip title={`${Object.keys(service.monthly_payments).length}/12 ${t("utility.months_filled", "місяців заповнено")}`}>
+                          <Box sx={{ width: 80 }}>
+                            <LinearProgress
+                              variant="determinate"
+                              value={(Object.keys(service.monthly_payments).length / 12) * 100}
+                              color={Object.keys(service.monthly_payments).length === 12 ? "success" : "primary"}
+                              sx={{ height: 6, borderRadius: 3 }}
+                            />
+                          </Box>
+                        </Tooltip>
+                        <Typography variant="caption" color="textSecondary">
+                          {Object.keys(service.monthly_payments).length}/12
+                        </Typography>
                       </Box>
-                    )}
+                    </Box>
+                    <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
+                      {isCurrentYear && (
+                        service.monthly_payments[currentMonth] ? (
+                          <Chip 
+                            icon={<CheckCircle style={{ color: "inherit" }} />} 
+                            label={t("utility.status.paid", "Оплачено")} 
+                            color="success" 
+                            size="small" 
+                            variant="outlined"
+                          />
+                        ) : (
+                          <Chip 
+                            icon={<ErrorOutline style={{ color: "inherit" }} />} 
+                            label={t("utility.status.pending", "Очікує")} 
+                            color="warning" 
+                            size="small" 
+                            variant="outlined"
+                          />
+                        )
+                      )}
+                      {isAdmin && (
+                        <Box>
+                          <IconButton size="small" onClick={() => setEditingService(service)}>
+                            <Edit fontSize="small" />
+                          </IconButton>
+                          {!hideDeleteButtons && (
+                            <IconButton
+                              size="small"
+                              onClick={() => setDeletingService(service)}
+                              color="error"
+                            >
+                              <Delete fontSize="small" />
+                            </IconButton>
+                          )}
+                        </Box>
+                      )}
+                    </Box>
                   </Box>
                   <Box mt={2}>
                     {Object.entries(service.monthly_payments)
@@ -428,9 +468,20 @@ export const AddressYearPage = () => {
                 services.map((service) => (
                   <TableRow key={service.id || service.name}>
                     <TableCell>
-                      <Typography variant="body2" fontWeight="bold">
-                        {service.name}
-                      </Typography>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="body2" fontWeight="bold">
+                          {service.name}
+                        </Typography>
+                        {isCurrentYear && (
+                          <Tooltip title={service.monthly_payments[currentMonth] ? t("utility.status.paid", "Оплачено") : t("utility.status.pending", "Очікує")}>
+                            {service.monthly_payments[currentMonth] ? (
+                              <CheckCircle color="success" sx={{ fontSize: 16 }} />
+                            ) : (
+                              <ErrorOutline color="warning" sx={{ fontSize: 16 }} />
+                            )}
+                          </Tooltip>
+                        )}
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="textSecondary">
