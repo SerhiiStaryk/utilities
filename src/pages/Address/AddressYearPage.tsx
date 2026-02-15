@@ -18,8 +18,11 @@ import {
   useTheme,
   useMediaQuery,
   Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
-import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-material";
+import { ArrowBack, Edit, Delete, ViewModule, ViewList, ExpandMore } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -208,38 +211,72 @@ export const AddressYearPage = () => {
             <Typography variant="subtitle1" color="textSecondary">
               {t("utility.payments", "Payments")} - {year} {t("common.year_short", "year")}
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {t("utility.sum_for_year", "Сума за рік")}: {countSumOfAllServices().toFixed(2)}{" "}
-              {services[0]?.currency ?? ""}
-            </Typography>
-            {Object.keys(monthlySums).length > 0 && (
-              <Box mt={1}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  sx={{ fontWeight: "bold", mb: 0.5 }}
-                >
-                  {t("utility.monthly_summary", "Загальний підсумок по місяцях")}:
+            <Accordion
+              elevation={0}
+              sx={{
+                bgcolor: "transparent",
+                "&:before": { display: "none" },
+                mt: 0.5,
+                "&.Mui-expanded": { margin: 0 },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                sx={{
+                  p: 0,
+                  minHeight: "unset",
+                  "& .MuiAccordionSummary-content": {
+                    margin: "4px 0",
+                    "&.Mui-expanded": { margin: "4px 0" },
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper": {
+                    color: "text.secondary",
+                  },
+                }}
+              >
+                <Typography variant="subtitle1" color="textSecondary">
+                  {t("utility.sum_for_year", "Сума за рік")}:{" "}
+                  <strong>
+                    {countSumOfAllServices().toFixed(2)} {services[0]?.currency ?? ""}
+                  </strong>
                 </Typography>
-                <Box display="flex" flexWrap="wrap" sx={{ gap: { xs: 0.5, sm: 1 } }}>
-                  {MONTHS.map((month) => {
-                    const sum = monthlySums[month];
-                    if (!sum) return null;
-                    return (
-                      <Typography key={month} variant="body2" color="textSecondary" sx={{ mr: 2 }}>
-                        <span style={{ textTransform: "capitalize" }}>
-                          {t(`utility.months.${month}`, month)}
-                        </span>
-                        :{" "}
-                        <strong>
-                          {sum.toFixed(2)} {services[0]?.currency ?? ""}
-                        </strong>
-                      </Typography>
-                    );
-                  })}
-                </Box>
-              </Box>
-            )}
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0, pb: 1 }}>
+                {Object.keys(monthlySums).length > 0 && (
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ fontWeight: "bold", mb: 0.5 }}
+                    >
+                      {t("utility.monthly_summary", "Загальний підсумок по місяцях")}:
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" sx={{ gap: { xs: 0.5, sm: 1 } }}>
+                      {MONTHS.map((month) => {
+                        const sum = monthlySums[month];
+                        if (!sum) return null;
+                        return (
+                          <Typography
+                            key={month}
+                            variant="body2"
+                            color="textSecondary"
+                            sx={{ mr: 2 }}
+                          >
+                            <span style={{ textTransform: "capitalize" }}>
+                              {t(`utility.months.${month}`, month)}
+                            </span>
+                            :{" "}
+                            <strong>
+                              {sum.toFixed(2)} {services[0]?.currency ?? ""}
+                            </strong>
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                )}
+              </AccordionDetails>
+            </Accordion>
           </Box>
         </Box>
         <Stack
