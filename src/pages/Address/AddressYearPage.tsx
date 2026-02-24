@@ -91,7 +91,11 @@ export const AddressYearPage = () => {
       return <WaterIcon sx={{ color: "#0288d1" }} />;
     if (lowerName.includes("газ") || lowerName.includes("gas"))
       return <GasIcon sx={{ color: "#f4511e" }} />;
-    if (lowerName.includes("інтернет") || lowerName.includes("internet") || lowerName.includes("wifi"))
+    if (
+      lowerName.includes("інтернет") ||
+      lowerName.includes("internet") ||
+      lowerName.includes("wifi")
+    )
       return <InternetIcon sx={{ color: "#7b1fa2" }} />;
     if (lowerName.includes("смітт") || lowerName.includes("waste") || lowerName.includes("trash"))
       return <WasteIcon sx={{ color: "#689f38" }} />;
@@ -184,7 +188,7 @@ export const AddressYearPage = () => {
         const payload: any = {
           monthly_payments: {
             [data.month]: {
-              amount: p.amount,
+              amount: Number(p.amount),
               currency: p.currency,
             },
           },
@@ -401,42 +405,47 @@ export const AddressYearPage = () => {
                           {Object.values(service.monthly_payments || {})[0]?.currency || ""}
                         </Typography>
                         <Box mt={1} display="flex" alignItems="center" gap={1}>
-                        <Tooltip title={`${Object.keys(service.monthly_payments).length}/12 ${t("utility.months_filled", "місяців заповнено")}`}>
-                          <Box sx={{ width: 80 }}>
-                            <LinearProgress
-                              variant="determinate"
-                              value={(Object.keys(service.monthly_payments).length / 12) * 100}
-                              color={Object.keys(service.monthly_payments).length === 12 ? "success" : "primary"}
-                              sx={{ height: 6, borderRadius: 3 }}
-                            />
-                          </Box>
-                        </Tooltip>
-                        <Typography variant="caption" color="textSecondary">
-                          {Object.keys(service.monthly_payments).length}/12
-                        </Typography>
+                          <Tooltip
+                            title={`${Object.keys(service.monthly_payments).length}/12 ${t("utility.months_filled", "місяців заповнено")}`}
+                          >
+                            <Box sx={{ width: 80 }}>
+                              <LinearProgress
+                                variant="determinate"
+                                value={(Object.keys(service.monthly_payments).length / 12) * 100}
+                                color={
+                                  Object.keys(service.monthly_payments).length === 12
+                                    ? "success"
+                                    : "primary"
+                                }
+                                sx={{ height: 6, borderRadius: 3 }}
+                              />
+                            </Box>
+                          </Tooltip>
+                          <Typography variant="caption" color="textSecondary">
+                            {Object.keys(service.monthly_payments).length}/12
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                  <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
-                      {isCurrentYear && (
-                        service.monthly_payments[currentMonth] ? (
-                          <Chip 
-                            icon={<CheckCircle style={{ color: "inherit" }} />} 
-                            label={t("utility.status.paid", "Оплачено")} 
-                            color="success" 
-                            size="small" 
+                    <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
+                      {isCurrentYear &&
+                        (service.monthly_payments[currentMonth] ? (
+                          <Chip
+                            icon={<CheckCircle style={{ color: "inherit" }} />}
+                            label={t("utility.status.paid", "Оплачено")}
+                            color="success"
+                            size="small"
                             variant="outlined"
                           />
                         ) : (
-                          <Chip 
-                            icon={<ErrorOutline style={{ color: "inherit" }} />} 
-                            label={t("utility.status.pending", "Очікує")} 
-                            color="warning" 
-                            size="small" 
+                          <Chip
+                            icon={<ErrorOutline style={{ color: "inherit" }} />}
+                            label={t("utility.status.pending", "Очікує")}
+                            color="warning"
+                            size="small"
                             variant="outlined"
                           />
-                        )
-                      )}
+                        ))}
                       {isAdmin && (
                         <Box>
                           <IconButton size="small" onClick={() => setEditingService(service)}>
@@ -524,27 +533,27 @@ export const AddressYearPage = () => {
                 services.map((service) => (
                   <TableRow key={service.id || service.name}>
                     <TableCell>
-                          <Box display="flex" alignItems="center" gap={1.5}>
-                            {getServiceIcon(service.name)}
-                            <Typography variant="body2" fontWeight="bold">
-                              {service.name}
-                            </Typography>
-                            {isCurrentYear && (
-                              <Tooltip
-                                title={
-                                  service.monthly_payments[currentMonth]
-                                    ? t("utility.status.paid", "Оплачено")
-                                    : t("utility.status.pending", "Очікує")
-                                }
-                              >
-                                {service.monthly_payments[currentMonth] ? (
-                                  <CheckCircle color="success" sx={{ fontSize: 16 }} />
-                                ) : (
-                                  <ErrorOutline color="warning" sx={{ fontSize: 16 }} />
-                                )}
-                              </Tooltip>
+                      <Box display="flex" alignItems="center" gap={1.5}>
+                        {getServiceIcon(service.name)}
+                        <Typography variant="body2" fontWeight="bold">
+                          {service.name}
+                        </Typography>
+                        {isCurrentYear && (
+                          <Tooltip
+                            title={
+                              service.monthly_payments[currentMonth]
+                                ? t("utility.status.paid", "Оплачено")
+                                : t("utility.status.pending", "Очікує")
+                            }
+                          >
+                            {service.monthly_payments[currentMonth] ? (
+                              <CheckCircle color="success" sx={{ fontSize: 16 }} />
+                            ) : (
+                              <ErrorOutline color="warning" sx={{ fontSize: 16 }} />
                             )}
-                          </Box>
+                          </Tooltip>
+                        )}
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" color="textSecondary">

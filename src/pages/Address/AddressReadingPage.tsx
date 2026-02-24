@@ -130,7 +130,7 @@ export const AddressReadingPage = () => {
         const payload: any = {
           monthly_readings: {
             [data.month]: {
-              value: r.value,
+              value: Number(r.value),
             },
           },
         };
