@@ -1,14 +1,10 @@
-import { Add, Payment, Speed } from "@mui/icons-material";
+import { Payment, Speed } from "@mui/icons-material";
 import {
   Card,
   Box,
   Typography,
-  CardContent,
-  Button,
   Stack,
   MenuItem,
-  FormControl,
-  InputLabel,
   Select as MuiSelect,
   CircularProgress,
   ToggleButtonGroup,
@@ -23,57 +19,36 @@ import { BarChart } from "@/components/charts/BarChart";
 import BarChartAll from "@/components/charts/BarChartAll";
 import { LineChart } from "@/components/charts/LineChart";
 import { PieChart } from "@/components/charts/PieChart";
-import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
+import { StatCards } from "@/components/StatCards";
 import { MONTHS } from "@/constants/months";
 import { getAddresses } from "@/firebase/firestore";
+import { getLocalStorage, setLocalStorage } from "@/helpers/localStorage";
 import { useDashboardData, DashboardType } from "@/hooks/useDashboardData";
 import { AddressDoc } from "@/types/firestore";
-
-const StatCard = ({
-  title,
-  value,
-  loading,
-}: {
-  title: string;
-  value: string | number;
-  loading?: boolean;
-}) => (
-  <Card sx={{ height: "100%" }}>
-    <CardContent>
-      <Typography color="textSecondary" gutterBottom variant="overline">
-        {title}
-      </Typography>
-      {loading ? (
-        <CircularProgress size={24} sx={{ mt: 1 }} />
-      ) : (
-        <Typography component="div" variant="h4">
-          {value}
-        </Typography>
-      )}
-    </CardContent>
-  </Card>
-);
+import { FilterSearch } from '@/components/FilterSearch';
+import { ChartCard } from '@/components/ChartCard';
 
 export const DashboardPage = () => {
-  const { t } = useTranslation();
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>(
-    localStorage.getItem("dashboard_selectedAddress") || "",
+    getLocalStorage("dashboard_selectedAddress") || "",
   );
   const [dashboardType, setDashboardType] = useState<DashboardType>(
-    (localStorage.getItem("dashboard_dashboardType") as DashboardType) || "expenses",
+    (getLocalStorage("dashboard_dashboardType") as DashboardType) || "expenses",
   );
   const [selectedYear, setSelectedYear] = useState<string>(
-    localStorage.getItem("dashboard_selectedYear") || "all",
+    getLocalStorage("dashboard_selectedYear") || "all",
   );
   const [selectedService, setSelectedService] = useState<string>(
-    localStorage.getItem("dashboard_selectedService") || "all",
+    getLocalStorage("dashboard_selectedService") || "all",
   );
   const [selectedMonth, setSelectedMonth] = useState<string>(
-    localStorage.getItem("dashboard_selectedMonth") || "all",
+    getLocalStorage("dashboard_selectedMonth") || "all",
   );
 
   const { role, allowedAddresses } = useAuth();
+  const { t } = useTranslation();
+
   const isAdmin = role === "admin";
 
   const {
@@ -90,18 +65,14 @@ export const DashboardPage = () => {
     selectedMonth,
   );
 
-  const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
-
   const fetchAddresses = async () => {
     try {
       const allAddresses = await getAddresses();
       let filtered: { id: string; data: AddressDoc }[] = [];
 
-      if (isAdmin) {
-        filtered = allAddresses;
-      } else {
-        filtered = allAddresses.filter((addr) => allowedAddresses?.includes(addr.id));
-      }
+      filtered = isAdmin
+        ? allAddresses
+        : allAddresses.filter((addr) => allowedAddresses?.includes(addr.id));
 
       setAddresses(filtered);
 
@@ -113,58 +84,94 @@ export const DashboardPage = () => {
     }
   };
 
+  const filters = [
+    {
+      label: t("dashboard.current_address"),
+      value: selectedAddress,
+      hasAll: false,
+      formControlStyle: { minWidth: { xs: "100%", sm: 150 } },
+      handleChange: setSelectedAddress,
+      options: addresses.map((addr) => (
+        <MenuItem key={addr.id} value={addr.id}>
+          {addr.data.street} {addr.data.house_number}, {addr.data.city}
+        </MenuItem>
+      )),
+    },
+    {
+      label: t("utility.year"),
+      value: selectedYear,
+      formControlStyle: { minWidth: { xs: "100%", sm: 120 } },
+      handleChange: setSelectedYear,
+      options: availableYears.map((y) => (
+        <MenuItem key={y} value={y}>
+          {y}
+        </MenuItem>
+      )),
+    },
+    {
+      label: t("utility.service"),
+      value: selectedService,
+      formControlStyle: { minWidth: { xs: "100%", sm: 150 } },
+      handleChange: setSelectedService,
+      options: availableServices.map((s) => (
+        <MenuItem key={s} value={s}>
+          {s}
+        </MenuItem>
+      )),
+    },
+    {
+      label: t("utility.month"),
+      value: selectedMonth,
+      formControlStyle: { minWidth: { xs: "100%", sm: 150 } },
+      handleChange: setSelectedMonth,
+      options: MONTHS.map((m) => (
+        <MenuItem key={m} value={m}>
+          {m}
+        </MenuItem>
+      )),
+    }
+  ]
+
   useEffect(() => {
     fetchAddresses();
   }, [isAdmin, allowedAddresses]);
 
   useEffect(() => {
-    if (selectedAddress) localStorage.setItem("dashboard_selectedAddress", selectedAddress);
-    localStorage.setItem("dashboard_dashboardType", dashboardType);
-    localStorage.setItem("dashboard_selectedYear", selectedYear);
-    localStorage.setItem("dashboard_selectedService", selectedService);
-    localStorage.setItem("dashboard_selectedMonth", selectedMonth);
-  }, [selectedAddress, dashboardType, selectedYear, selectedService, selectedMonth]);
-
-  const formatValue = (value: number) => {
-    if (dashboardType === "expenses") {
-      return new Intl.NumberFormat(undefined, {
-        style: "currency",
-        currency: "UAH",
-      }).format(value);
+    if (selectedAddress) {
+      setLocalStorage("dashboard_selectedAddress", selectedAddress);
+      setLocalStorage("dashboard_dashboardType", dashboardType);
+      setLocalStorage("dashboard_selectedYear", selectedYear);
+      setLocalStorage("dashboard_selectedService", selectedService);
+      setLocalStorage("dashboard_selectedMonth", selectedMonth);
     }
-    return new Intl.NumberFormat(undefined, {
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
+  }, [selectedAddress, dashboardType, selectedYear, selectedService, selectedMonth]);
 
   return (
     <Box>
       <Stack
         direction={{ xs: "column", md: "row" }}
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="flex-start"
         mb={4}
         gap={2}
+        flexWrap='wrap'
       >
-        <Box>
-          <Typography variant="h4" fontWeight="bold">
-            {t("dashboard.title")}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {dashboardType === "expenses" ? t("utility.payments") : t("utility.meter_readings")}
-            {" — "}
-            {t("dashboard.overview", {
-              address: selectedAddress || t("dashboard.all_addresses"),
-            })}
-          </Typography>
-        </Box>
 
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          gap={2}
-          alignItems="center"
-          sx={{ width: { xs: "100%", sm: "auto" } }}
+          gap={4}
+          justifyContent="space-between"
+          alignItems="flex-start"
+          sx={{ width: "100%" }}
         >
+          <Box>
+            <Typography variant="h4" fontWeight="bold">
+              {t("dashboard.title")}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {dashboardType === "expenses" ? t("utility.payments") : t("utility.meter_readings")}
+            </Typography>
+          </Box>
           <ToggleButtonGroup
             color="primary"
             value={dashboardType}
@@ -181,226 +188,80 @@ export const DashboardPage = () => {
               {t("dash.readings", "Споживання")}
             </ToggleButton>
           </ToggleButtonGroup>
+        </Stack>
 
-          {/* Address Filter */}
-          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
-            <InputLabel>{t("dashboard.current_address")}</InputLabel>
-            <MuiSelect
-              value={selectedAddress}
-              label={t("dashboard.current_address")}
-              onChange={(e) => setSelectedAddress(e.target.value)}
-            >
-              {addresses.map((addr) => (
-                <MenuItem key={addr.id} value={addr.id}>
-                  {addr.data.street} {addr.data.house_number}, {addr.data.city}
-                </MenuItem>
-              ))}
-            </MuiSelect>
-          </FormControl>
-
-          {/* Year Filter */}
-          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 120 } }}>
-            <InputLabel>{t("utility.year")}</InputLabel>
-            <MuiSelect
-              value={selectedYear}
-              label={t("utility.year")}
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              <MenuItem value="all">{t("common.all")}</MenuItem>
-              {availableYears.map((y) => (
-                <MenuItem key={y} value={y}>
-                  {y}
-                </MenuItem>
-              ))}
-            </MuiSelect>
-          </FormControl>
-
-          {/* Service Filter */}
-          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
-            <InputLabel>{t("utility.service")}</InputLabel>
-            <MuiSelect
-              value={selectedService}
-              label={t("utility.service")}
-              onChange={(e) => setSelectedService(e.target.value)}
-            >
-              <MenuItem value="all">{t("common.all")}</MenuItem>
-              {availableServices.map((s) => (
-                <MenuItem key={s} value={s}>
-                  {s}
-                </MenuItem>
-              ))}
-            </MuiSelect>
-          </FormControl>
-          {/* Month Filter */}
-          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 150 } }}>
-            <InputLabel>{t("utility.month")}</InputLabel>
-            <MuiSelect
-              value={selectedMonth}
-              label={t("utility.month")}
-              onChange={(e) => setSelectedMonth(e.target.value as string)}
-            >
-              <MenuItem value="all">{t("common.all")}</MenuItem>
-              {MONTHS.map((m) => (
-                <MenuItem key={m} value={m}>
-                  {t(`utility.months.${m}`)}
-                </MenuItem>
-              ))}
-            </MuiSelect>
-          </FormControl>
-
-          {isAdmin && (
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              disabled={!selectedAddress}
-              onClick={() => setCreateUtilityOpen(true)}
-              sx={{ width: { xs: "100%", sm: "auto" } }}
-            >
-              {t("dashboard.add_utility")}
-            </Button>
-          )}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          gap={2}
+          alignItems="center"
+          flexWrap='wrap'
+          sx={{ width: { xs: "100%", sm: "auto" } }}
+        >
+          {filters.map((filter) => (
+            <FilterSearch
+              key={filter.label}
+              formControlStyle={filter.formControlStyle}
+              value={filter.value}
+              label={filter.label}
+              handleChange={filter.handleChange}
+              options={filter.options}
+            />
+          ))}
         </Stack>
       </Stack>
 
-      <CreateUtilityModal
-        open={createUtilityOpen}
-        onClose={() => setCreateUtilityOpen(false)}
-        addressId={selectedAddress}
+      <StatCards
+        dashboardType={dashboardType}
+        stats={stats}
+        dataLoading={dataLoading}
+        selectedYear={selectedYear}
       />
 
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard
-            title={
-              dashboardType === "expenses"
-                ? t("dashboard.stats.total_spent")
-                : t("dash.total_usage", "Разом спожито")
-            }
-            value={formatValue(stats.total)}
-            loading={dataLoading}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard
-            title={
-              selectedYear === "all"
-                ? t("dashboard.stats.filtered_spent", "Filtered Total")
-                : dashboardType === "expenses"
-                  ? t("dashboard.stats.year_spent")
-                  : t("dash.year_usage", "Спожито за рік")
-            }
-            value={formatValue(stats.filtered)}
-            loading={dataLoading}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard
-            title={t("dashboard.stats.avg_monthly")}
-            value={formatValue(stats.avgMonthly)}
-            loading={dataLoading}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <StatCard
-            title={t("dashboard.stats.last_month")}
-            value={formatValue(stats.lastMonth)}
-            loading={dataLoading}
-          />
-        </Grid>
-      </Grid>
-
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.performance")}{" "}
-              {selectedService !== "all" ? `(${selectedService})` : ""}
-            </Typography>
-            <Box sx={{ height: 350 }}>
-              {dataLoading ? (
-                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                  <CircularProgress />
-                </Box>
-              ) : chartData.lineData.length > 0 ? (
-                <LineChart
-                  data={chartData.lineData}
-                  labels={MONTHS.map((m) => t(`utility.months.${m}`))}
-                  seriesLabel={selectedService !== "all" ? selectedService : t("utility.amount")}
-                />
-              ) : (
-                <Typography variant="body2" color="textSecondary" textAlign="center" mt={10}>
-                  {t("dashboard.charts.no_data", "No data available for charts")}
-                </Typography>
-              )}
-            </Box>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.device_distribution")}
-            </Typography>
-            <Box
-              sx={{
-                height: 350,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {dataLoading ? (
-                <CircularProgress />
-              ) : chartData.pieData.length > 0 ? (
-                <PieChart data={chartData.pieData} />
-              ) : (
-                <Typography variant="body2" color="textSecondary">
-                  {t("common.no_data", "No data")}
-                </Typography>
-              )}
-            </Box>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.sales_category")}
-            </Typography>
-            <Box sx={{ height: 350 }}>
-              {dataLoading ? (
-                <CircularProgress />
-              ) : chartData.barData.length > 0 ? (
-                <BarChart data={chartData.barData} label={t("utility.service")} />
-              ) : (
-                <Typography variant="body2" color="textSecondary">
-                  {t("common.no_data", "No data")}
-                </Typography>
-              )}
-            </Box>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("dashboard.charts.monthly_trends")}
-            </Typography>
-            <Box sx={{ height: 350 }}>
-              {dataLoading ? (
-                <CircularProgress />
-              ) : chartData.monthlyTrend.length > 0 ? (
-                <BarChartAll
-                  data={chartData.monthlyTrend}
-                  labels={MONTHS.map((m) => t(`utility.months.${m}`))}
-                  seriesLabel={t("utility.amount")}
-                />
-              ) : (
-                <Typography variant="body2" color="textSecondary">
-                  {t("common.no_data", "No data")}
-                </Typography>
-              )}
-            </Box>
-          </Card>
-        </Grid>
+        <ChartCard
+          chartTitle="dashboard.charts.performance"
+          dataLoading={dataLoading}
+          chartCondition={chartData.lineData.length > 0}
+          size={{ xs: 12 }}
+        >
+          <LineChart
+            data={chartData.lineData}
+            labels={MONTHS.map((m) => t(`utility.months.${m}`))}
+            seriesLabel={selectedService !== "all" ? selectedService : t("utility.amount")}
+          />
+        </ChartCard>
+
+        <ChartCard
+          chartTitle="dashboard.charts.device_distribution"
+          dataLoading={dataLoading}
+          chartCondition={chartData.pieData.length > 0}
+          size={{ xs: 12 }}
+        >
+          <PieChart data={chartData.pieData} />
+        </ChartCard>
+
+        <ChartCard
+          chartTitle="dashboard.charts.sales_category"
+          dataLoading={dataLoading}
+          chartCondition={chartData.barData.length > 0}
+          size={{ xs: 12, md: 6 }}
+        >
+          <BarChart data={chartData.barData} label={t("utility.service")} />
+        </ChartCard>
+
+        <ChartCard
+          chartTitle="dashboard.charts.monthly_trends"
+          dataLoading={dataLoading}
+          chartCondition={chartData.monthlyTrend.length > 0}
+          size={{ xs: 12, md: 6 }}
+        >
+          <BarChartAll
+            data={chartData.monthlyTrend}
+            labels={MONTHS.map((m) => t(`utility.months.${m}`))}
+            seriesLabel={t("utility.amount")}
+          />
+        </ChartCard>
       </Grid>
-    </Box>
+    </Box >
   );
 };
