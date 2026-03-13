@@ -1,6 +1,7 @@
 import { styled } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { DRAWER_WIDTH } from "../../constants";
+
+import { DRAWER_WIDTH } from "@/constants";
 
 const drawerWidth = DRAWER_WIDTH;
 

@@ -1,5 +1,5 @@
-import { ID } from "../../../types/common";
-import { UtilityServiceYear } from "../../utilities/utils/utility.types";
+import { UtilityServiceYear } from "@/features/utilities/utils/utility.types";
+import { ID } from "@/types/common";
 
 export interface AddressYear {
   id: ID;

@@ -1,10 +1,11 @@
 import { Button, Box, Stack, Grid2, Typography } from "@mui/material";
 import { useForm, Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Input } from "../Input";
-import { Select as CustomSelect } from "../Select";
-import { currencies } from "../../constants";
-import { MONTHS } from "../../constants/months";
+
+import { Input } from "@/components/Input";
+import { Select as CustomSelect } from "@/components/Select";
+import { currencies } from "@/constants";
+import { MONTHS } from "@/constants/months";
 
 type QuickEntryFormProps = {
   onSubmit: (data: any) => void;

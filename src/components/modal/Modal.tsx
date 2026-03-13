@@ -1,6 +1,8 @@
-import { useModalApi, useModalData } from "../../controller/modal.controller";
-import { PropsWithChildren, ReactNode } from "react";
 import { SxProps } from "@mui/material";
+import { PropsWithChildren, ReactNode } from "react";
+
+import { useModalApi, useModalData } from "@/controller/modal.controller";
+
 import { GenericModal } from "./GenericModal";
 
 export type ModalProps = PropsWithChildren & {

@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
-import { Modal } from "./Modal";
-import { ReadingForm } from "../forms/ReadingForm";
 import { Box, Button, TextField } from "@mui/material";
-
-import { addMeterReadingData, getAddress } from "../../firebase/firestore";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+
+import { ReadingForm } from "@/components/forms/ReadingForm";
+import { Loader } from "@/components/Loader";
+import { addMeterReadingData, getAddress } from "@/firebase/firestore";
+
+import { Modal } from "./Modal";
 
 interface CreateReadingModalProps {
   open: boolean;
@@ -12,9 +15,6 @@ interface CreateReadingModalProps {
   addressId: string;
   onSuccess?: () => void;
 }
-
-import { toast } from "react-toastify";
-import { Loader } from "../Loader";
 
 export const CreateReadingModal = ({
   open,

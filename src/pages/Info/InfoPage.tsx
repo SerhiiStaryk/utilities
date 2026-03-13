@@ -1,4 +1,16 @@
 import {
+  Phone,
+  Language,
+  LocalFireDepartment,
+  LocalPolice,
+  MedicalServices,
+  GasMeter,
+  ElectricBolt,
+  WaterDrop,
+  HotTub,
+  Wifi,
+} from "@mui/icons-material";
+import {
   Box,
   Typography,
   Card,
@@ -11,18 +23,6 @@ import {
   ListItemIcon,
   Link,
 } from "@mui/material";
-import {
-  Phone,
-  Language,
-  LocalFireDepartment,
-  LocalPolice,
-  MedicalServices,
-  GasMeter,
-  ElectricBolt,
-  WaterDrop,
-  HotTub,
-  Wifi,
-} from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 export const InfoPage = () => {
@@ -82,7 +82,11 @@ export const InfoPage = () => {
       <Grid container spacing={4}>
         {/* Emergency Section */}
         <Grid size={{ xs: 12, md: 5 }}>
-          <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
             <Phone fontSize="small" /> {t("info.emergency")}
           </Typography>
           <Typography variant="body2" color="textSecondary" mb={2}>
@@ -122,7 +126,11 @@ export const InfoPage = () => {
 
         {/* Utilities Section */}
         <Grid size={{ xs: 12, md: 7 }}>
-          <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
             <Language fontSize="small" /> {t("info.utility_services")}
           </Typography>
           <Typography variant="body2" color="textSecondary" mb={2}>

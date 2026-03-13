@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login as firebaseLogin } from "../firebase/auth";
+
+import { login as firebaseLogin } from "@/firebase/auth";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);

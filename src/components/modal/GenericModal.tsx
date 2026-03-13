@@ -1,3 +1,4 @@
+import { Close } from "@mui/icons-material";
 import {
   Backdrop,
   Modal as ModalUI,
@@ -9,9 +10,8 @@ import {
   IconButton,
   SxProps,
 } from "@mui/material";
-
-import { Close } from "@mui/icons-material";
 import { PropsWithChildren, ReactNode } from "react";
+
 import { StyledModalContent } from "./styles";
 
 export type GenericModalProps = PropsWithChildren & {

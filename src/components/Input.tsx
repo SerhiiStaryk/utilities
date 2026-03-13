@@ -1,5 +1,5 @@
-import React, { forwardRef } from "react";
 import { FormControl, InputLabel, Input as MuiInput, FormHelperText } from "@mui/material";
+import React, { forwardRef } from "react";
 
 type InputProps = React.ComponentProps<typeof MuiInput> & {
   label: string;
@@ -16,3 +16,5 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     </FormControl>
   ),
 );
+
+Input.displayName = "Input";

@@ -1,5 +1,5 @@
-import { forwardRef } from "react";
 import { Select as MuiSelect, InputLabel, FormControl, MenuItem } from "@mui/material";
+import { forwardRef } from "react";
 
 type SelectProps = React.ComponentProps<typeof MuiSelect> & {
   label: string;
@@ -25,3 +25,5 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     );
   },
 );
+
+Select.displayName = "Select";

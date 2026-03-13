@@ -1,20 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Layout from "../../components/layout/Layout";
-import { LoginPage } from "../../pages/Auth/LoginPage";
-import { DashboardPage } from "../../pages/Dashboard/DashboardPage";
-import { AddressListPage } from "../../pages/Address/AddressListPage";
-import { CreateAddressPage } from "../../pages/Address/CreateAddressPage";
-import { EditAddressPage } from "../../pages/Address/EditAddressPage";
-import { AddressDetailsPage } from "../../pages/Address/AddressDetailsPage";
-import { AddressServicesPage } from "../../pages/Address/AddressServicesPage";
-import { AddressYearPage } from "../../pages/Address/AddressYearPage";
-import { AddressReadingPage } from "../../pages/Address/AddressReadingPage";
-import { SettingsPage } from "../../pages/Settings/SettingPage";
-import { ProfilePage } from "../../pages/Settings/ProfilePage";
-import { UsersPage } from "../../pages/Users/UsersPage";
-import { RentalManagementPage } from "../../pages/Rental/RentalManagementPage";
-import { InfoPage } from "../../pages/Info/InfoPage";
+import Layout from "@/components/layout/Layout";
+import { AddressDetailsPage } from "@/pages/Address/AddressDetailsPage";
+import { AddressListPage } from "@/pages/Address/AddressListPage";
+import { AddressReadingPage } from "@/pages/Address/AddressReadingPage";
+import { AddressServicesPage } from "@/pages/Address/AddressServicesPage";
+import { AddressYearPage } from "@/pages/Address/AddressYearPage";
+import { CreateAddressPage } from "@/pages/Address/CreateAddressPage";
+import { EditAddressPage } from "@/pages/Address/EditAddressPage";
+import { LoginPage } from "@/pages/Auth/LoginPage";
+import { DashboardPage } from "@/pages/Dashboard/DashboardPage";
+import { InfoPage } from "@/pages/Info/InfoPage";
+import { RentalManagementPage } from "@/pages/Rental/RentalManagementPage";
+import { ProfilePage } from "@/pages/Settings/ProfilePage";
+import { SettingsPage } from "@/pages/Settings/SettingPage";
+import { UsersPage } from "@/pages/Users/UsersPage";
+
 import { PrivateRoute } from "./PrivateRoute";
 
 export const router = createBrowserRouter([

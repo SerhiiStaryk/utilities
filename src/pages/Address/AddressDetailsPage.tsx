@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { ArrowBack, Edit, Delete, CalendarToday, Download, Upload } from "@mui/icons-material";
+import { Settings } from "@mui/icons-material";
 import {
   Button,
   Stack,
@@ -14,13 +15,18 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-
-import { ArrowBack, Edit, Delete, CalendarToday, Download, Upload } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { Modal } from "../../components/modal/Modal";
-import { ConfirmModal } from "../../components/modal/ConfirmModal";
-import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
-import { CreateReadingModal } from "../../components/modal/CreateReadingModal";
+import { toast } from "react-toastify";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useSettings } from "@/app/providers/SettingsProvider";
+import { Input } from "@/components/Input";
+import { ConfirmModal } from "@/components/modal/ConfirmModal";
+import { CreateReadingModal } from "@/components/modal/CreateReadingModal";
+import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
+import { Modal } from "@/components/modal/Modal";
 import {
   deleteAddress,
   getYearsForAddress,
@@ -29,15 +35,8 @@ import {
   deleteYearAndServices,
   getAddressBackupData,
   restoreAddressFromBackup,
-} from "../../firebase/firestore";
-import { YearDoc } from "../../types/firestore";
-import { Settings } from "@mui/icons-material";
-import { Input } from "../../components/Input";
-import { useTranslation } from "react-i18next";
-import { useSettings } from "../../app/providers/SettingsProvider";
-import { useAuth } from "../../app/providers/AuthProvider";
-
-import { toast } from "react-toastify";
+} from "@/firebase/firestore";
+import { YearDoc } from "@/types/firestore";
 
 export const AddressDetailsPage = () => {
   const { id } = useParams();

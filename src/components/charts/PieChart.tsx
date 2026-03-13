@@ -1,5 +1,5 @@
-import { PieChart as PieChartMui } from "@mui/x-charts/PieChart";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { PieChart as PieChartMui } from "@mui/x-charts/PieChart";
 
 interface PieChartProps {
   data: { id: number | string; value: number; label: string }[];

@@ -1,6 +1,7 @@
-import { Theme, CSSObject, styled } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
-import { DRAWER_WIDTH } from "../../constants";
+import { Theme, CSSObject, styled } from "@mui/material/styles";
+
+import { DRAWER_WIDTH } from "@/constants";
 
 const drawerWidth = DRAWER_WIDTH;
 

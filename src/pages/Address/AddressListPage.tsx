@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
   List,
   ListItem,
@@ -14,12 +14,13 @@ import {
   Stack,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AddIcon from "@mui/icons-material/Add";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getAddresses } from "../../firebase/firestore";
-import { AddressDoc } from "../../types/firestore";
-import { useAuth } from "../../app/providers/AuthProvider";
+import { Link } from "react-router-dom";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { getAddresses } from "@/firebase/firestore";
+import { AddressDoc } from "@/types/firestore";
 
 export const AddressListPage = () => {
   const { t } = useTranslation();

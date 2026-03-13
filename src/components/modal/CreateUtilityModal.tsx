@@ -1,13 +1,15 @@
 import { Button, Stack, Box, Grid2, Typography } from "@mui/material";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { GenericModal } from "./GenericModal";
-import { Input } from "../Input";
-import { Select } from "../Select";
-import { addUtilityData } from "../../firebase/firestore";
-import { UtilityDataPayload } from "../../types/firestore";
-import { useTranslation } from "react-i18next";
-import { currencies } from "../../constants";
 import { useState, useEffect } from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
+import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
+import { currencies } from "@/constants";
+import { addUtilityData } from "@/firebase/firestore";
+import { UtilityDataPayload } from "@/types/firestore";
+
+import { GenericModal } from "./GenericModal";
 
 interface CreateUtilityModalProps {
   open: boolean;

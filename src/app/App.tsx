@@ -1,11 +1,12 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { getAppTheme } from "../constants/theme";
-import AppRouterProvider from "./providers/RouterProvider";
-import { AuthProvider } from "./providers/AuthProvider";
-import { ModalController } from "../controller/modal.controller";
-import { SettingsProvider, useSettings } from "./providers/SettingsProvider";
-
 import { ToastContainer } from "react-toastify";
+
+import { getAppTheme } from "@/constants/theme";
+import { ModalController } from "@/controller/modal.controller";
+
+import { AuthProvider } from "./providers/AuthProvider";
+import AppRouterProvider from "./providers/RouterProvider";
+import { SettingsProvider, useSettings } from "./providers/SettingsProvider";
 import "react-toastify/dist/ReactToastify.css";
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {

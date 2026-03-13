@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { Box, Typography, Paper, Button, Stack, IconButton, Avatar, Divider } from "@mui/material";
 import { ArrowBack, CameraAlt } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../app/providers/AuthProvider";
+import { Box, Typography, Paper, Button, Stack, IconButton, Avatar, Divider } from "@mui/material";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Input } from "../../components/Input";
-import { updateUserProfile } from "../../firebase/auth";
-import { syncUserProfile } from "../../firebase/firestore";
-
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { Input } from "@/components/Input";
+import { updateUserProfile } from "@/firebase/auth";
+import { syncUserProfile } from "@/firebase/firestore";
 
 export const ProfilePage = () => {
   const { t } = useTranslation();

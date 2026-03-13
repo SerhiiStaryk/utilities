@@ -1,5 +1,6 @@
+import { DefaultValuesUtilityForm } from "@/types/utilities";
+
 import { currencies } from ".";
-import { DefaultValuesUtilityForm } from "../types/utilities";
 
 export const defaultValuesUtilityForm: DefaultValuesUtilityForm = {
   currency: currencies[0].value,

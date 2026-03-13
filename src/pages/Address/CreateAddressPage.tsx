@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Box, Button, Card, CardContent, Stack, Typography, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useState } from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Input } from "../../components/Input";
-import { Loader } from "../../components/Loader";
-import { addAddress } from "../../firebase/firestore";
+import { useNavigate } from "react-router-dom";
+
+import { Input } from "@/components/Input";
+import { Loader } from "@/components/Loader";
+import { addAddress } from "@/firebase/firestore";
 
 interface AddressFormValues {
   id: string;

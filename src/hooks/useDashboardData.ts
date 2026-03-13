@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+import { MONTHS } from "@/constants/months";
 import {
   getAllUtilityServicesForYear,
   getYearsForAddress,
   getAllMeterReadingsForYear,
-} from "../firebase/firestore";
-import { UtilityService, MeterReadingService } from "../types/firestore";
-import { MONTHS } from "../constants/months";
-import { useTranslation } from "react-i18next";
+} from "@/firebase/firestore";
+import { UtilityService, MeterReadingService } from "@/types/firestore";
 
 export type DashboardType = "expenses" | "readings";
 

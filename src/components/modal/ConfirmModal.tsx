@@ -1,7 +1,8 @@
-import { Box, Button, Typography, Stack } from "@mui/material";
-import { Modal } from "./Modal";
-import { useTranslation } from "react-i18next";
 import { WarningAmber } from "@mui/icons-material";
+import { Box, Button, Typography, Stack } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { Modal } from "./Modal";
 
 interface ConfirmModalProps {
   open: boolean;

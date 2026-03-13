@@ -1,4 +1,14 @@
 import {
+  Logout,
+  Person,
+  DarkMode,
+  Language,
+  DeleteForever,
+  People,
+  Download,
+  Upload,
+} from "@mui/icons-material";
+import {
   Box,
   Typography,
   Paper,
@@ -10,18 +20,15 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { Logout, Person, DarkMode, Language, DeleteForever, People, Download, Upload } from "@mui/icons-material";
-import { logout } from "../../firebase/auth";
-import {
-  getGlobalBackupData,
-  restoreGlobalFromBackup,
-} from "../../firebase/firestore";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSettings } from "../../app/providers/SettingsProvider";
-import { useAuth } from "../../app/providers/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useSettings } from "@/app/providers/SettingsProvider";
+import { logout } from "@/firebase/auth";
+import { getGlobalBackupData, restoreGlobalFromBackup } from "@/firebase/firestore";
 
 export const SettingsPage = () => {
   const { t, i18n } = useTranslation();

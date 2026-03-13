@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   TextField,
@@ -9,8 +8,10 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { useLogin } from "../../hooks/useLogin";
-import logo from "../../assets/logo.png";
+import { useState } from "react";
+
+import logo from "@/assets/logo.png";
+import { useLogin } from "@/hooks/useLogin";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");

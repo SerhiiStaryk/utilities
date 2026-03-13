@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { Add, ArrowBack, Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -13,14 +13,14 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-
-import { Add, ArrowBack, Delete } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader } from "../../components/Loader";
-import { useSettings } from "../../app/providers/SettingsProvider";
-import { getAddress, addAddress } from "../../firebase/firestore"; // Reusing addAddress for update
-import { AddressDoc } from "../../types/firestore";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { useSettings } from "@/app/providers/SettingsProvider";
+import { Loader } from "@/components/Loader";
+import { getAddress, addAddress } from "@/firebase/firestore"; // Reusing addAddress for update
+import { AddressDoc } from "@/types/firestore";
 
 export const AddressServicesPage = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Add, Save, Delete } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -24,12 +24,13 @@ import {
   IconButton,
   Chip,
 } from "@mui/material";
-import { Add, Save, Delete } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getAddresses, getAddress, updateRentalInfo } from "../../firebase/firestore";
-import { AddressDoc, RentalInfo, RentalPayment } from "../../types/firestore";
-import { useAuth } from "../../app/providers/AuthProvider";
 import { toast } from "react-toastify";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { getAddresses, getAddress, updateRentalInfo } from "@/firebase/firestore";
+import { AddressDoc, RentalInfo, RentalPayment } from "@/types/firestore";
 
 export const RentalManagementPage = () => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ export const RentalManagementPage = () => {
 
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>(
-    localStorage.getItem("rental_selectedAddressId") || ""
+    localStorage.getItem("rental_selectedAddressId") || "",
   );
 
   useEffect(() => {
@@ -58,11 +59,10 @@ export const RentalManagementPage = () => {
     payments: [],
   });
 
-
   const fetchAddresses = async () => {
     try {
       const all = await getAddresses();
-      const filtered = isAdmin ? all : all.filter(a => allowedAddresses?.includes(a.id));
+      const filtered = isAdmin ? all : all.filter((a) => allowedAddresses?.includes(a.id));
       setAddresses(filtered);
       if (filtered.length > 0 && !selectedAddressId) {
         setSelectedAddressId(filtered[0].id);
@@ -127,7 +127,7 @@ export const RentalManagementPage = () => {
 
   const updatePaymentStatus = (id: string, status: RentalPayment["status"]) => {
     const updatedPayments = (rentalInfo.payments || []).map((p) =>
-      p.id === id ? { ...p, status } : p
+      p.id === id ? { ...p, status } : p,
     );
     setRentalInfo({ ...rentalInfo, payments: updatedPayments });
   };
@@ -157,7 +157,9 @@ export const RentalManagementPage = () => {
       {selectedAddressId ? (
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 4 }}>
-            <Card sx={{ backdropFilter: "blur(10px)", backgroundColor: "rgba(255, 255, 255, 0.8)" }}>
+            <Card
+              sx={{ backdropFilter: "blur(10px)", backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+            >
               <CardContent>
                 <Typography variant="h6" gutterBottom color="primary">
                   {t("rental.status")}
@@ -167,7 +169,9 @@ export const RentalManagementPage = () => {
                     control={
                       <Switch
                         checked={rentalInfo.isRented}
-                        onChange={(e) => setRentalInfo({ ...rentalInfo, isRented: e.target.checked })}
+                        onChange={(e) =>
+                          setRentalInfo({ ...rentalInfo, isRented: e.target.checked })
+                        }
                       />
                     }
                     label={rentalInfo.isRented ? t("rental.rented") : t("rental.vacant")}
@@ -200,7 +204,9 @@ export const RentalManagementPage = () => {
                       label={t("rental.monthly_rent")}
                       type="number"
                       value={rentalInfo.monthlyRent}
-                      onChange={(e) => setRentalInfo({ ...rentalInfo, monthlyRent: Number(e.target.value) })}
+                      onChange={(e) =>
+                        setRentalInfo({ ...rentalInfo, monthlyRent: Number(e.target.value) })
+                      }
                       fullWidth
                       size="small"
                     />
@@ -216,7 +222,9 @@ export const RentalManagementPage = () => {
                     label={t("rental.deposit")}
                     type="number"
                     value={rentalInfo.deposit}
-                    onChange={(e) => setRentalInfo({ ...rentalInfo, deposit: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setRentalInfo({ ...rentalInfo, deposit: Number(e.target.value) })
+                    }
                     fullWidth
                     size="small"
                   />
@@ -269,8 +277,8 @@ export const RentalManagementPage = () => {
                               payment.status === "paid"
                                 ? "success"
                                 : payment.status === "overdue"
-                                ? "error"
-                                : "warning"
+                                  ? "error"
+                                  : "warning"
                             }
                             size="small"
                             onClick={() => {

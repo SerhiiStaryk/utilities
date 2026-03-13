@@ -1,15 +1,16 @@
-import Toolbar from "@mui/material/Toolbar";
-import MenuIcon from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { AppBarUI } from "../ui/AppBarUI";
-import { useState } from "react";
-import { Avatar, Menu, MenuItem, ListItemIcon, Box, Tooltip, Divider } from "@mui/material";
 import { Logout, Settings, Person } from "@mui/icons-material";
-import { useAuth } from "../../app/providers/AuthProvider";
-import { logout } from "../../firebase/auth";
-import { useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Avatar, Menu, MenuItem, ListItemIcon, Box, Tooltip, Divider } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { AppBarUI } from "@/components/ui/AppBarUI";
+import { logout } from "@/firebase/auth";
 
 type HeaderProps = {
   open: boolean;

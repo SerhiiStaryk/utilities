@@ -1,12 +1,13 @@
 import { Stack, Grid2, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Input } from "../Input";
-import { Select } from "../Select";
-import { currencies } from "../../constants";
-import { defaultValuesUtilityForm } from "../../constants/utilities";
-import { MONTHS } from "../../constants/months";
-import { DefaultValuesUtilityForm } from "../../types/utilities";
+
+import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
+import { currencies } from "@/constants";
+import { MONTHS } from "@/constants/months";
+import { defaultValuesUtilityForm } from "@/constants/utilities";
+import { DefaultValuesUtilityForm } from "@/types/utilities";
 
 interface UtilityFormProps {
   initialValues?: DefaultValuesUtilityForm;

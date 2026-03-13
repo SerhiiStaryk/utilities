@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { Add, Payment, Speed } from "@mui/icons-material";
 import {
   Card,
   Box,
@@ -15,19 +14,20 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
-import { BarChart } from "../../components/charts/BarChart";
-import { LineChart } from "../../components/charts/LineChart";
-import { PieChart } from "../../components/charts/PieChart";
-import BarChartAll from "../../components/charts/BarChartAll";
-import { Add, Payment, Speed } from "@mui/icons-material";
-import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
-import { getAddresses } from "../../firebase/firestore";
-import { AddressDoc } from "../../types/firestore";
-import { useTranslation } from "react-i18next";
 import Grid from "@mui/material/Grid2";
-import { useDashboardData, DashboardType } from "../../hooks/useDashboardData";
-import { MONTHS } from "../../constants/months";
-import { useAuth } from "../../app/providers/AuthProvider";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { BarChart } from "@/components/charts/BarChart";
+import BarChartAll from "@/components/charts/BarChartAll";
+import { LineChart } from "@/components/charts/LineChart";
+import { PieChart } from "@/components/charts/PieChart";
+import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
+import { MONTHS } from "@/constants/months";
+import { getAddresses } from "@/firebase/firestore";
+import { useDashboardData, DashboardType } from "@/hooks/useDashboardData";
+import { AddressDoc } from "@/types/firestore";
 
 const StatCard = ({
   title,
@@ -82,7 +82,13 @@ export const DashboardPage = () => {
     availableYears,
     availableServices,
     loading: dataLoading,
-  } = useDashboardData(selectedAddress, dashboardType, selectedYear, selectedService, selectedMonth);
+  } = useDashboardData(
+    selectedAddress,
+    dashboardType,
+    selectedYear,
+    selectedService,
+    selectedMonth,
+  );
 
   const [createUtilityOpen, setCreateUtilityOpen] = useState(false);
 

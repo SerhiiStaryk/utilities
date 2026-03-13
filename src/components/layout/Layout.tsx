@@ -1,12 +1,13 @@
+import { Box, CssBaseline, useMediaQuery, useTheme } from "@mui/material";
 import { useState } from "react";
 import { Outlet, useNavigation, useLocation, Navigate } from "react-router-dom";
-import { Box, CssBaseline, useMediaQuery, useTheme } from "@mui/material";
 
-import { DrawerHeaderUI } from "../ui/DrawerHeaderUI";
+import { useAuth } from "@/app/providers/AuthProvider";
+import { Loader } from "@/components/Loader";
+import { DrawerHeaderUI } from "@/components/ui/DrawerHeaderUI";
+
 import { Drawer } from "./Drawer";
 import { Header } from "./Header";
-import { Loader } from "../Loader";
-import { useAuth } from "../../app/providers/AuthProvider";
 
 const Layout = () => {
   const theme = useTheme();

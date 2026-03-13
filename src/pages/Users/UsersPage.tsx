@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -17,19 +17,20 @@ import {
   Checkbox,
   ListItemText,
 } from "@mui/material";
-import { Loader } from "../../components/Loader";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { Loader } from "@/components/Loader";
 import {
   getUsers,
   updateUserRole,
   getAddresses,
   updateAllowedAddresses,
   updateAllowedPages,
-} from "../../firebase/firestore";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "../../app/providers/AuthProvider";
-import { useNavigate } from "react-router-dom";
-import { ArrowBack } from "@mui/icons-material";
-import { AddressDoc } from "../../types/firestore";
+} from "@/firebase/firestore";
+import { AddressDoc } from "@/types/firestore";
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -90,7 +91,9 @@ export const UsersPage = () => {
   const handleAllowedPagesChange = async (uid: string, selectedPages: string[]) => {
     try {
       await updateAllowedPages(uid, selectedPages);
-      setUsers((prev) => prev.map((u) => (u.id === uid ? { ...u, allowedPages: selectedPages } : u)));
+      setUsers((prev) =>
+        prev.map((u) => (u.id === uid ? { ...u, allowedPages: selectedPages } : u)),
+      );
     } catch (e) {
       console.error(e);
     }

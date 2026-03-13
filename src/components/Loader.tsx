@@ -25,13 +25,7 @@ export const Loader = ({ message, fullPage = false, button = false }: LoaderProp
   const theme = useTheme();
 
   if (button) {
-    return (
-      <CircularProgress
-        size={20}
-        thickness={5}
-        sx={{ color: "inherit" }}
-      />
-    );
+    return <CircularProgress size={20} thickness={5} sx={{ color: "inherit" }} />;
   }
 
   return (

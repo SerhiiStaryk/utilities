@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-material";
 import {
   Typography,
   Box,
@@ -19,24 +19,25 @@ import {
   useMediaQuery,
   Stack,
 } from "@mui/material";
-import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import Grid from "@mui/material/Grid2";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useSettings } from "@/app/providers/SettingsProvider";
+import { QuickReadingForm } from "@/components/forms/QuickReadingForm";
+import { ReadingForm } from "@/components/forms/ReadingForm";
+import { ConfirmModal } from "@/components/modal/ConfirmModal";
+import { Modal } from "@/components/modal/Modal";
+import { MONTHS } from "@/constants/months";
 import {
   getAllMeterReadingsForYear,
   updateMeterReading,
   deleteMeterReading,
   getAddress,
-} from "../../firebase/firestore";
-import { MeterReadingService, AddressDoc } from "../../types/firestore";
-import { Modal } from "../../components/modal/Modal";
-import { ConfirmModal } from "../../components/modal/ConfirmModal";
-import { ReadingForm } from "../../components/forms/ReadingForm";
-import { QuickReadingForm } from "../../components/forms/QuickReadingForm";
-import Grid from "@mui/material/Grid2";
-import { MONTHS } from "../../constants/months";
-import { useSettings } from "../../app/providers/SettingsProvider";
-import { useAuth } from "../../app/providers/AuthProvider";
+} from "@/firebase/firestore";
+import { MeterReadingService, AddressDoc } from "@/types/firestore";
 
 type ViewMode = "cards" | "table";
 

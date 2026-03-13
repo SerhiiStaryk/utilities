@@ -1,4 +1,21 @@
-import { useEffect, useState } from "react";
+import {
+  ArrowBack,
+  Edit,
+  Delete,
+  ViewModule,
+  ViewList,
+  ExpandMore,
+  CheckCircle,
+  ErrorOutline,
+  FlashOn as ElectricityIcon,
+  WaterDrop as WaterIcon,
+  Whatshot as GasIcon,
+  Wifi as InternetIcon,
+  Home as HousingIcon,
+  DeleteOutline as WasteIcon,
+  Thermostat as HeatingIcon,
+  QuestionMark as DefaultIcon,
+} from "@mui/icons-material";
 import {
   Typography,
   Box,
@@ -25,42 +42,26 @@ import {
   Tooltip,
   LinearProgress,
 } from "@mui/material";
-import {
-  ArrowBack,
-  Edit,
-  Delete,
-  ViewModule,
-  ViewList,
-  ExpandMore,
-  CheckCircle,
-  ErrorOutline,
-  FlashOn as ElectricityIcon,
-  WaterDrop as WaterIcon,
-  Whatshot as GasIcon,
-  Wifi as InternetIcon,
-  Home as HousingIcon,
-  DeleteOutline as WasteIcon,
-  Thermostat as HeatingIcon,
-  QuestionMark as DefaultIcon,
-} from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import Grid from "@mui/material/Grid2";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useSettings } from "@/app/providers/SettingsProvider";
+import { QuickEntryForm } from "@/components/forms/QuickEntryForm";
+import { UtilityForm } from "@/components/forms/UtilityForm";
+import { ConfirmModal } from "@/components/modal/ConfirmModal";
+import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
+import { Modal } from "@/components/modal/Modal";
+import { MONTHS } from "@/constants/months";
 import {
   getAllUtilityServicesForYear,
   updateUtilityService,
   deleteUtilityService,
   getAddress,
-} from "../../firebase/firestore";
-import { UtilityService, AddressDoc, MonthlyPayments } from "../../types/firestore";
-import { Modal } from "../../components/modal/Modal";
-import { ConfirmModal } from "../../components/modal/ConfirmModal";
-import { UtilityForm } from "../../components/forms/UtilityForm";
-import { QuickEntryForm } from "../../components/forms/QuickEntryForm";
-import { CreateUtilityModal } from "../../components/modal/CreateUtilityModal";
-import Grid from "@mui/material/Grid2";
-import { MONTHS } from "../../constants/months";
-import { useSettings } from "../../app/providers/SettingsProvider";
-import { useAuth } from "../../app/providers/AuthProvider";
+} from "@/firebase/firestore";
+import { UtilityService, AddressDoc, MonthlyPayments } from "@/types/firestore";
 
 type ViewMode = "cards" | "table";
 

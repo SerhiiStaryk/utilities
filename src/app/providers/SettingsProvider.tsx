@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+
+import { getUserSettings, updateUserSettings } from "@/firebase/firestore";
+
 import { useAuth } from "./AuthProvider";
-import { getUserSettings, updateUserSettings } from "../../firebase/firestore";
 
 export type ThemeMode = "light" | "dark";
 

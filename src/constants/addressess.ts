@@ -1,4 +1,4 @@
-import { Address } from "../types/common";
+import { Address } from "@/types/common";
 
 export type AddressID = "Mazepy" | "Levandivska" | "Dashkevicha" | "Haidamatska";
 export type Addresses = Record<AddressID, Address>;

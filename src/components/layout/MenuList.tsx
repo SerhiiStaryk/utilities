@@ -1,6 +1,7 @@
 import { List } from "@mui/material";
-import { MenuItem } from "./MenuItem";
+
 import { listMenuType } from "./Drawer";
+import { MenuItem } from "./MenuItem";
 
 type MenuListProps = {
   open: boolean;

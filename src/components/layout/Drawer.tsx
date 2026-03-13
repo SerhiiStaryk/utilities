@@ -1,19 +1,21 @@
-import { useTheme } from "@mui/material/styles";
-import { Box, Divider, IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 import HouseIcon from "@mui/icons-material/House";
 import KeyIcon from "@mui/icons-material/Key";
-import HelpCenterIcon from "@mui/icons-material/HelpCenter";
-import { DrawerUI } from "../ui/DrawerUI";
-import { DrawerHeaderUI } from "../ui/DrawerHeaderUI";
-import { MenuList } from "./MenuList";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Box, Divider, IconButton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
-import logo from "../../assets/logo.png";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../app/providers/AuthProvider";
+
+import { useAuth } from "@/app/providers/AuthProvider";
+import logo from "@/assets/logo.png";
+import { DrawerHeaderUI } from "@/components/ui/DrawerHeaderUI";
+import { DrawerUI } from "@/components/ui/DrawerUI";
+
+import { MenuList } from "./MenuList";
 
 type DrawerProps = {
   open: boolean;

@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "../../firebase/firebase.config";
 import { doc, getDoc } from "firebase/firestore";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { auth, db } from "@/firebase/firebase.config";
 
 interface AuthContextValue {
   user: User | null;
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setAllowedAddresses([]);
             setAllowedPages([]);
           }
-        } catch (error) {
+        } catch {
           setRole(null);
           setAllowedAddresses([]);
         }

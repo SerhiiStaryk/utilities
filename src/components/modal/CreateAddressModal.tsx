@@ -1,9 +1,11 @@
 import { Button, Stack, Box } from "@mui/material";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { GenericModal } from "./GenericModal";
-import { Input } from "../Input";
-import { addAddress } from "../../firebase/firestore";
 import { useTranslation } from "react-i18next";
+
+import { Input } from "@/components/Input";
+import { addAddress } from "@/firebase/firestore";
+
+import { GenericModal } from "./GenericModal";
 
 interface CreateAddressModalProps {
   open: boolean;

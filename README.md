@@ -5,7 +5,7 @@ A comprehensive personal finance and utility management application built with *
 ## 🚀 Key Features
 
 - **📊 Interactive Dashboard**:
-  - Visual analytics using [Recharts](https://recharts.org/).
+  - Visual analytics using **MUI X Charts**.
   - Track revenue, user stats, and monthly trends.
   - Dynamic context switching between different property addresses.
 - **🏠 Address Management**:
@@ -25,6 +25,9 @@ A comprehensive personal finance and utility management application built with *
 - **🔐 Security**:
   - Authentication powered by **Firebase Auth**.
   - Secure data storage with **Cloud Firestore**.
+  - Admin controls with role-based page access management.
+- **💾 Data Management**:
+  - Backup and restore address data via JSON export/import.
 
 ## 🛠️ Tech Stack
 
@@ -33,7 +36,9 @@ A comprehensive personal finance and utility management application built with *
 - **State Management**: React Hooks & Context API
 - **Database**: Firebase Firestore
 - **Auth**: Firebase Auth
-- **Charts**: Recharts
+- **Routing**: React Router DOM v7
+- **Charts**: MUI X Charts
+- **Notifications**: React Toastify
 - **I18n**: i18next, react-i18next
 - **Forms**: React Hook Form
 
@@ -41,13 +46,17 @@ A comprehensive personal finance and utility management application built with *
 
 ```
 src/
-├── app/             # App entry point, routing, and global styles
+├── app/             # App entry point, routing, and global providers
+├── assets/          # Static assets
 ├── components/      # Reusable UI components (Charts, Modals, Inputs)
 ├── constants/       # Global constants and theme definitions
 ├── controller/      # Logic controllers (e.g., Modal state)
+├── features/        # Feature-specific logic (addresses, utilities)
 ├── firebase/        # Firebase configuration and Firestore API wrappers
+├── helpers/         # Utility functions
+├── hooks/           # Custom React hooks
 ├── i18n/            # Internationalization setup and locales (en/uk)
-├── pages/           # Main page views (Dashboard, Address, Auth, Settings)
+├── pages/           # Main page views (Dashboard, Address, Auth, Info, Rental, Settings, Users)
 ├── types/           # TypeScript interfaces and type definitions
 └── main.tsx         # Application root
 ```

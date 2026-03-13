@@ -8,6 +8,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
+
 import {
   AddressDoc,
   UtilityDataPayload,
@@ -17,7 +18,7 @@ import {
   MeterReadingService,
   RentalInfo,
   RentalPayment,
-} from "../types/firestore";
+} from "@/types/firestore";
 
 const db = getFirestore();
 
@@ -56,7 +57,6 @@ export async function addRentalPayment(addressId: string, payment: RentalPayment
     throw error;
   }
 }
-
 
 // --- Create / Update ---
 
@@ -614,7 +614,13 @@ export async function addUtilityService(serviceName: string) {
 // --- User Management ---
 
 export async function getUsers(): Promise<
-  { id: string; role: string; email: string; allowedAddresses?: string[]; allowedPages?: string[] }[]
+  {
+    id: string;
+    role: string;
+    email: string;
+    allowedAddresses?: string[];
+    allowedPages?: string[];
+  }[]
 > {
   const usersCol = collection(db, "users");
   const snapshot = await getDocs(usersCol);

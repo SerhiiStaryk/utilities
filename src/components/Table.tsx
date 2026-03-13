@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../firebase/firebase.config";
+
+import { db } from "@/firebase/firebase.config";
 
 const months = [
   "January",

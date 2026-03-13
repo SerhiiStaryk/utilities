@@ -1,8 +1,9 @@
-import { useForm, useFieldArray } from "react-hook-form";
 import { Box, Button, Stack, Typography, MenuItem, TextField, Divider } from "@mui/material";
-import { Input } from "../Input";
-import { MONTHS } from "../../constants/months";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+
+import { Input } from "@/components/Input";
+import { MONTHS } from "@/constants/months";
 
 interface QuickReadingFormProps {
   onSubmit: (data: any) => void;

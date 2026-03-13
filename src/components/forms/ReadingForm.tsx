@@ -1,9 +1,10 @@
-import { useForm } from "react-hook-form";
 import { Box, Button, Stack, Typography, Autocomplete, TextField } from "@mui/material";
-import { Input } from "../Input";
-import { MONTHS } from "../../constants/months";
-import { useTranslation } from "react-i18next";
 import Grid from "@mui/material/Grid2";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+
+import { Input } from "@/components/Input";
+import { MONTHS } from "@/constants/months";
 
 interface ReadingFormProps {
   onSubmit: (data: any) => void;
