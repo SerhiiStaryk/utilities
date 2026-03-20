@@ -87,6 +87,18 @@ export const getAppTheme = (mode: "light" | "dark") => {
           },
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            "&[type='date']::-webkit-calendar-picker-indicator": {
+              filter: mode === "dark" ? "invert(1)" : "none",
+            },
+            "&[type='date']": {
+              colorScheme: mode,
+            },
+          },
+        },
+      },
     },
   });
 

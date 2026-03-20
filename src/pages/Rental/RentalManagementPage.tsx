@@ -27,6 +27,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  alpha,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -227,7 +228,10 @@ export const RentalManagementPage = () => {
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 4 }}>
             <Card
-              sx={{ backdropFilter: "blur(10px)", backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+              sx={(theme) => ({
+                backdropFilter: "blur(10px)",
+                backgroundColor: alpha(theme.palette.background.paper, 0.8),
+              })}
             >
               <CardContent>
                 <Typography variant="h6" gutterBottom color="primary">
