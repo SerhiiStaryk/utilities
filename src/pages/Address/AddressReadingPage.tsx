@@ -434,6 +434,7 @@ export const AddressReadingPage = () => {
           services={readings.map((s) => ({
             name: s.name,
             meter_number: s.meter_number,
+            monthly_readings: s.monthly_readings,
           }))}
           onSubmit={handleQuickEntrySubmit}
           onCancel={() => setQuickEntryOpen(false)}

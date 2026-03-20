@@ -677,6 +677,7 @@ export const AddressYearPage = () => {
           services={services.map((s) => ({
             name: s.name,
             accountNumber: s.account_number,
+            monthly_payments: s.monthly_payments,
           }))}
           onSubmit={handleQuickEntrySubmit}
           onCancel={() => setQuickEntryOpen(false)}

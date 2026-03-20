@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button, Box, Stack, Grid2, Typography } from "@mui/material";
 import { useForm, Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,7 @@ type QuickEntryFormProps = {
   onSubmit: (data: any) => void;
   onCancel: () => void;
   currentMonth: string;
-  services: { name: string; accountNumber: string }[];
+  services: { name: string; accountNumber: string; monthly_payments?: any }[];
   showActions?: boolean;
   id?: string;
 };
@@ -26,15 +27,15 @@ export const QuickEntryForm = ({
 }: QuickEntryFormProps) => {
   const { t } = useTranslation();
   // ... (useForm hook unchanged)
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       month: currentMonth,
       year: new Date().getFullYear().toString(),
       payments: services.map((s) => ({
         serviceId: s.name,
         accountNumber: s.accountNumber,
-        amount: "",
-        currency: "UAH",
+        amount: s.monthly_payments?.[currentMonth]?.amount || "",
+        currency: s.monthly_payments?.[currentMonth]?.currency || "UAH",
       })),
     },
   });
@@ -48,6 +49,18 @@ export const QuickEntryForm = ({
     control,
     name: "month",
   });
+
+  useEffect(() => {
+    services.forEach((s, index) => {
+      const payment = s.monthly_payments?.[selectedMonth];
+      if (payment) {
+        setValue(`payments.${index}.amount`, payment.amount || "");
+        setValue(`payments.${index}.currency`, payment.currency || "UAH");
+      } else {
+        setValue(`payments.${index}.amount`, "");
+      }
+    });
+  }, [selectedMonth, services, setValue]);
 
   const monthOptions = MONTHS.map((month) => ({
     value: month,

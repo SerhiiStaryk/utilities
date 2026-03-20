@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { Box, Button, Stack, Typography, MenuItem, TextField, Divider } from "@mui/material";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
@@ -8,7 +9,7 @@ import { MONTHS } from "@/constants/months";
 interface QuickReadingFormProps {
   onSubmit: (data: any) => void;
   onCancel?: () => void;
-  services: { name: string; meter_number: string }[];
+  services: { name: string; meter_number: string; monthly_readings?: any }[];
   currentMonth: string;
   showActions?: boolean;
   id?: string;
@@ -24,13 +25,13 @@ export const QuickReadingForm = ({
 }: QuickReadingFormProps) => {
   const { t } = useTranslation();
 
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: {
       month: currentMonth,
       readings: services.map((s) => ({
         serviceId: s.name,
         meterNumber: s.meter_number,
-        value: "",
+        value: s.monthly_readings?.[currentMonth]?.value || "",
       })),
     },
   });
@@ -39,6 +40,22 @@ export const QuickReadingForm = ({
     control,
     name: "readings",
   });
+
+  const selectedMonth = useWatch({
+    control,
+    name: "month",
+  });
+
+  useEffect(() => {
+    services.forEach((s, index) => {
+      const reading = s.monthly_readings?.[selectedMonth];
+      if (reading) {
+        setValue(`readings.${index}.value`, reading.value || "");
+      } else {
+        setValue(`readings.${index}.value`, "");
+      }
+    });
+  }, [selectedMonth, services, setValue]);
 
   return (
     <Box component="form" id={id} onSubmit={handleSubmit(onSubmit)}>
