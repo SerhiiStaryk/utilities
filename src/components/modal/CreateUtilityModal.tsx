@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
+import { IconSelect } from "@/components/IconSelect";
 import { currencies } from "@/constants";
 import { addUtilityData } from "@/firebase/firestore";
 import { UtilityDataPayload } from "@/types/firestore";
@@ -55,6 +56,7 @@ export const CreateUtilityModal = ({
     defaultValues: {
       yearId: "",
       serviceId: "",
+      icon: "DefaultIcon",
       currency: "",
       accountNumber: "",
       january: "",
@@ -77,6 +79,7 @@ export const CreateUtilityModal = ({
       reset({
         yearId: initialYear || "",
         serviceId: "",
+        icon: "DefaultIcon",
         currency: "UAH",
         accountNumber: "",
         january: "",
@@ -98,6 +101,7 @@ export const CreateUtilityModal = ({
   const onSubmit: SubmitHandler<{
     yearId: string;
     serviceId: string;
+    icon: string;
     currency: string;
     accountNumber: string;
     january: string;
@@ -115,12 +119,13 @@ export const CreateUtilityModal = ({
   }> = async (data) => {
     try {
       setDisabledSubmit(true);
-      const { yearId, serviceId, currency, accountNumber, ...monthsData } = data;
+      const { yearId, serviceId, icon, currency, accountNumber, ...monthsData } = data;
 
       const payload: UtilityDataPayload = {
         addressId,
         yearId,
         serviceId,
+        icon,
         addressDoc: addressData ?? {
           street: "",
           house_number: "",
@@ -207,6 +212,17 @@ export const CreateUtilityModal = ({
                 name="accountNumber"
                 control={control}
                 render={({ field }) => <Input {...field} label={t("utility.account")} />}
+              />
+              <Controller
+                name="icon"
+                control={control}
+                render={({ field }) => (
+                  <IconSelect
+                    {...field}
+                    value={field.value || "DefaultIcon"}
+                    label={t("utility.icon")}
+                  />
+                )}
               />
             </Stack>
           </Grid2>

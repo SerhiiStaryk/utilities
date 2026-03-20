@@ -54,6 +54,7 @@ import { UtilityForm } from "@/components/forms/UtilityForm";
 import { ConfirmModal } from "@/components/modal/ConfirmModal";
 import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
 import { Modal } from "@/components/modal/Modal";
+import { SERVICE_ICONS } from "@/components/IconSelect";
 import { MONTHS } from "@/constants/months";
 import {
   getAllUtilityServicesForYear,
@@ -84,7 +85,13 @@ export const AddressYearPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
   const [disableSubmit, setDisabledSubmit] = useState(false);
 
-  const getServiceIcon = (name: string) => {
+  const getServiceIcon = (name: string, iconStr?: string) => {
+    if (iconStr && SERVICE_ICONS[iconStr]) {
+      const IconComp = SERVICE_ICONS[iconStr].icon;
+      const color = SERVICE_ICONS[iconStr].color;
+      return <IconComp sx={{ color }} />;
+    }
+
     const lowerName = name.toLowerCase();
     if (lowerName.includes("світл") || lowerName.includes("електр") || lowerName.includes("electr"))
       return <ElectricityIcon sx={{ color: "#fbc02d" }} />;
@@ -146,6 +153,7 @@ export const AddressYearPage = () => {
       monthly_payments: {},
       account_number: data.accountNumber,
       currency: data.currency,
+      icon: data.icon,
     };
 
     MONTHS.forEach((month) => {
@@ -392,7 +400,7 @@ export const AddressYearPage = () => {
                           justifyContent: "center",
                         }}
                       >
-                        {getServiceIcon(service.name)}
+                        {getServiceIcon(service.name, service.icon)}
                       </Box>
                       <Box>
                         <Typography variant="h6" gutterBottom color="primary">
@@ -535,7 +543,7 @@ export const AddressYearPage = () => {
                   <TableRow key={service.id || service.name}>
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={1.5}>
-                        {getServiceIcon(service.name)}
+                        {getServiceIcon(service.name, service.icon)}
                         <Typography variant="body2" fontWeight="bold">
                           {service.name}
                         </Typography>
@@ -627,6 +635,7 @@ export const AddressYearPage = () => {
           <UtilityForm
             id="edit-utility-form"
             initialValues={{
+              icon: editingService.icon || "DefaultIcon",
               currency: Object.values(editingService.monthly_payments || {})[0]?.currency || "",
               accountNumber: editingService.account_number,
               ...Object.entries(editingService.monthly_payments || {}).reduce(

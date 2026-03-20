@@ -99,6 +99,7 @@ export async function addUtilityData({
   november,
   december,
   currency,
+  icon,
 }: UtilityDataPayload) {
   try {
     if (!addressId || !yearId || !serviceId) {
@@ -150,6 +151,7 @@ export async function addUtilityData({
       name: serviceId,
       account_number: accountNumber,
       monthly_payments,
+      icon,
     };
 
     await setDoc(serviceRef, payload);

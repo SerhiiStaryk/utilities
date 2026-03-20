@@ -13,4 +13,5 @@ export type DefaultValuesUtilityForm = {
   october: number;
   november: number;
   december: number;
+  icon?: string;
 };

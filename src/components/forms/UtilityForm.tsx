@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
+import { IconSelect } from "@/components/IconSelect";
 import { currencies } from "@/constants";
 import { MONTHS } from "@/constants/months";
 import { defaultValuesUtilityForm } from "@/constants/utilities";
@@ -81,6 +82,17 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
               name="accountNumber"
               control={control}
               render={({ field }) => <Input {...field} label={t("utility.account")} />}
+            />
+            <Controller
+              name="icon"
+              control={control}
+              render={({ field }) => (
+                <IconSelect
+                  {...field}
+                  value={field.value || "DefaultIcon"}
+                  label={t("utility.icon")}
+                />
+              )}
             />
           </Stack>
         </Grid2>

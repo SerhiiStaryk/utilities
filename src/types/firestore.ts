@@ -25,6 +25,7 @@ export interface UtilityService {
   account_number: string;
   currency?: "UAH" | "USD" | "EUR";
   monthly_payments: MonthlyPayments;
+  icon?: string;
 }
 
 export interface YearDoc {
@@ -50,6 +51,7 @@ export interface UtilityDataPayload {
   november: string;
   december: string;
   currency: string;
+  icon?: string;
 }
 
 export interface MonthReading {
