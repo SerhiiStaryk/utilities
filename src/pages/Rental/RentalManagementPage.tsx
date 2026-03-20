@@ -23,6 +23,10 @@ import {
   Paper,
   IconButton,
   Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,6 +35,21 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { getAddresses, getAddress, updateRentalInfo } from "@/firebase/firestore";
 import { AddressDoc, RentalInfo, RentalPayment } from "@/types/firestore";
+
+const MONTHS = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];
 
 export const RentalManagementPage = () => {
   const { t } = useTranslation();
@@ -41,6 +60,14 @@ export const RentalManagementPage = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<string>(
     localStorage.getItem("rental_selectedAddressId") || "",
   );
+
+  const [isAddPaymentOpen, setIsAddPaymentOpen] = useState(false);
+  const [newPaymentData, setNewPaymentData] = useState({
+    month: new Date().toLocaleString("en-US", { month: "long" }).toLowerCase(),
+    year: new Date().getFullYear(),
+    amount: 0,
+    date: new Date().toISOString().split("T")[0],
+  });
 
   useEffect(() => {
     if (selectedAddressId) {
@@ -107,18 +134,29 @@ export const RentalManagementPage = () => {
     }
   };
 
-  const handleAddPayment = async () => {
-    const newPayment: RentalPayment = {
-      id: crypto.randomUUID(),
+  const handleOpenAddPayment = () => {
+    setNewPaymentData({
       month: new Date().toLocaleString("en-US", { month: "long" }).toLowerCase(),
       year: new Date().getFullYear(),
       amount: rentalInfo.monthlyRent,
       date: new Date().toISOString().split("T")[0],
+    });
+    setIsAddPaymentOpen(true);
+  };
+
+  const handleAddPayment = async () => {
+    const newPayment: RentalPayment = {
+      id: crypto.randomUUID(),
+      month: newPaymentData.month,
+      year: newPaymentData.year,
+      amount: newPaymentData.amount,
+      date: newPaymentData.date,
       status: "paid",
     };
     const updatedPayments = [newPayment, ...(rentalInfo.payments || [])];
     const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
     setRentalInfo(newRentalInfo);
+    setIsAddPaymentOpen(false);
     
     if (selectedAddressId) {
       try {
@@ -158,6 +196,10 @@ export const RentalManagementPage = () => {
       }
     }
   };
+
+  const totalEarned = (rentalInfo.payments || [])
+    .filter((p) => p.status === "paid")
+    .reduce((sum, p) => sum + p.amount, 0);
 
   return (
     <Box>
@@ -271,8 +313,15 @@ export const RentalManagementPage = () => {
           <Grid size={{ xs: 12, md: 8 }}>
             <Paper sx={{ p: 3 }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">{t("rental.payments")}</Typography>
-                <Button variant="outlined" startIcon={<Add />} onClick={handleAddPayment}>
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Typography variant="h6">{t("rental.payments")}</Typography>
+                  <Chip
+                    label={`${t("rental.total_earned", "Зароблено:")} ${totalEarned} ${rentalInfo.currency}`}
+                    color="success"
+                    variant="outlined"
+                  />
+                </Box>
+                <Button variant="outlined" startIcon={<Add />} onClick={handleOpenAddPayment}>
                   {t("rental.add_payment")}
                 </Button>
               </Stack>
@@ -349,6 +398,57 @@ export const RentalManagementPage = () => {
           {t("dashboard.all_addresses")}
         </Typography>
       )}
+
+      <Dialog open={isAddPaymentOpen} onClose={() => setIsAddPaymentOpen(false)}>
+        <DialogTitle>{t("rental.add_payment")}</DialogTitle>
+        <DialogContent>
+          <Stack spacing={3} sx={{ mt: 1, minWidth: 300 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>{t("utility.month")}</InputLabel>
+              <MuiSelect
+                value={newPaymentData.month}
+                label={t("utility.month")}
+                onChange={(e) => setNewPaymentData({ ...newPaymentData, month: e.target.value })}
+              >
+                {MONTHS.map((m) => (
+                  <MenuItem key={m} value={m}>
+                    {t(`utility.months.${m}`)}
+                  </MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+            <TextField
+              label={t("utility.year", "Рік")}
+              type="number"
+              value={newPaymentData.year}
+              onChange={(e) => setNewPaymentData({ ...newPaymentData, year: Number(e.target.value) })}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              label={t("rental.amount")}
+              type="number"
+              value={newPaymentData.amount}
+              onChange={(e) => setNewPaymentData({ ...newPaymentData, amount: Number(e.target.value) })}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              label={t("rental.payment_date", "Дата платежу")}
+              type="date"
+              value={newPaymentData.date}
+              onChange={(e) => setNewPaymentData({ ...newPaymentData, date: e.target.value })}
+              fullWidth
+              size="small"
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsAddPaymentOpen(false)}>{t("common.cancel")}</Button>
+          <Button variant="contained" onClick={handleAddPayment}>{t("common.add")}</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
