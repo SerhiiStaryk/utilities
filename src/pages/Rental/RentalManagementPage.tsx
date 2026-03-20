@@ -100,14 +100,14 @@ export const RentalManagementPage = () => {
   const handleSaveInfo = async () => {
     if (!selectedAddressId) return;
     try {
-      await updateRentalInfo(selectedAddressId, rentalInfo);
+      await updateRentalInfo(selectedAddressId, rentalInfo, false);
       toast.success(t("rental.save_success", "Дані збережено"));
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleAddPayment = () => {
+  const handleAddPayment = async () => {
     const newPayment: RentalPayment = {
       id: crypto.randomUUID(),
       month: new Date().toLocaleString("en-US", { month: "long" }).toLowerCase(),
@@ -117,19 +117,46 @@ export const RentalManagementPage = () => {
       status: "paid",
     };
     const updatedPayments = [newPayment, ...(rentalInfo.payments || [])];
-    setRentalInfo({ ...rentalInfo, payments: updatedPayments });
+    const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
+    setRentalInfo(newRentalInfo);
+    
+    if (selectedAddressId) {
+      try {
+        await updateRentalInfo(selectedAddressId, newRentalInfo, false);
+      } catch (e) {
+        console.error(e);
+      }
+    }
   };
 
-  const handleDeletePayment = (id: string) => {
+  const handleDeletePayment = async (id: string) => {
     const updatedPayments = (rentalInfo.payments || []).filter((p) => p.id !== id);
-    setRentalInfo({ ...rentalInfo, payments: updatedPayments });
+    const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
+    setRentalInfo(newRentalInfo);
+    
+    if (selectedAddressId) {
+      try {
+        await updateRentalInfo(selectedAddressId, newRentalInfo, false);
+      } catch (e) {
+        console.error(e);
+      }
+    }
   };
 
-  const updatePaymentStatus = (id: string, status: RentalPayment["status"]) => {
+  const updatePaymentStatus = async (id: string, status: RentalPayment["status"]) => {
     const updatedPayments = (rentalInfo.payments || []).map((p) =>
       p.id === id ? { ...p, status } : p,
     );
-    setRentalInfo({ ...rentalInfo, payments: updatedPayments });
+    const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
+    setRentalInfo(newRentalInfo);
+
+    if (selectedAddressId) {
+      try {
+        await updateRentalInfo(selectedAddressId, newRentalInfo, false);
+      } catch (e) {
+        console.error(e);
+      }
+    }
   };
 
   return (

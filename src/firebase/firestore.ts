@@ -24,14 +24,22 @@ const db = getFirestore();
 
 // --- Rental Management ---
 
-export async function updateRentalInfo(addressId: string, rentalInfo: RentalInfo) {
+export async function updateRentalInfo(
+  addressId: string,
+  rentalInfo: RentalInfo,
+  showToast: boolean = true,
+) {
   try {
     const addressRef = doc(db, "addresses", addressId);
     await setDoc(addressRef, { rental_info: rentalInfo }, { merge: true });
-    toast.success("Rental information updated");
+    if (showToast) {
+      toast.success("Rental information updated");
+    }
   } catch (error) {
     console.error("Error updating rental info:", error);
-    toast.error("Error updating rental info");
+    if (showToast) {
+      toast.error("Error updating rental info");
+    }
     throw error;
   }
 }
