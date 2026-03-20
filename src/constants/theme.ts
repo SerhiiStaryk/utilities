@@ -62,6 +62,27 @@ export const getAppTheme = (mode: "light" | "dark") => {
       borderRadius: 12,
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          "*": {
+            scrollbarWidth: "thin",
+            scrollbarColor: "#FFC107 transparent",
+          },
+          "*::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+            backgroundColor: "transparent",
+          },
+          "*::-webkit-scrollbar-thumb": {
+            borderRadius: "8px",
+            backgroundColor: "#FFC107",
+            minHeight: "24px",
+          },
+          "*::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#FFA000",
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {
