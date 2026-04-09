@@ -104,3 +104,75 @@ You can switch to **Ukrainian** at any time by navigating to the **Settings** pa
 3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4.  Push to the Branch (`git push origin feature/AmazingFeature`)
 5.  Open a Pull Request
+
+## GitHub Copilot Agents
+
+### Agents
+
+#### Code Reviewer
+
+Reviews the currently open file for bugs, type-safety issues, security vulnerabilities (OWASP), and violations of project conventions (TypeScript strict, component/hook/API/test patterns). Returns a structured report with severity-tagged findings and concrete fix suggestions — does NOT edit files.
+
+**How to invoke:**
+
+1. Open the file you want reviewed.
+2. Open the Copilot Chat panel.
+3. Switch the agent to **Code Reviewer** using the agent picker.
+4. Send a message like "review this file".
+
+---
+
+#### Performance Analyzer
+
+Memory-focused performance analysis for the currently open file. Detects memory leaks, component lifecycle issues, missing cleanup, event listener problems, and React re-render inefficiencies. Generates a detailed report with metrics, bottlenecks, and prioritized recommendations — can apply optimizations automatically.
+
+**How to invoke:**
+
+1. Open the file you want analyzed.
+2. Open the Copilot Chat panel.
+3. Switch the agent to **Performance Analyzer** using the agent picker.
+4. Send a message like "analyze this file for memory leaks".
+
+---
+
+#### Readme Updater
+
+Keeps README.md in sync whenever a new prompt (.prompt.md) or agent (.agent.md) is added or changed. Reads all files in .github/prompts/ and .github/agents/, then updates the "GitHub Copilot Agents" section in README.md to reflect the current state — without touching any other section.
+
+**How to invoke:**
+
+1. Open the Copilot Chat panel.
+2. Switch the agent to **Readme Updater** using the agent picker.
+3. Send a message like "update the readme".
+
+---
+
+#### Refactoring Specialist
+
+Restructures code to follow project conventions after Code Reviewer identifies improvements. Extracts components/hooks, renames for clarity, converts patterns, and improves file organization — preserves behavior, verifies with tests.
+
+**How to invoke:**
+
+1. Open the file you want refactored.
+2. Open the Copilot Chat panel.
+3. Switch the agent to **Refactoring Specialist** using the agent picker.
+4. Send a message describing the refactor you want.
+
+---
+
+#### Security Auditor
+
+Deep security analysis for the currently open file. Identifies OWASP Top 10 vulnerabilities, secrets exposure, injection flaws, authentication bypasses, and insecure dependencies. Returns a threat-prioritized report with exploit scenarios and remediation steps — does NOT edit files.
+
+**How to invoke:**
+
+1. Open the file you want audited.
+2. Open the Copilot Chat panel.
+3. Switch the agent to **Security Auditor** using the agent picker.
+4. Send a message like "audit this file for security issues".
+
+---
+
+### Prompts
+
+_No prompts directory found; no slash commands available._
