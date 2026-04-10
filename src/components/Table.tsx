@@ -7,11 +7,10 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import { MONTHS, Month } from "@/constants/months";
-import { db } from "@/firebase/firebase.config";
+import useAddressCategories from "@/hooks/useAddressCategories";
 
 const monthLabels: Record<Month, string> = {
   [Month.JAN]: "Січень",
@@ -28,28 +27,19 @@ const monthLabels: Record<Month, string> = {
   [Month.DEC]: "Грудень",
 };
 
-const fetchData = async (setData: (value: any[]) => void) => {
-  try {
-    const querySnapshot = await getDocs(
-      collection(db, "addresses", "Dashkevycha", "years", "2020", "categories"),
-    );
-    const data = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    setData(data);
-  } catch (error) {
-    console.error("Помилка отримання даних:", error);
-  }
+type TableProps = {
+  addressId: string;
+  yearId: string;
+  data?: any[];
 };
 
-const Table = () => {
-  const [data, setData] = useState<any[]>([]);
+const Table = ({ addressId, yearId, data: externalData }: TableProps) => {
+  const { data: hookData, loading } = useAddressCategories(addressId, yearId);
+  const [data, setData] = useState<any[]>(externalData ?? hookData ?? []);
 
   useEffect(() => {
-    fetchData(setData);
-  }, []);
+    setData(externalData ?? hookData ?? []);
+  }, [externalData, hookData]);
 
   return (
     <TableContainer component={Paper}>
