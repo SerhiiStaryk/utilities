@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SERVICE_ICONS, IconSelectProps } from "./iconSelectUtils";
+export { SERVICE_ICONS } from "./iconSelectUtils";
 
 export const IconSelect = forwardRef<HTMLSelectElement, IconSelectProps>(
   ({ value, onChange, onBlur, name, label, error }, ref) => {
