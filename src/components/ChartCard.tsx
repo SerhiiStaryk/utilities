@@ -42,7 +42,7 @@ export const ChartCard = ({
           ) : chartCondition ? (
             children
           ) : (
-            <Typography variant="body2" color="textSecondary" sx={{ textAlign: "center", mt: 10 }}>
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 10, textAlign: "center" }}>
               {t("dashboard.charts.no_data", "No data available for charts")}
             </Typography>
           )}

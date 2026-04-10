@@ -16,7 +16,7 @@ export const PieChart = ({ data }: PieChartProps) => {
         series={[
           {
             data,
-            highlightScope: { fade: "global", highlighted: "item" } as any,
+            highlightScope: { fade: "global", highlight: "item" },
             paddingAngle: 2,
             cornerRadius: 6,
             innerRadius: 40,
@@ -35,21 +35,30 @@ export const PieChart = ({ data }: PieChartProps) => {
         slotProps={{
           legend: {
             hidden: data.length === 0,
-            // cast to any to avoid strict Direction typings in the chart lib
             direction: (isMobile ? "row" : "column") as any,
             position: {
-              vertical: isMobile ? "bottom" : "middle",
-              horizontal: (isMobile ? "middle" : "right") as any,
+              vertical: isMobile ? "bottom" : "center",
+              horizontal: isMobile ? "center" : "end",
             },
-            itemMarkWidth: 8,
-            itemMarkHeight: 8,
-            markGap: 5,
-            itemGap: isMobile ? 12 : data.length > 12 ? 4 : 8,
-            labelStyle: {
-              fontSize: isMobile ? 10 : data.length > 12 ? 9 : 11,
-              fill: theme.palette.text.secondary,
+            sx: {
+              // Adjust legend item mark size
+              "& .MuiChartsLegend-itemMark": {
+                width: 8,
+                height: 8,
+                marginRight: 1,
+              },
+              // Gap between mark and label
+              "& .MuiChartsLegend-item": {
+                gap: isMobile ? 12 : data.length > 12 ? 4 : 8,
+                marginBottom: 4,
+              },
+              // Label styling
+              "& .MuiChartsLegend-label": {
+                fontSize: isMobile ? 10 : data.length > 12 ? 9 : 11,
+                color: theme.palette.text.secondary,
+              },
             },
-          } as any,
+          },
         }}
       />
     </Box>

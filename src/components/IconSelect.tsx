@@ -1,38 +1,9 @@
-import {
-  FlashOn,
-  WaterDrop,
-  Whatshot,
-  Wifi,
-  Home,
-  DeleteOutlineOutlined,
-  Thermostat,
-  QuestionMark,
-  Security,
-} from "@mui/icons-material";
 import { MenuItem, Select, FormControl, InputLabel, Box } from "@mui/material";
 import { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 
-export const SERVICE_ICONS: Record<string, { icon: React.ElementType; color: string }> = {
-  ElectricityIcon: { icon: FlashOn, color: "#fbc02d" },
-  WaterIcon: { icon: WaterDrop, color: "#0288d1" },
-  GasIcon: { icon: Whatshot, color: "#f4511e" },
-  InternetIcon: { icon: Wifi, color: "#7b1fa2" },
-  HousingIcon: { icon: Home, color: "#455a64" },
-  WasteIcon: { icon: DeleteOutlineOutlined, color: "#689f38" },
-  HeatingIcon: { icon: Thermostat, color: "#e64a19" },
-  SecurityIcon: { icon: Security, color: "#1976d2" },
-  DefaultIcon: { icon: QuestionMark, color: "" },
-};
-
-export interface IconSelectProps {
-  value: string;
-  onChange: (value: string) => void;
-  onBlur?: () => void;
-  name?: string;
-  label?: string;
-  error?: boolean;
-}
+import { SERVICE_ICONS, IconSelectProps } from "./iconSelectUtils";
+export { SERVICE_ICONS } from "./iconSelectUtils";
 
 export const IconSelect = forwardRef<HTMLSelectElement, IconSelectProps>(
   ({ value, onChange, onBlur, name, label, error }, ref) => {
@@ -42,14 +13,14 @@ export const IconSelect = forwardRef<HTMLSelectElement, IconSelectProps>(
       <FormControl fullWidth size="small" error={error}>
         <InputLabel>{label || t("utility.icon", "Icon")}</InputLabel>
         <Select
-          ref={ref as any}
+          ref={ref as React.Ref<HTMLSelectElement>}
           name={name}
           onBlur={onBlur}
           value={value || "DefaultIcon"}
           label={label || t("utility.icon", "Icon")}
           onChange={(e) => onChange(e.target.value)}
           renderValue={(selected) => {
-            const IconComponent = SERVICE_ICONS[selected]?.icon || QuestionMark;
+            const IconComponent = SERVICE_ICONS[selected]?.icon || SERVICE_ICONS.DefaultIcon.icon;
             const color = SERVICE_ICONS[selected]?.color;
             return (
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -76,3 +47,5 @@ export const IconSelect = forwardRef<HTMLSelectElement, IconSelectProps>(
     );
   },
 );
+
+IconSelect.displayName = "IconSelect";

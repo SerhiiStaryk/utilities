@@ -12,14 +12,25 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, openned: true };
     case "close":
       return { ...state, openned: false };
+    default:
+      return state;
   }
 };
 
-const ContextData = React.createContext({
+interface ContextDataShape {
+  openned: boolean;
+}
+
+interface ContextApiShape {
+  open: () => void;
+  close: () => void;
+}
+
+const ContextData = React.createContext<ContextDataShape>({
   openned: false,
 });
 
-const ContextApi = React.createContext({
+const ContextApi = React.createContext<ContextApiShape>({
   open: () => {},
   close: () => {},
 });
