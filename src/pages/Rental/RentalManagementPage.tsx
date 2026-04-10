@@ -37,22 +37,11 @@ import { toast } from "react-toastify";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { getAddresses, getAddress, updateRentalInfo } from "@/firebase/firestore";
+import { MONTHS_META } from "@/constants/months";
 import { AddressDoc, RentalInfo, RentalPayment } from "@/types/firestore";
 
-const MONTHS = [
-  "january",
-  "february",
-  "march",
-  "april",
-  "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "october",
-  "november",
-  "december",
-];
+// Use centralized months metadata
+const MONTHS = MONTHS_META.map((m) => m.id);
 
 export const RentalManagementPage = () => {
   const { t } = useTranslation();
@@ -429,9 +418,9 @@ export const RentalManagementPage = () => {
                 label={t("utility.month")}
                 onChange={(e) => setNewPaymentData({ ...newPaymentData, month: e.target.value })}
               >
-                {MONTHS.map((m) => (
-                  <MenuItem key={m} value={m}>
-                    {t(`utility.months.${m}`)}
+                {MONTHS_META.map((m) => (
+                  <MenuItem key={m.id} value={m.id}>
+                    {t(m.key)}
                   </MenuItem>
                 ))}
               </MuiSelect>

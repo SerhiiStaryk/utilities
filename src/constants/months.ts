@@ -27,3 +27,9 @@ export const MONTHS: Month[] = [
   Month.NOV,
   Month.DEC,
 ];
+
+// Helper with i18n keys for display: use `t(`utility.months.${id}`)` when rendering
+export const MONTHS_META: { id: Month; key: string }[] = MONTHS.map((m) => ({
+  id: m,
+  key: `utility.months.${m}`,
+}));

@@ -62,20 +62,11 @@ export const utilityServices = [
   },
 ];
 
-export const months = [
-  { value: "january", label: "січень" },
-  { value: "february", label: "лютий" },
-  { value: "march", label: "березень" },
-  { value: "april", label: "квітень" },
-  { value: "may", label: "травень" },
-  { value: "june", label: "червень" },
-  { value: "july", label: "липень" },
-  { value: "august", label: "серпень" },
-  { value: "september", label: "вересень" },
-  { value: "october", label: "жовтень" },
-  { value: "november", label: "листопад" },
-  { value: "december", label: "грудень" },
-];
+import { MONTHS_META } from "./months";
+
+// Export months metadata referencing centralized `MONTHS_META`.
+// `label` contains i18n key (e.g. `utility.months.january`) — components should call `t()`.
+export const months = MONTHS_META.map((m) => ({ value: m.id, label: m.key }));
 
 export const currencies = [
   { value: "UAH", label: "грн." },

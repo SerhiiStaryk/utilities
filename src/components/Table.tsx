@@ -7,39 +7,27 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { MONTHS, Month } from "@/constants/months";
+import { MONTHS } from "@/constants/months";
 import useAddressCategories from "@/hooks/useAddressCategories";
 
-const monthLabels: Record<Month, string> = {
-  [Month.JAN]: "Січень",
-  [Month.FEB]: "Лютий",
-  [Month.MAR]: "Березень",
-  [Month.APR]: "Квітень",
-  [Month.MAY]: "Травень",
-  [Month.JUN]: "Червень",
-  [Month.JUL]: "Липень",
-  [Month.AUG]: "Серпень",
-  [Month.SEP]: "Вересень",
-  [Month.OCT]: "Жовтень",
-  [Month.NOV]: "Листопад",
-  [Month.DEC]: "Грудень",
+type CategoryRow = {
+  id: string;
+  monthly?: Record<string, string | number | null>;
 };
 
 type TableProps = {
   addressId: string;
   yearId: string;
-  data?: any[];
+  data?: CategoryRow[];
 };
 
 const Table = ({ addressId, yearId, data: externalData }: TableProps) => {
-  const { data: hookData, loading } = useAddressCategories(addressId, yearId);
-  const [data, setData] = useState<any[]>(externalData ?? hookData ?? []);
+  const { t } = useTranslation();
+  const { data: hookData } = useAddressCategories(addressId, yearId);
 
-  useEffect(() => {
-    setData(externalData ?? hookData ?? []);
-  }, [externalData, hookData]);
+  const rows: CategoryRow[] = externalData ?? hookData ?? [];
 
   return (
     <TableContainer component={Paper}>
@@ -49,13 +37,13 @@ const Table = ({ addressId, yearId, data: externalData }: TableProps) => {
             <TableCell>Категорія</TableCell>
             {MONTHS.map((month) => (
               <TableCell key={month} align="right">
-                {monthLabels[month]}
+                {t(`utility.months.${month}`)}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((item) => (
+          {rows.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               {MONTHS.map((month) => (

@@ -145,7 +145,8 @@
       "december": "Грудень"
     },
     "service_placeholder": "Введіть назву послуги",
-    "year_placeholder": "Введіть рік (наприклад, 2026)"
+    "year_placeholder": "Введіть рік (наприклад, 2026)",
+    "icon": "Іконка"
   },
   "settings": {
     "title": "Налаштування",
@@ -216,5 +217,8 @@
     "heating_desc": "Київтеплоенерго / Місцева ТЕЦ",
     "internet": "Інтернет та зв'язок",
     "internet_desc": "Київстар, Vodafone, Lifecell, Lanet"
+  },
+  "table": {
+    "actions_column": "Дії"
   }
 }

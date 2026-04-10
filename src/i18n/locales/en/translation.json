@@ -145,7 +145,8 @@
       "december": "December"
     },
     "service_placeholder": "Enter service name",
-    "year_placeholder": "Enter year (e.g., 2026)"
+    "year_placeholder": "Enter year (e.g., 2026)",
+    "icon": "Icon"
   },
   "settings": {
     "title": "Settings",
@@ -212,5 +213,8 @@
     "heating_desc": "Kyivteploenergo / Local CHP",
     "internet": "Internet & Communication",
     "internet_desc": "Kyivstar, Vodafone, Lifecell, Lanet"
+  },
+  "table": {
+    "actions_column": "Actions"
   }
 }

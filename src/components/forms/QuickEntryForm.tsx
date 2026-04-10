@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/Input";
 import { Select as CustomSelect } from "@/components/Select";
 import { currencies } from "@/constants";
-import { MONTHS } from "@/constants/months";
+import { MONTHS_META } from "@/constants/months";
 
 type QuickEntryFormProps = {
   onSubmit: (data: any) => void;
@@ -62,9 +62,9 @@ export const QuickEntryForm = ({
     });
   }, [selectedMonth, services, setValue]);
 
-  const monthOptions = MONTHS.map((month) => ({
-    value: month,
-    label: t(`utility.months.${month}`, month),
+  const monthOptions = MONTHS_META.map((month) => ({
+    value: month.id,
+    label: t(month.key, month.id),
   }));
 
   return (
