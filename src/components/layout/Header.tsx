@@ -91,8 +91,8 @@ export const Header = ({ open, handleDrawerOpen, isMobile }: HeaderProps) => {
           open={menuOpen}
           onClose={handleClose}
           onClick={handleClose}
-          PaperProps={
-            {
+          slotProps={{
+            paper: {
               elevation: 0,
               sx: {
                 overflow: "visible",
@@ -117,8 +117,8 @@ export const Header = ({ open, handleDrawerOpen, isMobile }: HeaderProps) => {
                   zIndex: 0,
                 },
               },
-            } as any
-          }
+            },
+          }}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >

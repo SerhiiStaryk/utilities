@@ -10,22 +10,8 @@ import {
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
+import { MONTHS } from "@/constants/months";
 import { db } from "@/firebase/firebase.config";
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const monthLabels: Record<string, string> = {
   January: "Січень",
@@ -71,7 +57,7 @@ const Table = () => {
         <TableHead>
           <TableRow>
             <TableCell>Категорія</TableCell>
-            {months.map((month) => (
+            {MONTHS.map((month) => (
               <TableCell key={month} align="right">
                 {monthLabels[month]}
               </TableCell>
@@ -82,7 +68,7 @@ const Table = () => {
           {data.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              {months.map((month) => (
+              {MONTHS.map((month) => (
                 <TableCell key={month} align="right">
                   {item.monthly?.[month] ?? "-"}
                 </TableCell>

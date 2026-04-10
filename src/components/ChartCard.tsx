@@ -1,6 +1,5 @@
-import { Card, Box, Typography, CircularProgress } from "@mui/material";
+import { Card, Box, Typography, CircularProgress, Grid } from "@mui/material";
 import { GridSize } from "@mui/material/Grid";
-import Grid from "@mui/material/Grid";
 import { ResponsiveStyleValue } from "@mui/system";
 import { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
