@@ -88,8 +88,7 @@ export const EditAddressPage = () => {
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "center" }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" } }}
         mb={4}
         gap={2}
       >
@@ -115,13 +114,13 @@ export const EditAddressPage = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom color="textSecondary">
                   Basic Information
                 </Typography>
               </Grid>
 
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Controller
                   name="id"
                   control={control}
@@ -131,7 +130,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <Controller
                   name="city"
                   control={control}
@@ -147,7 +146,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <Controller
                   name="street"
                   control={control}
@@ -163,7 +162,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <Controller
                   name="houseNumber"
                   control={control}
@@ -179,7 +178,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid item xs={12} sm={6}>
                 <Controller
                   name="flatNumber"
                   control={control}
@@ -187,10 +186,10 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Stack
                   direction={{ xs: "column-reverse", sm: "row" }}
-                  justifyContent="flex-end"
+                  sx={{ justifyContent: "flex-end" }}
                   gap={2}
                   mt={2}
                 >

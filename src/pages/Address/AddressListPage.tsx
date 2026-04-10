@@ -45,8 +45,7 @@ export const AddressListPage = () => {
     <Box>
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "center" }}
+        sx={{ justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" } }}
         mb={4}
         gap={2}
       >
@@ -67,7 +66,7 @@ export const AddressListPage = () => {
       </Stack>
 
       <Grid container spacing={3}>
-        <Grid size={12}>
+        <Grid item xs={12}>
           <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom color="primary">

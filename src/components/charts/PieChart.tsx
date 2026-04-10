@@ -40,13 +40,23 @@ export const PieChart = ({ data }: PieChartProps) => {
               vertical: isMobile ? "bottom" : "center",
               horizontal: isMobile ? "center" : "end",
             },
-            itemMarkWidth: 8,
-            itemMarkHeight: 8,
-            markGap: 5,
-            itemGap: isMobile ? 12 : data.length > 12 ? 4 : 8,
-            labelStyle: {
-              fontSize: isMobile ? 10 : data.length > 12 ? 9 : 11,
-              fill: theme.palette.text.secondary,
+            sx: {
+              // Adjust legend item mark size
+              "& .MuiChartsLegend-itemMark": {
+                width: 8,
+                height: 8,
+                marginRight: 1,
+              },
+              // Gap between mark and label
+              "& .MuiChartsLegend-item": {
+                gap: isMobile ? 12 : data.length > 12 ? 4 : 8,
+                marginBottom: 4,
+              },
+              // Label styling
+              "& .MuiChartsLegend-label": {
+                fontSize: isMobile ? 10 : data.length > 12 ? 9 : 11,
+                color: theme.palette.text.secondary,
+              },
             },
           },
         }}
