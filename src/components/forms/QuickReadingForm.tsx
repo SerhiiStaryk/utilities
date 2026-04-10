@@ -4,7 +4,7 @@ import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
-import { MONTHS } from "@/constants/months";
+import { MONTHS_META } from "@/constants/months";
 
 interface QuickReadingFormProps {
   onSubmit: (data: any) => void;
@@ -67,9 +67,9 @@ export const QuickReadingForm = ({
           fullWidth
           defaultValue={currentMonth}
         >
-          {MONTHS.map((m) => (
-            <MenuItem key={m} value={m} sx={{ textTransform: "capitalize" }}>
-              {t(`utility.months.${m}`)}
+          {MONTHS_META.map((m) => (
+            <MenuItem key={m.id} value={m.id} sx={{ textTransform: "capitalize" }}>
+              {t(m.key)}
             </MenuItem>
           ))}
         </TextField>

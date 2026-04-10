@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
-import { MONTHS } from "@/constants/months";
+import { MONTHS_META } from "@/constants/months";
 
 interface ReadingFormProps {
   onSubmit: (data: any) => void;
@@ -29,8 +29,8 @@ export const ReadingForm = ({
     defaultValues: initialValues || {
       serviceId: "",
       meter_number: "",
-      ...MONTHS.reduce((acc: any, month) => {
-        acc[month] = "";
+      ...MONTHS_META.reduce((acc: any, month) => {
+        acc[month.id] = "";
         return acc;
       }, {}),
     },
@@ -70,13 +70,13 @@ export const ReadingForm = ({
         </Typography>
 
         <Grid container spacing={2}>
-          {MONTHS.map((month) => (
-            <Grid size={{ xs: 6, sm: 4, md: 3 }} key={month}>
+          {MONTHS_META.map((month) => (
+            <Grid size={{ xs: 6, sm: 4, md: 3 }} key={month.id}>
               <Input
-                label={t(`utility.months.${month}`, month)}
+                label={t(month.key, month.id)}
                 placeholder="0.00"
                 type="number"
-                {...register(month)}
+                {...register(month.id)}
                 fullWidth
               />
             </Grid>

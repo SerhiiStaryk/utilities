@@ -6,7 +6,7 @@ import { IconSelect } from "@/components/IconSelect";
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
 import { currencies } from "@/constants";
-import { MONTHS } from "@/constants/months";
+import { MONTHS_META } from "@/constants/months";
 import { defaultValuesUtilityForm } from "@/constants/utilities";
 import { DefaultValuesUtilityForm } from "@/types/utilities";
 
@@ -33,10 +33,10 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
             {t("utility.monthly")}
           </Typography>
           <Grid container spacing={2}>
-            {MONTHS.map((month) => (
-              <Grid key={month} size={4}>
+            {MONTHS_META.map((month) => (
+              <Grid key={month.id} size={4}>
                 <Controller
-                  name={month}
+                  name={month.id}
                   control={control}
                   render={({ field }) => {
                     const { onChange, onBlur, name, ref, value } = field;
@@ -48,7 +48,7 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
                         onBlur={onBlur}
                         ref={ref}
                         type="number"
-                        label={t(`utility.months.${month}`)}
+                        label={t(month.key)}
                         sx={{
                           "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
                             {

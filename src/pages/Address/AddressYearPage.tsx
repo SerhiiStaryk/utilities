@@ -541,7 +541,7 @@ export const AddressYearPage = () => {
                   </TableCell>
                 ))}
                 <TableCell align="center">
-                  <strong>{t("address.create.cancel", "Actions")}</strong>
+                  <strong>{t("table.actions_column", "Actions")}</strong>
                 </TableCell>
               </TableRow>
             </TableHead>

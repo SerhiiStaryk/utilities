@@ -7,6 +7,7 @@ import { IconSelect } from "@/components/IconSelect";
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
 import { currencies } from "@/constants";
+import { MONTHS, MONTHS_META } from "@/constants/months";
 import { addUtilityData } from "@/firebase/firestore";
 import { UtilityDataPayload } from "@/types/firestore";
 
@@ -26,21 +27,6 @@ interface CreateUtilityModalProps {
   initialYear?: string;
 }
 
-const MONTHS = [
-  "january",
-  "february",
-  "march",
-  "april",
-  "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "october",
-  "november",
-  "december",
-] as const;
-
 export const CreateUtilityModal = ({
   open,
   onClose,
@@ -59,18 +45,10 @@ export const CreateUtilityModal = ({
       icon: "DefaultIcon",
       currency: "",
       accountNumber: "",
-      january: "",
-      february: "",
-      march: "",
-      april: "",
-      may: "",
-      june: "",
-      july: "",
-      august: "",
-      september: "",
-      october: "",
-      november: "",
-      december: "",
+      ...MONTHS.reduce((acc: any, m) => {
+        acc[m] = "";
+        return acc;
+      }, {}),
     },
   });
 
@@ -82,18 +60,10 @@ export const CreateUtilityModal = ({
         icon: "DefaultIcon",
         currency: "UAH",
         accountNumber: "",
-        january: "",
-        february: "",
-        march: "",
-        april: "",
-        may: "",
-        june: "",
-        july: "",
-        august: "",
-        september: "",
-        october: "",
-        november: "",
-        december: "",
+        ...MONTHS.reduce((acc: any, m) => {
+          acc[m] = "";
+          return acc;
+        }, {}),
       });
     }
   }, [open, initialYear, reset]);

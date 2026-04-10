@@ -167,10 +167,9 @@ export const AddressServicesPage = () => {
           </Paper>
 
           <Stack
-            mt={4}
             direction={{ xs: "column-reverse", sm: "row" }}
-            justifyContent="flex-end"
-            gap={2}
+            spacing={2}
+            sx={{ mt: 4, justifyContent: { xs: "center", sm: "flex-end" } }}
           >
             <Button onClick={() => navigate(-1)} fullWidth={isMobile}>
               {t("address.create.cancel")}
