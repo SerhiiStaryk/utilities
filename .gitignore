@@ -61,3 +61,8 @@ coverage/
 # Firebase
 # =====================
 .firebase
+
+# =====================
+# Folder for output files, such as build artifacts, generated documentation, etc.
+# =====================
+output/
