@@ -1,5 +1,6 @@
-import { Card, Box, Typography, CircularProgress, Grid } from "@mui/material";
+import { Card, Box, Typography, CircularProgress } from "@mui/material";
 import { GridSize } from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 import { ResponsiveStyleValue } from "@mui/system";
 import { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,30 +20,22 @@ export const ChartCard = ({
   size,
 }: PropsWithChildren<ChartCardProps>) => {
   const { t } = useTranslation();
-  const gridProps = typeof size === "object" ? (size as any) : { md: size, xs: 12 };
 
   return (
-    <Grid item {...gridProps}>
+    <Grid size={size}>
       <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
         <Typography variant="h6" gutterBottom>
           {t(`${chartTitle}`)}
         </Typography>
         <Box sx={{ height: 350 }}>
           {dataLoading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
+            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
               <CircularProgress />
             </Box>
           ) : chartCondition ? (
             children
           ) : (
-            <Typography variant="body2" color="textSecondary" sx={{ textAlign: "center", mt: 10 }}>
+            <Typography variant="body2" color="textSecondary" textAlign="center" mt={10}>
               {t("dashboard.charts.no_data", "No data available for charts")}
             </Typography>
           )}
