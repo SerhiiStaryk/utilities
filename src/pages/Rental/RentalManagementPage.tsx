@@ -29,6 +29,8 @@ import {
   DialogActions,
   alpha,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -204,8 +206,11 @@ export const RentalManagementPage = () => {
 
   return (
     <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4" fontWeight="bold">
+      <Stack
+        spacing={4}
+        sx={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", mb: 4 }}
+      >
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {t("rental.title")}
         </Typography>
         <FormControl size="small" sx={{ minWidth: 200 }}>
@@ -237,7 +242,7 @@ export const RentalManagementPage = () => {
                 <Typography variant="h6" gutterBottom color="primary">
                   {t("rental.status")}
                 </Typography>
-                <Stack gap={3}>
+                <Stack spacing={3}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -263,16 +268,19 @@ export const RentalManagementPage = () => {
                     fullWidth
                     size="small"
                   />
-                  <TextField
+                  <DatePicker
                     label={t("rental.start_date")}
-                    type="date"
-                    value={rentalInfo.startDate}
-                    onChange={(e) => setRentalInfo({ ...rentalInfo, startDate: e.target.value })}
-                    fullWidth
-                    size="small"
-                    slotProps={{ inputLabel: { shrink: true } }}
+                    value={rentalInfo.startDate ? dayjs(rentalInfo.startDate) : null}
+                    onChange={(newValue) => {
+                      setRentalInfo({
+                        ...rentalInfo,
+                        startDate: newValue ? newValue.format("YYYY-MM-DD") : "",
+                      });
+                    }}
+                    format="DD.MM.YYYY"
+                    slotProps={{ textField: { fullWidth: true, size: "small" } }}
                   />
-                  <Box display="flex" gap={2}>
+                  <Box sx={{ display: "flex", gap: 2 }}>
                     <TextField
                       label={t("rental.monthly_rent")}
                       type="number"
@@ -316,8 +324,15 @@ export const RentalManagementPage = () => {
 
           <Grid size={{ xs: 12, md: 8 }}>
             <Paper sx={{ p: 3 }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-                <Box display="flex" alignItems="center" gap={2}>
+              <Stack
+                sx={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Typography variant="h6">{t("rental.payments")}</Typography>
                   <Chip
                     label={`${t("rental.total_earned", "Зароблено:")} ${totalEarned} ${rentalInfo.currency}`}
@@ -385,7 +400,7 @@ export const RentalManagementPage = () => {
                     {(!rentalInfo.payments || rentalInfo.payments.length === 0) && (
                       <TableRow>
                         <TableCell colSpan={5} align="center">
-                          <Typography variant="body2" color="textSecondary" py={4}>
+                          <Typography variant="body2" color="textSecondary" sx={{ py: 4 }}>
                             {t("common.no_data")}
                           </Typography>
                         </TableCell>

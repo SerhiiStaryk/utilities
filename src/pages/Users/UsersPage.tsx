@@ -111,11 +111,11 @@ export const UsersPage = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" mb={4}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <IconButton onClick={() => navigate("/settings")} sx={{ mr: 2 }}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4" fontWeight="bold">
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {t("settings.user_management", "User Management")}
         </Typography>
       </Box>

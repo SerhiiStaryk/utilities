@@ -26,13 +26,13 @@ export const LoginPage = () => {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="100vh"
-      bgcolor="background.default"
       sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        bgcolor: "background.default",
         padding: isMobile ? 2 : 0,
       }}
     >
@@ -44,14 +44,14 @@ export const LoginPage = () => {
           boxShadow: isMobile ? "none" : undefined,
         }}
       >
-        <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3 }}>
           <img src={logo} alt="Logo" style={{ height: 52, marginRight: 8 }} />
-          <Typography variant="h4" textAlign="center" fontWeight="bold">
+          <Typography variant="h4" sx={{ textAlign: "center", fontWeight: "bold" }}>
             Комуналка
           </Typography>
         </Box>
 
-        <Box display="flex" flexDirection="column" gap={3}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           <TextField
             label="Email"
             variant="outlined"

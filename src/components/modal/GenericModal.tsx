@@ -64,7 +64,7 @@ export const GenericModal = ({
               zIndex: 1,
             }}
           >
-            <Typography variant="h6" fontWeight="bold">
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
               {title}
             </Typography>
             <IconButton onClick={onClose} size="small" autoFocus>

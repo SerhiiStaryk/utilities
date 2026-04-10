@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { Box, Button, Stack, Typography, MenuItem, TextField, Divider } from "@mui/material";
+import { useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -80,10 +80,12 @@ export const QuickReadingForm = ({
           {fields.map((field, index) => (
             <Box
               key={field.id}
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              gap={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 2,
+              }}
             >
               <Box sx={{ flex: 1 }}>
                 <Typography sx={{ fontWeight: "500" }}>{field.serviceId}</Typography>
@@ -107,7 +109,7 @@ export const QuickReadingForm = ({
         </Stack>
 
         {showActions && (
-          <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
             {onCancel && (
               <Button onClick={onCancel} color="inherit">
                 {t("address.create.cancel")}

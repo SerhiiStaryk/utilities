@@ -25,7 +25,7 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
   });
 
   return (
-    <Stack id={id} component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
+    <Stack id={id} component="form" onSubmit={handleSubmit(onSubmit)} sx={{ gap: 3, mt: 2 }}>
       <Grid container spacing={3}>
         {/* ... (grid body remains same) */}
         <Grid size={12}>
@@ -70,7 +70,7 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
           <Typography variant="subtitle2" gutterBottom color="primary">
             {t("utility.config")}
           </Typography>
-          <Stack gap={2}>
+          <Stack sx={{ gap: 2 }}>
             <Controller
               name="currency"
               control={control}

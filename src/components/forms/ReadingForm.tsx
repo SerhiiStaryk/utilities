@@ -65,7 +65,7 @@ export const ReadingForm = ({
           fullWidth
         />
 
-        <Typography variant="subtitle1" fontWeight="bold">
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           {t("utility.monthly", "Monthly Readings")}
         </Typography>
 
@@ -84,7 +84,7 @@ export const ReadingForm = ({
         </Grid>
 
         {showActions && (
-          <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
             {onCancel && (
               <Button onClick={onCancel} color="inherit">
                 {t("address.create.cancel")}

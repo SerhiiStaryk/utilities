@@ -155,22 +155,23 @@ export const AddressReadingPage = () => {
   return (
     <Box>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        justifyContent="space-between"
-        mb={4}
-        gap={2}
+        sx={{
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "flex-start", sm: "center" },
+          justifyContent: "space-between",
+          mb: 4,
+          gap: 2,
+        }}
       >
-        <Box display="flex" alignItems="center">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <IconButton onClick={() => navigate(`/address-list/${id}`)} sx={{ mr: { xs: 1, sm: 2 } }}>
             <ArrowBack />
           </IconButton>
           <Box>
             <Typography
               variant={isMobile ? "h5" : "h4"}
-              fontWeight="bold"
               noWrap
-              sx={{ maxWidth: { xs: "70vw", sm: "100%" } }}
+              sx={{ maxWidth: { xs: "70vw", sm: "100%" }, fontWeight: "bold" }}
             >
               {addressDisplay}
             </Typography>
@@ -181,10 +182,13 @@ export const AddressReadingPage = () => {
           </Box>
         </Box>
         <Stack
-          direction="row"
-          gap={2}
-          alignItems="center"
-          sx={{ width: { xs: "100%", sm: "auto" }, justifyContent: "space-between" }}
+          sx={{
+            flexDirection: "row",
+            gap: 2,
+            alignItems: "center",
+            width: { xs: "100%", sm: "auto" },
+            justifyContent: "space-between",
+          }}
         >
           {!isMobile && (
             <ToggleButtonGroup
@@ -221,7 +225,9 @@ export const AddressReadingPage = () => {
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={reading.id || reading.name}>
               <Card>
                 <CardContent>
-                  <Box display="flex" justifyContent="space-between" alignItems="start">
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}
+                  >
                     <Box>
                       <Typography variant="h6" gutterBottom color="secondary">
                         {reading.name}
@@ -247,7 +253,7 @@ export const AddressReadingPage = () => {
                       </Box>
                     )}
                   </Box>
-                  <Box mt={2}>
+                  <Box sx={{ mt: 2 }}>
                     {Object.entries(reading.monthly_readings || {})
                       .sort(([monthA], [monthB]) => {
                         const indexA = MONTHS.indexOf(monthA as any);
@@ -255,11 +261,14 @@ export const AddressReadingPage = () => {
                         return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
                       })
                       .map(([month, r]) => (
-                        <Box key={month} display="flex" justifyContent="space-between" my={0.5}>
+                        <Box
+                          key={month}
+                          sx={{ display: "flex", justifyContent: "space-between", my: 0.5 }}
+                        >
                           <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
                             {t(`utility.months.${month}`, month)}:
                           </Typography>
-                          <Typography variant="body2" fontWeight="bold">
+                          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                             {r.value}
                           </Typography>
                         </Box>
@@ -314,7 +323,7 @@ export const AddressReadingPage = () => {
                 readings.map((reading) => (
                   <TableRow key={reading.id || reading.name}>
                     <TableCell>
-                      <Typography variant="body2" fontWeight="bold">
+                      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                         {reading.name}
                       </Typography>
                     </TableCell>
@@ -369,7 +378,7 @@ export const AddressReadingPage = () => {
           open={!!editingReading}
           onClose={() => setEditingReading(null)}
           footer={
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
               <Button onClick={() => setEditingReading(null)} color="inherit">
                 {t("address.create.cancel")}
               </Button>
@@ -417,7 +426,7 @@ export const AddressReadingPage = () => {
         open={quickEntryOpen}
         onClose={() => setQuickEntryOpen(false)}
         footer={
-          <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button onClick={() => setQuickEntryOpen(false)} color="inherit">
               {t("address.create.cancel")}
             </Button>

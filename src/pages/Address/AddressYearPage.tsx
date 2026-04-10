@@ -6,13 +6,13 @@ import {
   ViewList,
   ExpandMore,
   CheckCircle,
-  ErrorOutline,
+  ErrorOutlineOutlined as ErrorOutline,
   FlashOn as ElectricityIcon,
   WaterDrop as WaterIcon,
   Whatshot as GasIcon,
   Wifi as InternetIcon,
   Home as HousingIcon,
-  DeleteOutline as WasteIcon,
+  DeleteOutlineOutlined as WasteIcon,
   Thermostat as HeatingIcon,
   QuestionMark as DefaultIcon,
 } from "@mui/icons-material";
@@ -248,22 +248,23 @@ export const AddressYearPage = () => {
   return (
     <Box>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        justifyContent="space-between"
-        mb={4}
-        gap={2}
+        sx={{
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "flex-start", sm: "center" },
+          justifyContent: "space-between",
+          mb: 4,
+          gap: 2,
+        }}
       >
-        <Box display="flex" alignItems="center">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <IconButton onClick={() => navigate(`/address-list/${id}`)} sx={{ mr: { xs: 1, sm: 2 } }}>
             <ArrowBack />
           </IconButton>
           <Box>
             <Typography
               variant={isMobile ? "h5" : "h4"}
-              fontWeight="bold"
               noWrap
-              sx={{ maxWidth: { xs: "70vw", sm: "100%" } }}
+              sx={{ maxWidth: { xs: "70vw", sm: "100%" }, fontWeight: "bold" }}
             >
               {addressDisplay}
             </Typography>
@@ -310,7 +311,7 @@ export const AddressYearPage = () => {
                     >
                       {t("utility.monthly_summary", "Загальний підсумок по місяцях")}:
                     </Typography>
-                    <Box display="flex" flexWrap="wrap" sx={{ gap: { xs: 0.5, sm: 1 } }}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: { xs: 0.5, sm: 1 } }}>
                       {MONTHS.map((month) => {
                         const sum = monthlySums[month];
                         if (!sum) return null;
@@ -339,10 +340,13 @@ export const AddressYearPage = () => {
           </Box>
         </Box>
         <Stack
-          direction="row"
-          gap={2}
-          alignItems="center"
-          sx={{ width: { xs: "100%", sm: "auto" }, justifyContent: "space-between" }}
+          sx={{
+            flexDirection: "row",
+            gap: 2,
+            alignItems: "center",
+            width: { xs: "100%", sm: "auto" },
+            justifyContent: "space-between",
+          }}
         >
           {!isMobile && (
             <ToggleButtonGroup
@@ -362,7 +366,7 @@ export const AddressYearPage = () => {
             </ToggleButtonGroup>
           )}
           {isAdmin && (
-            <Stack direction={{ xs: "column", sm: "row" }} gap={1} sx={{ width: "100%" }}>
+            <Stack sx={{ flexDirection: { xs: "column", sm: "row" }, gap: 1, width: "100%" }}>
               <Button
                 variant="outlined"
                 onClick={() => setCreateUtilityOpen(true)}
@@ -388,8 +392,10 @@ export const AddressYearPage = () => {
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={service.id || service.name}>
               <Card>
                 <CardContent>
-                  <Box display="flex" justifyContent="space-between" alignItems="start">
-                    <Box display="flex" gap={1.5}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}
+                  >
+                    <Box sx={{ display: "flex", gap: 1.5 }}>
                       <Box
                         sx={{
                           bgcolor: "action.hover",
@@ -413,7 +419,7 @@ export const AddressYearPage = () => {
                           Cума: {countSumOfService(service).toFixed(2)}
                           {Object.values(service.monthly_payments || {})[0]?.currency || ""}
                         </Typography>
-                        <Box mt={1} display="flex" alignItems="center" gap={1}>
+                        <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1 }}>
                           <Tooltip
                             title={`${Object.keys(service.monthly_payments).length}/12 ${t("utility.months_filled", "місяців заповнено")}`}
                           >
@@ -436,7 +442,14 @@ export const AddressYearPage = () => {
                         </Box>
                       </Box>
                     </Box>
-                    <Box display="flex" flexDirection="column" alignItems="flex-end" gap={1}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        gap: 1,
+                      }}
+                    >
                       {isCurrentYear &&
                         (service.monthly_payments[currentMonth] ? (
                           <Chip
@@ -473,7 +486,7 @@ export const AddressYearPage = () => {
                       )}
                     </Box>
                   </Box>
-                  <Box mt={2}>
+                  <Box sx={{ mt: 2 }}>
                     {Object.entries(service.monthly_payments)
                       .sort(([monthA], [monthB]) => {
                         const indexA = MONTHS.indexOf(monthA as any);
@@ -482,12 +495,15 @@ export const AddressYearPage = () => {
                         return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
                       })
                       .map(([month, payment]) => (
-                        <Box key={month} display="flex" justifyContent="space-between" my={0.5}>
+                        <Box
+                          key={month}
+                          sx={{ display: "flex", justifyContent: "space-between", my: 0.5 }}
+                        >
                           <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
                             {t(`utility.months.${month}`, month)}:
                           </Typography>
 
-                          <Typography variant="body2" fontWeight="bold">
+                          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                             {payment.amount} {payment.currency}
                           </Typography>
                         </Box>
@@ -542,9 +558,9 @@ export const AddressYearPage = () => {
                 services.map((service) => (
                   <TableRow key={service.id || service.name}>
                     <TableCell>
-                      <Box display="flex" alignItems="center" gap={1.5}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                         {getServiceIcon(service.name, service.icon)}
-                        <Typography variant="body2" fontWeight="bold">
+                        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                           {service.name}
                         </Typography>
                         {isCurrentYear && (
@@ -617,7 +633,7 @@ export const AddressYearPage = () => {
           open={!!editingService}
           onClose={() => setEditingService(null)}
           footer={
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
               <Button onClick={() => setEditingService(null)} color="inherit">
                 {t("address.create.cancel")}
               </Button>
@@ -669,7 +685,7 @@ export const AddressYearPage = () => {
         open={quickEntryOpen}
         onClose={() => setQuickEntryOpen(false)}
         footer={
-          <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button onClick={() => setQuickEntryOpen(false)} color="inherit">
               {t("address.create.cancel")}
             </Button>

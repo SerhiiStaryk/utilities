@@ -36,7 +36,7 @@ export const ConfirmModal = ({
       title={title}
       additionalStyles={{ minWidth: 400 }}
       footer={
-        <Box display="flex" justifyContent="flex-end" gap={2}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button onClick={onClose} color="inherit" disabled={loading}>
             {cancelText || t("address.create.cancel", "Cancel")}
           </Button>
@@ -46,7 +46,7 @@ export const ConfirmModal = ({
         </Box>
       }
     >
-      <Stack direction="row" spacing={2} alignItems="center">
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
         <WarningAmber color={confirmColor} sx={{ fontSize: 40 }} />
         <Typography variant="body1">{message}</Typography>
       </Stack>

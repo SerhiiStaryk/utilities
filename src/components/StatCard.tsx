@@ -13,14 +13,14 @@ export const StatCard = ({ title, value, loading }: StatCardProps) => (
         color="textSecondary"
         gutterBottom
         variant="overline"
-        fontSize={{ sx: 10, md: 12, lg: 14 }}
+        sx={{ fontSize: { sx: 10, md: 12, lg: 14 } }}
       >
         {title}
       </Typography>
       {loading ? (
         <CircularProgress size={24} sx={{ mt: 1 }} />
       ) : (
-        <Typography component="div" variant="h4" fontSize={{ sx: 16, md: 20, lg: 24 }}>
+        <Typography component="div" variant="h4" sx={{ fontSize: { sx: 16, md: 20, lg: 24 } }}>
           {value}
         </Typography>
       )}

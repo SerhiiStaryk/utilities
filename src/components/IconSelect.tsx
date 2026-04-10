@@ -1,17 +1,17 @@
-import { forwardRef } from "react";
-import { MenuItem, Select, FormControl, InputLabel, Box } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import {
   FlashOn,
   WaterDrop,
   Whatshot,
   Wifi,
   Home,
-  DeleteOutline,
+  DeleteOutlineOutlined,
   Thermostat,
   QuestionMark,
   Security,
 } from "@mui/icons-material";
+import { MenuItem, Select, FormControl, InputLabel, Box } from "@mui/material";
+import { forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export const SERVICE_ICONS: Record<string, { icon: React.ElementType; color: string }> = {
   ElectricityIcon: { icon: FlashOn, color: "#fbc02d" },
@@ -19,7 +19,7 @@ export const SERVICE_ICONS: Record<string, { icon: React.ElementType; color: str
   GasIcon: { icon: Whatshot, color: "#f4511e" },
   InternetIcon: { icon: Wifi, color: "#7b1fa2" },
   HousingIcon: { icon: Home, color: "#455a64" },
-  WasteIcon: { icon: DeleteOutline, color: "#689f38" },
+  WasteIcon: { icon: DeleteOutlineOutlined, color: "#689f38" },
   HeatingIcon: { icon: Thermostat, color: "#e64a19" },
   SecurityIcon: { icon: Security, color: "#1976d2" },
   DefaultIcon: { icon: QuestionMark, color: "" },
@@ -74,5 +74,5 @@ export const IconSelect = forwardRef<HTMLSelectElement, IconSelectProps>(
         </Select>
       </FormControl>
     );
-  }
+  },
 );

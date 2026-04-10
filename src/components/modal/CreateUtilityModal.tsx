@@ -155,7 +155,7 @@ export const CreateUtilityModal = ({
       open={open}
       onClose={onClose}
       footer={
-        <Box display="flex" justifyContent="flex-end" gap={2}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button onClick={onClose} color="inherit">
             {t("address.create.cancel")}
           </Button>
@@ -170,84 +170,86 @@ export const CreateUtilityModal = ({
         </Box>
       }
     >
-      <Stack id="create-utility-form" component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
-        <Grid container spacing={3}>
-          {/* General Info Column */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="subtitle2" gutterBottom color="primary">
-              {t("utility.config")}
-            </Typography>
-            <Stack gap={2}>
-              <Controller
-                name="yearId"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="number"
-                    label={t("utility.year")}
-                    placeholder={t("utility.year_placeholder")}
-                  />
-                )}
-              />
-              <Controller
-                name="serviceId"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    label={t("utility.service")}
-                    placeholder={t("utility.service_placeholder")}
-                  />
-                )}
-              />
-              <Controller
-                name="currency"
-                control={control}
-                render={({ field }) => (
-                  <Select {...field} label={t("utility.currency")} options={currencies} />
-                )}
-              />
-              <Controller
-                name="accountNumber"
-                control={control}
-                render={({ field }) => <Input {...field} label={t("utility.account")} />}
-              />
-              <Controller
-                name="icon"
-                control={control}
-                render={({ field }) => (
-                  <IconSelect
-                    {...field}
-                    value={field.value || "DefaultIcon"}
-                    label={t("utility.icon")}
-                  />
-                )}
-              />
-            </Stack>
-          </Grid>
+      <form id="create-utility-form" onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={3}>
+          <Grid container spacing={3}>
+            {/* General Info Column */}
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Typography variant="subtitle2" gutterBottom color="primary">
+                {t("utility.config")}
+              </Typography>
+              <Stack spacing={2}>
+                <Controller
+                  name="yearId"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      type="number"
+                      label={t("utility.year")}
+                      placeholder={t("utility.year_placeholder")}
+                    />
+                  )}
+                />
+                <Controller
+                  name="serviceId"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label={t("utility.service")}
+                      placeholder={t("utility.service_placeholder")}
+                    />
+                  )}
+                />
+                <Controller
+                  name="currency"
+                  control={control}
+                  render={({ field }) => (
+                    <Select {...field} label={t("utility.currency")} options={currencies} />
+                  )}
+                />
+                <Controller
+                  name="accountNumber"
+                  control={control}
+                  render={({ field }) => <Input {...field} label={t("utility.account")} />}
+                />
+                <Controller
+                  name="icon"
+                  control={control}
+                  render={({ field }) => (
+                    <IconSelect
+                      {...field}
+                      value={field.value || "DefaultIcon"}
+                      label={t("utility.icon")}
+                    />
+                  )}
+                />
+              </Stack>
+            </Grid>
 
-          {/* Monthly Data Column */}
-          <Grid size={{ xs: 12, md: 8 }}>
-            <Typography variant="subtitle2" gutterBottom color="primary">
-              {t("utility.monthly")}
-            </Typography>
-            <Grid container spacing={2}>
-              {MONTHS.map((month) => (
-                <Grid key={month} size={6}>
-                  <Controller
-                    name={month}
-                    control={control}
-                    render={({ field }) => (
-                      <Input {...field} type="number" label={t(`utility.months.${month}`)} />
-                    )}
-                  />
-                </Grid>
-              ))}
+            {/* Monthly Data Column */}
+            <Grid size={{ xs: 12, md: 8 }}>
+              <Typography variant="subtitle2" gutterBottom color="primary">
+                {t("utility.monthly")}
+              </Typography>
+              <Grid container spacing={2}>
+                {MONTHS.map((month) => (
+                  <Grid key={month} size={6}>
+                    <Controller
+                      name={month}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} type="number" label={t(`utility.months.${month}`)} />
+                      )}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Stack>
+        </Stack>
+      </form>
     </GenericModal>
   );
 };

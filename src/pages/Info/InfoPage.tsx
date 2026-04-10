@@ -75,7 +75,7 @@ export const InfoPage = () => {
 
   return (
     <Box sx={{ pb: 8 }}>
-      <Typography variant="h4" fontWeight="bold" mb={4}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 4 }}>
         {t("info.title")}
       </Typography>
 
@@ -89,10 +89,10 @@ export const InfoPage = () => {
           >
             <Phone fontSize="small" /> {t("info.emergency")}
           </Typography>
-          <Typography variant="body2" color="textSecondary" mb={2}>
+          <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
             {t("info.emergency_desc")}
           </Typography>
-          <Stack spacing={2}>
+          <Stack sx={{ gap: 2 }}>
             {emergencyContacts.map((contact) => (
               <Card
                 key={contact.phone}
@@ -102,18 +102,23 @@ export const InfoPage = () => {
                 }}
               >
                 <CardContent sx={{ py: "16px !important" }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Stack direction="row" spacing={2} alignItems="center">
+                  <Stack
+                    sx={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Stack sx={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
                       {contact.icon}
-                      <Typography fontWeight="500">{contact.name}</Typography>
+                      <Typography sx={{ fontWeight: 500 }}>{contact.name}</Typography>
                     </Stack>
                     <Typography
                       variant="h5"
                       color="primary"
-                      fontWeight="bold"
                       component="a"
                       href={`tel:${contact.phone}`}
-                      sx={{ textDecoration: "none" }}
+                      sx={{ textDecoration: "none", fontWeight: "bold" }}
                     >
                       {contact.phone}
                     </Typography>
@@ -133,10 +138,10 @@ export const InfoPage = () => {
           >
             <Language fontSize="small" /> {t("info.utility_services")}
           </Typography>
-          <Typography variant="body2" color="textSecondary" mb={2}>
+          <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
             {t("info.utility_desc")}
           </Typography>
-          <Stack spacing={2}>
+          <Stack sx={{ gap: 2 }}>
             {utilityServices.map((service) => (
               <Card key={service.name}>
                 <CardContent>
@@ -147,7 +152,7 @@ export const InfoPage = () => {
                       </Box>
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
-                      <Typography variant="subtitle1" fontWeight="bold">
+                      <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                         {service.name}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
@@ -162,8 +167,7 @@ export const InfoPage = () => {
                               <Phone fontSize="small" />
                             </ListItemIcon>
                             <ListItemText
-                              primary={service.phone}
-                              primaryTypographyProps={{ variant: "body2" }}
+                              primary={<Typography variant="body2">{service.phone}</Typography>}
                             />
                           </ListItem>
                         )}
@@ -179,10 +183,11 @@ export const InfoPage = () => {
                                 rel="noopener"
                                 sx={{ textDecoration: "none" }}
                               >
-                                {service.site.replace("https://", "")}
+                                <Typography variant="body2">
+                                  {service.site.replace("https://", "")}
+                                </Typography>
                               </Link>
                             }
-                            primaryTypographyProps={{ variant: "body2" }}
                           />
                         </ListItem>
                       </List>

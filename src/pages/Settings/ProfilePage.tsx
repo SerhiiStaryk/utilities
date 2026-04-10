@@ -36,17 +36,17 @@ export const ProfilePage = () => {
 
   return (
     <Box maxWidth="sm" mx="auto">
-      <Box display="flex" alignItems="center" mb={4}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <IconButton onClick={() => navigate("/settings")} sx={{ mr: 2 }}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4" fontWeight="bold">
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {t("settings.profile")}
         </Typography>
       </Box>
 
       <Paper sx={{ p: { xs: 2, sm: 4 } }}>
-        <Stack spacing={4} alignItems="center">
+        <Stack sx={{ gap: 4, alignItems: "center" }}>
           <Box position="relative">
             <Avatar src={photoURL} sx={{ width: 120, height: 120, fontSize: "3rem" }}>
               {displayName ? displayName[0].toUpperCase() : user?.email?.[0].toUpperCase()}
@@ -70,13 +70,13 @@ export const ProfilePage = () => {
             <Typography variant="subtitle2" gutterBottom color="textSecondary">
               {t("common.email", "Email")}
             </Typography>
-            <Typography variant="body1" mb={3}>
+            <Typography variant="body1" sx={{ mb: 3 }}>
               {user?.email}
             </Typography>
 
             <Divider sx={{ mb: 3 }} />
 
-            <Stack spacing={3}>
+            <Stack sx={{ gap: 3 }}>
               <Input
                 label={t("profile.display_name", "Display Name")}
                 value={displayName}
@@ -92,7 +92,7 @@ export const ProfilePage = () => {
             </Stack>
           </Box>
 
-          <Box display="flex" justifyContent="flex-end" width="100%" gap={2}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%", gap: 2 }}>
             <Button onClick={() => navigate("/settings")} color="inherit">
               {t("address.create.cancel")}
             </Button>

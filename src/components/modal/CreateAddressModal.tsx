@@ -51,50 +51,52 @@ export const CreateAddressModal = ({ open, onClose, onSuccess }: CreateAddressMo
 
   return (
     <GenericModal title={t("address.create.title")} open={open} onClose={onClose}>
-      <Stack component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
-        <Controller
-          name="id"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              label={t("address.create.id_label")}
-              placeholder="e.g. MyNewApartment"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={3}>
+          <Controller
+            name="id"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                label={t("address.create.id_label")}
+                placeholder="e.g. MyNewApartment"
+              />
+            )}
+          />
+          <Controller
+            name="city"
+            control={control}
+            render={({ field }) => <Input {...field} label={t("address.create.city")} />}
+          />
+          <Controller
+            name="street"
+            control={control}
+            render={({ field }) => <Input {...field} label={t("address.create.street")} />}
+          />
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Controller
+              name="houseNumber"
+              control={control}
+              render={({ field }) => <Input {...field} label={t("address.create.house")} />}
             />
-          )}
-        />
-        <Controller
-          name="city"
-          control={control}
-          render={({ field }) => <Input {...field} label={t("address.create.city")} />}
-        />
-        <Controller
-          name="street"
-          control={control}
-          render={({ field }) => <Input {...field} label={t("address.create.street")} />}
-        />
-        <Box display="flex" gap={2}>
-          <Controller
-            name="houseNumber"
-            control={control}
-            render={({ field }) => <Input {...field} label={t("address.create.house")} />}
-          />
-          <Controller
-            name="flatNumber"
-            control={control}
-            render={({ field }) => <Input {...field} label={t("address.create.flat")} />}
-          />
-        </Box>
+            <Controller
+              name="flatNumber"
+              control={control}
+              render={({ field }) => <Input {...field} label={t("address.create.flat")} />}
+            />
+          </Box>
 
-        <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button onClick={onClose} color="inherit">
-            {t("address.create.cancel")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("address.create.submit")}
-          </Button>
-        </Box>
-      </Stack>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button onClick={onClose} color="inherit">
+              {t("address.create.cancel")}
+            </Button>
+            <Button variant="contained" type="submit">
+              {t("address.create.submit")}
+            </Button>
+          </Box>
+        </Stack>
+      </form>
     </GenericModal>
   );
 };

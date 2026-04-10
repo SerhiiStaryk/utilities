@@ -146,22 +146,26 @@ export const DashboardPage = () => {
   return (
     <Box>
       <Stack
-        direction={{ xs: "column", md: "row" }}
-        justifyContent="space-between"
-        alignItems="flex-start"
-        mb={4}
-        gap={2}
-        flexWrap="wrap"
+        sx={{
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          mb: 4,
+          gap: 2,
+          flexWrap: "wrap",
+        }}
       >
         <Stack
-          direction={{ xs: "column", sm: "row" }}
-          gap={4}
-          justifyContent="space-between"
-          alignItems="flex-start"
-          sx={{ width: "100%" }}
+          sx={{
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 4,
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            width: "100%",
+          }}
         >
           <Box>
-            <Typography variant="h4" fontWeight="bold">
+            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
               {t("dashboard.title")}
             </Typography>
             <Typography variant="body2" color="textSecondary">
@@ -187,11 +191,13 @@ export const DashboardPage = () => {
         </Stack>
 
         <Stack
-          direction={{ xs: "column", sm: "row" }}
-          gap={2}
-          alignItems="center"
-          flexWrap="wrap"
-          sx={{ width: { xs: "100%", sm: "auto" } }}
+          sx={{
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            alignItems: "center",
+            flexWrap: "wrap",
+            width: { xs: "100%", sm: "auto" },
+          }}
         >
           {filters.map((filter) => (
             <FilterSearch

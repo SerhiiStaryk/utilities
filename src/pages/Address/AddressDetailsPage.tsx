@@ -222,21 +222,27 @@ export const AddressDetailsPage = () => {
   return (
     <Box>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        justifyContent="space-between"
-        mb={4}
-        gap={2}
+        sx={{
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "flex-start", sm: "center" },
+          justifyContent: "space-between",
+          mb: 4,
+          gap: 2,
+        }}
       >
-        <Box display="flex" alignItems="center">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <IconButton onClick={() => navigate("/address-list")} sx={{ mr: { xs: 1, sm: 2 } }}>
             <ArrowBack />
           </IconButton>
-          <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold">
+          <Typography variant={isMobile ? "h5" : "h4"} sx={{ fontWeight: "bold" }}>
             {t("address.details_title", { address: formatFullAddress() })}
           </Typography>
         </Box>
-        <Stack direction="row" gap={1} sx={{ width: { xs: "100%", sm: "auto" }, flexWrap: "wrap" }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ width: { xs: "100%", sm: "auto" }, flexWrap: "wrap" }}
+        >
           {isAdmin && (
             <Button
               variant="outlined"
@@ -313,14 +319,16 @@ export const AddressDetailsPage = () => {
 
       <Paper sx={{ p: { xs: 2, sm: 3 }, mb: 3 }}>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "center" }}
-          mb={2}
-          gap={2}
+          sx={{
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            mb: 2,
+            gap: 2,
+          }}
         >
           <Typography variant="h6">{t("address.year_archive", "Years Archive")}</Typography>
-          <Stack direction="row" gap={2} sx={{ width: { xs: "100%", sm: "auto" } }}>
+          <Stack sx={{ flexDirection: "row", gap: 2, width: { xs: "100%", sm: "auto" } }}>
             {isAdmin && (
               <Button
                 variant="outlined"
@@ -332,7 +340,7 @@ export const AddressDetailsPage = () => {
               </Button>
             )}
             {isAdmin && (
-              <Stack direction="row" gap={1} sx={{ flexGrow: 1 }}>
+              <Stack sx={{ flexDirection: "row", gap: 1, flexGrow: 1 }}>
                 <Button
                   variant="contained"
                   onClick={() => setCreateUtilityOpen(true)}
@@ -402,7 +410,7 @@ export const AddressDetailsPage = () => {
         open={createYearOpen}
         onClose={() => setCreateYearOpen(false)}
         footer={
-          <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, width: "100%" }}>
             <Button onClick={() => setCreateYearOpen(false)}>{t("address.create.cancel")}</Button>
             <Button
               variant="contained"
@@ -415,7 +423,7 @@ export const AddressDetailsPage = () => {
         }
       >
         <Box>
-          <Typography variant="body2" mb={2} color="textSecondary">
+          <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
             {t(
               "year.create_desc",
               "Enter the year (e.g., 2026). This will create a new archive and automatically add the configured services for this address.",

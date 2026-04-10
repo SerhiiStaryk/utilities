@@ -64,7 +64,7 @@ export const CreateReadingModal = ({
       onClose={onClose}
       title={t("utility.meter_readings", "Add Meter Reading")}
       footer={
-        <Box display="flex" justifyContent="flex-end" gap={2}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button onClick={onClose}>{t("address.create.cancel")}</Button>
           <Button variant="contained" type="submit" form="create-reading-form" disabled={loading}>
             {loading ? <Loader button /> : t("utility.submit")}
@@ -72,7 +72,7 @@ export const CreateReadingModal = ({
         </Box>
       }
     >
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <TextField
           label={t("utility.year", "Year")}
           value={year}

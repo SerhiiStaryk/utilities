@@ -16,8 +16,7 @@ export const PieChart = ({ data }: PieChartProps) => {
         series={[
           {
             data,
-            highlightScope: { faded: "global", highlighted: "item" },
-            faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+            highlightScope: { fade: "global", highlighted: "item" } as any,
             paddingAngle: 2,
             cornerRadius: 6,
             innerRadius: 40,
@@ -36,10 +35,11 @@ export const PieChart = ({ data }: PieChartProps) => {
         slotProps={{
           legend: {
             hidden: data.length === 0,
-            direction: isMobile ? "row" : "column",
+            // cast to any to avoid strict Direction typings in the chart lib
+            direction: (isMobile ? "row" : "column") as any,
             position: {
               vertical: isMobile ? "bottom" : "middle",
-              horizontal: isMobile ? "middle" : "right",
+              horizontal: (isMobile ? "middle" : "right") as any,
             },
             itemMarkWidth: 8,
             itemMarkHeight: 8,
@@ -49,7 +49,7 @@ export const PieChart = ({ data }: PieChartProps) => {
               fontSize: isMobile ? 10 : data.length > 12 ? 9 : 11,
               fill: theme.palette.text.secondary,
             },
-          },
+          } as any,
         }}
       />
     </Box>
