@@ -19,9 +19,10 @@ export const ChartCard = ({
   size,
 }: PropsWithChildren<ChartCardProps>) => {
   const { t } = useTranslation();
+  const gridProps = typeof size === "object" ? (size as any) : { md: size, xs: 12 };
 
   return (
-    <Grid size={size}>
+    <Grid item {...gridProps}>
       <Card sx={{ height: "100%", minHeight: 400, p: 2 }}>
         <Typography variant="h6" gutterBottom>
           {t(`${chartTitle}`)}
