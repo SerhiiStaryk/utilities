@@ -29,13 +29,20 @@ export const ChartCard = ({
         </Typography>
         <Box sx={{ height: 350 }}>
           {dataLoading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
               <CircularProgress />
             </Box>
           ) : chartCondition ? (
             children
           ) : (
-            <Typography variant="body2" color="textSecondary" textAlign="center" mt={10}>
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 10, textAlign: "center" }}>
               {t("dashboard.charts.no_data", "No data available for charts")}
             </Typography>
           )}
