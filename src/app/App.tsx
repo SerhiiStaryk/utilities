@@ -1,13 +1,16 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ToastContainer } from "react-toastify";
 
 import { getAppTheme } from "@/constants/theme";
 import { ModalController } from "@/controller/modal.controller";
 
 import { AuthProvider } from "./providers/AuthProvider";
+import "react-toastify/dist/ReactToastify.css";
+
 import AppRouterProvider from "./providers/RouterProvider";
 import { SettingsProvider, useSettings } from "./providers/SettingsProvider";
-import "react-toastify/dist/ReactToastify.css";
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
   const { themeMode } = useSettings();
@@ -25,10 +28,12 @@ const App = () => (
   <AuthProvider>
     <SettingsProvider>
       <ThemeWrapper>
-        <ModalController>
-          <AppRouterProvider />
-          <ToastContainer position="bottom-right" autoClose={3000} />
-        </ModalController>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ModalController>
+            <AppRouterProvider />
+            <ToastContainer position="bottom-right" autoClose={3000} />
+          </ModalController>
+        </LocalizationProvider>
       </ThemeWrapper>
     </SettingsProvider>
   </AuthProvider>
