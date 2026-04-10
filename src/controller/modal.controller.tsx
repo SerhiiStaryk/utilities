@@ -1,24 +1,24 @@
 import React, { useContext, useMemo, useReducer } from "react";
 
-type State = { openned: boolean };
+type State = { opened: boolean };
 
-const defaultState: State = { openned: false };
+const defaultState: State = { opened: false };
 
 type Action = { type: "open" | "close" };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "open":
-      return { ...state, openned: true };
+      return { ...state, opened: true };
     case "close":
-      return { ...state, openned: false };
+      return { ...state, opened: false };
     default:
       return state;
   }
 };
 
 interface ContextDataShape {
-  openned: boolean;
+  opened: boolean;
 }
 
 interface ContextApiShape {
@@ -27,7 +27,7 @@ interface ContextApiShape {
 }
 
 const ContextData = React.createContext<ContextDataShape>({
-  openned: false,
+  opened: false,
 });
 
 const ContextApi = React.createContext<ContextApiShape>({
@@ -43,7 +43,7 @@ export const ModalController = ({ children }: { children: React.ReactNode }) => 
 
   const data = useMemo(
     () => ({
-      openned: state.openned,
+      opened: state.opened,
     }),
     [state],
   );
