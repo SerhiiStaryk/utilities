@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { MONTHS } from "@/constants/months";
@@ -9,6 +9,15 @@ import {
 } from "@/firebase/firestore";
 import { UtilityService, MeterReadingService } from "@/types/firestore";
 
+// Cache fetched year data by key: `${addressId}:${dashboardType}:${year}`
+const yearDataCache = new Map<string, Promise<(UtilityService | MeterReadingService)[]>>();
+
+const clearCacheForAddressAndType = (aId: string, dType: string) => {
+  const prefix = `${aId}:${dType}:`;
+  for (const key of Array.from(yearDataCache.keys())) {
+    if (key.startsWith(prefix)) yearDataCache.delete(key);
+  }
+};
 export type DashboardType = "expenses" | "readings";
 
 export const useDashboardData = (
@@ -19,6 +28,7 @@ export const useDashboardData = (
   selectedMonth: string = "all",
 ) => {
   const { t } = useTranslation();
+  const prevComboRef = useRef<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
   const [availableServices, setAvailableServices] = useState<string[]>([]);
@@ -43,6 +53,21 @@ export const useDashboardData = (
   });
 
   useEffect(() => {
+    // Invalidate cache for the previous address+dashboardType combo when it changes
+    const combo = `${addressId}:${dashboardType}`;
+    const prev = prevComboRef.current;
+    if (prev && prev !== combo) {
+      const [prevAddress, prevType] = prev.split(":");
+      if (prevAddress) clearCacheForAddressAndType(prevAddress, prevType || "");
+    }
+    prevComboRef.current = combo;
+
+    // If a specific year was selected, invalidate that year's cache to ensure fresh data
+    if (addressId && selectedYearId && selectedYearId !== "all") {
+      const key = `${addressId}:${dashboardType}:${selectedYearId}`;
+      if (yearDataCache.has(key)) yearDataCache.delete(key);
+    }
+
     const fetchData = async () => {
       if (!addressId) return;
       setLoading(true);
@@ -57,26 +82,41 @@ export const useDashboardData = (
         let servicesList: string[] = [];
 
         const latestYearId = yearIds[0];
+
+        // helper to fetch and cache per-year data (avoids duplicate calls)
+        const fetchYearData = (
+          aId: string,
+          yId: string,
+        ): Promise<(UtilityService | MeterReadingService)[]> => {
+          const key = `${aId}:${dashboardType}:${yId}`;
+          if (yearDataCache.has(key)) return yearDataCache.get(key)!;
+          const p =
+            dashboardType === "expenses"
+              ? (getAllUtilityServicesForYear(aId, yId) as Promise<
+                  (UtilityService | MeterReadingService)[]
+                >)
+              : (getAllMeterReadingsForYear(aId, yId) as Promise<
+                  (UtilityService | MeterReadingService)[]
+                >);
+          yearDataCache.set(key, p);
+          return p;
+        };
+
         if (latestYearId) {
+          const latestData = await fetchYearData(addressId, latestYearId);
           if (dashboardType === "expenses") {
-            const sList = await getAllUtilityServicesForYear(addressId, latestYearId);
-            servicesList = Array.from(new Set(sList.map((s) => s.name)));
+            servicesList = Array.from(new Set((latestData as UtilityService[]).map((s) => s.name)));
           } else {
-            const rList = await getAllMeterReadingsForYear(addressId, latestYearId);
-            servicesList = Array.from(new Set(rList.map((r) => r.name)));
+            servicesList = Array.from(
+              new Set((latestData as MeterReadingService[]).map((r) => r.name)),
+            );
           }
           setAvailableServices(servicesList);
         }
 
-        for (const yId of targetYears) {
-          if (dashboardType === "expenses") {
-            const data = await getAllUtilityServicesForYear(addressId, yId);
-            allFilteredData = [...allFilteredData, ...data];
-          } else {
-            const data = await getAllMeterReadingsForYear(addressId, yId);
-            allFilteredData = [...allFilteredData, ...data];
-          }
-        }
+        // Fetch all target years in parallel (instead of sequential awaits)
+        const results = await Promise.all(targetYears.map((y) => fetchYearData(addressId, y)));
+        allFilteredData = results.flat();
 
         let filteredTotal = 0;
         const itemTotals: Record<string, number> = {};
