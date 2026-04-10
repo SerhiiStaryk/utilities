@@ -1,10 +1,10 @@
-import { Stack, Grid2, Typography } from "@mui/material";
+import { Stack, Grid, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+import { IconSelect } from "@/components/IconSelect";
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
-import { IconSelect } from "@/components/IconSelect";
 import { currencies } from "@/constants";
 import { MONTHS } from "@/constants/months";
 import { defaultValuesUtilityForm } from "@/constants/utilities";
@@ -26,15 +26,15 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
 
   return (
     <Stack id={id} component="form" onSubmit={handleSubmit(onSubmit)} gap={3} sx={{ mt: 2 }}>
-      <Grid2 container spacing={3}>
+      <Grid container spacing={3}>
         {/* ... (grid body remains same) */}
-        <Grid2 size={12}>
+        <Grid size={12}>
           <Typography variant="subtitle2" gutterBottom color="primary">
             {t("utility.monthly")}
           </Typography>
-          <Grid2 container spacing={2}>
+          <Grid container spacing={2}>
             {MONTHS.map((month) => (
-              <Grid2 key={month} size={4}>
+              <Grid key={month} size={4}>
                 <Controller
                   name={month}
                   control={control}
@@ -62,11 +62,11 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
                     );
                   }}
                 />
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
-        </Grid2>
-        <Grid2 size={12}>
+          </Grid>
+        </Grid>
+        <Grid size={12}>
           <Typography variant="subtitle2" gutterBottom color="primary">
             {t("utility.config")}
           </Typography>
@@ -95,8 +95,8 @@ export const UtilityForm = ({ initialValues, onSubmit, id }: UtilityFormProps) =
               )}
             />
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
     </Stack>
   );
 };

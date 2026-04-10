@@ -1,11 +1,11 @@
-import { Button, Stack, Box, Grid2, Typography } from "@mui/material";
+import { Button, Stack, Box, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
+import { IconSelect } from "@/components/IconSelect";
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
-import { IconSelect } from "@/components/IconSelect";
 import { currencies } from "@/constants";
 import { addUtilityData } from "@/firebase/firestore";
 import { UtilityDataPayload } from "@/types/firestore";
@@ -171,9 +171,9 @@ export const CreateUtilityModal = ({
       }
     >
       <Stack id="create-utility-form" component="form" onSubmit={handleSubmit(onSubmit)} gap={3}>
-        <Grid2 container spacing={3}>
+        <Grid container spacing={3}>
           {/* General Info Column */}
-          <Grid2 size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="subtitle2" gutterBottom color="primary">
               {t("utility.config")}
             </Typography>
@@ -225,16 +225,16 @@ export const CreateUtilityModal = ({
                 )}
               />
             </Stack>
-          </Grid2>
+          </Grid>
 
           {/* Monthly Data Column */}
-          <Grid2 size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <Typography variant="subtitle2" gutterBottom color="primary">
               {t("utility.monthly")}
             </Typography>
-            <Grid2 container spacing={2}>
+            <Grid container spacing={2}>
               {MONTHS.map((month) => (
-                <Grid2 key={month} size={6}>
+                <Grid key={month} size={6}>
                   <Controller
                     name={month}
                     control={control}
@@ -242,11 +242,11 @@ export const CreateUtilityModal = ({
                       <Input {...field} type="number" label={t(`utility.months.${month}`)} />
                     )}
                   />
-                </Grid2>
+                </Grid>
               ))}
-            </Grid2>
-          </Grid2>
-        </Grid2>
+            </Grid>
+          </Grid>
+        </Grid>
       </Stack>
     </GenericModal>
   );

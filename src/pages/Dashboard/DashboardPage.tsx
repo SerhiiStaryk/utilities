@@ -6,24 +6,24 @@ import {
   MenuItem,
   ToggleButtonGroup,
   ToggleButton,
+  Grid,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAuth } from "@/app/providers/AuthProvider";
+import { ChartCard } from "@/components/ChartCard";
 import { BarChart } from "@/components/charts/BarChart";
 import BarChartAll from "@/components/charts/BarChartAll";
 import { LineChart } from "@/components/charts/LineChart";
 import { PieChart } from "@/components/charts/PieChart";
+import { FilterSearch } from "@/components/FilterSearch";
 import { StatCards } from "@/components/StatCards";
 import { MONTHS } from "@/constants/months";
 import { getAddresses } from "@/firebase/firestore";
 import { getLocalStorage, setLocalStorage } from "@/helpers/localStorage";
 import { useDashboardData, DashboardType } from "@/hooks/useDashboardData";
 import { AddressDoc } from "@/types/firestore";
-import { FilterSearch } from '@/components/FilterSearch';
-import { ChartCard } from '@/components/ChartCard';
 
 export const DashboardPage = () => {
   const [addresses, setAddresses] = useState<{ id: string; data: AddressDoc }[]>([]);
@@ -126,8 +126,8 @@ export const DashboardPage = () => {
           {m}
         </MenuItem>
       )),
-    }
-  ]
+    },
+  ];
 
   useEffect(() => {
     fetchAddresses();
@@ -151,9 +151,8 @@ export const DashboardPage = () => {
         alignItems="flex-start"
         mb={4}
         gap={2}
-        flexWrap='wrap'
+        flexWrap="wrap"
       >
-
         <Stack
           direction={{ xs: "column", sm: "row" }}
           gap={4}
@@ -191,7 +190,7 @@ export const DashboardPage = () => {
           direction={{ xs: "column", sm: "row" }}
           gap={2}
           alignItems="center"
-          flexWrap='wrap'
+          flexWrap="wrap"
           sx={{ width: { xs: "100%", sm: "auto" } }}
         >
           {filters.map((filter) => (
@@ -259,6 +258,6 @@ export const DashboardPage = () => {
           />
         </ChartCard>
       </Grid>
-    </Box >
+    </Box>
   );
 };

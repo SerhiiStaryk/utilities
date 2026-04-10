@@ -9,7 +9,7 @@ import {
   MenuItem,
   Card,
   CardContent,
-  Grid2 as Grid,
+  Grid,
   Button,
   TextField,
   Switch,
@@ -158,7 +158,7 @@ export const RentalManagementPage = () => {
     const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
     setRentalInfo(newRentalInfo);
     setIsAddPaymentOpen(false);
-    
+
     if (selectedAddressId) {
       try {
         await updateRentalInfo(selectedAddressId, newRentalInfo, false);
@@ -172,7 +172,7 @@ export const RentalManagementPage = () => {
     const updatedPayments = (rentalInfo.payments || []).filter((p) => p.id !== id);
     const newRentalInfo = { ...rentalInfo, payments: updatedPayments };
     setRentalInfo(newRentalInfo);
-    
+
     if (selectedAddressId) {
       try {
         await updateRentalInfo(selectedAddressId, newRentalInfo, false);
@@ -425,7 +425,9 @@ export const RentalManagementPage = () => {
               label={t("utility.year", "Рік")}
               type="number"
               value={newPaymentData.year}
-              onChange={(e) => setNewPaymentData({ ...newPaymentData, year: Number(e.target.value) })}
+              onChange={(e) =>
+                setNewPaymentData({ ...newPaymentData, year: Number(e.target.value) })
+              }
               fullWidth
               size="small"
             />
@@ -433,7 +435,9 @@ export const RentalManagementPage = () => {
               label={t("rental.amount")}
               type="number"
               value={newPaymentData.amount}
-              onChange={(e) => setNewPaymentData({ ...newPaymentData, amount: Number(e.target.value) })}
+              onChange={(e) =>
+                setNewPaymentData({ ...newPaymentData, amount: Number(e.target.value) })
+              }
               fullWidth
               size="small"
             />
@@ -450,7 +454,9 @@ export const RentalManagementPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsAddPaymentOpen(false)}>{t("common.cancel")}</Button>
-          <Button variant="contained" onClick={handleAddPayment}>{t("common.add")}</Button>
+          <Button variant="contained" onClick={handleAddPayment}>
+            {t("common.add")}
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

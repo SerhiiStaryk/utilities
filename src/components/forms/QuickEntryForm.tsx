@@ -1,5 +1,5 @@
+import { Button, Box, Stack, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { Button, Box, Stack, Grid2, Typography } from "@mui/material";
 import { useForm, Controller, useFieldArray, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -87,9 +87,9 @@ export const QuickEntryForm = ({
         </Typography>
       </Box>
 
-      <Grid2 container spacing={3}>
+      <Grid container spacing={3}>
         {fields.map((field, index) => (
-          <Grid2 size={4} key={field.id}>
+          <Grid size={4} key={field.id}>
             <Box p={2} border={1} borderColor="divider" borderRadius={1}>
               <Typography variant="subtitle2" gutterBottom color="primary">
                 {field.serviceId}
@@ -115,9 +115,9 @@ export const QuickEntryForm = ({
                 />
               </Stack>
             </Box>
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
 
       {showActions && (
         <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>

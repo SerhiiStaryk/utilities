@@ -42,7 +42,7 @@ import {
   Tooltip,
   LinearProgress,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,10 +51,10 @@ import { useAuth } from "@/app/providers/AuthProvider";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { QuickEntryForm } from "@/components/forms/QuickEntryForm";
 import { UtilityForm } from "@/components/forms/UtilityForm";
+import { SERVICE_ICONS } from "@/components/IconSelect";
 import { ConfirmModal } from "@/components/modal/ConfirmModal";
 import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
 import { Modal } from "@/components/modal/Modal";
-import { SERVICE_ICONS } from "@/components/IconSelect";
 import { MONTHS } from "@/constants/months";
 import {
   getAllUtilityServicesForYear,

@@ -1,25 +1,24 @@
-import {
-  Card,
-  Box,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import { GridSize } from '@mui/material/Grid2';
-import Grid from "@mui/material/Grid2";
-import { ResponsiveStyleValue } from '@mui/system';
-
-import { PropsWithChildren } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Card, Box, Typography, CircularProgress } from "@mui/material";
+import { GridSize } from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
+import { ResponsiveStyleValue } from "@mui/system";
+import { PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 
 type ChartCardProps = {
   chartTitle: string;
   dataLoading: boolean;
   chartCondition: boolean;
   size: ResponsiveStyleValue<GridSize>;
-}
+};
 
-
-export const ChartCard = ({ children, chartTitle, dataLoading, chartCondition, size }: PropsWithChildren<ChartCardProps>) => {
+export const ChartCard = ({
+  children,
+  chartTitle,
+  dataLoading,
+  chartCondition,
+  size,
+}: PropsWithChildren<ChartCardProps>) => {
   const { t } = useTranslation();
 
   return (

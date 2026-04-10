@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography, Autocomplete, TextField } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
