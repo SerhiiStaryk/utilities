@@ -14,7 +14,8 @@
     "preview": "vite preview",
     "deploy": "npm run build && firebase deploy",
     "deploy:hosting": "npm run build && firebase deploy --only hosting",
-    "deploy:rules": "firebase deploy --only firestore:rules"
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "compilier:watch": "tsc -w --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
