@@ -1,4 +1,4 @@
-import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { PieChart as PieChartMui } from "@mui/x-charts/PieChart";
 
 interface PieChartProps {
@@ -8,7 +8,6 @@ interface PieChartProps {
 export const PieChart = ({ data }: PieChartProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const hasManyItems = data.length > 8;
 
   return (
     <Box sx={{ width: "100%", height: isMobile ? 300 : 350, position: "relative" }}>
@@ -21,8 +20,6 @@ export const PieChart = ({ data }: PieChartProps) => {
             cornerRadius: 6,
             innerRadius: 40,
             outerRadius: 80,
-            cx: isMobile ? "50%" : hasManyItems ? "35%" : "50%",
-            cy: isMobile ? "40%" : "50%",
           },
         ]}
         height={isMobile ? 300 : 350}
@@ -30,14 +27,13 @@ export const PieChart = ({ data }: PieChartProps) => {
           top: 10,
           bottom: isMobile ? 80 : 10,
           left: 10,
-          right: isMobile ? 10 : hasManyItems ? 180 : 10,
+          right: isMobile ? 10 : 140,
         }}
         slotProps={{
           legend: {
-            hidden: data.length === 0,
-            direction: (isMobile ? "row" : "column") as any,
+            direction: isMobile ? "horizontal" : "vertical",
             position: {
-              vertical: isMobile ? "bottom" : "center",
+              vertical: isMobile ? "bottom" : "middle",
               horizontal: isMobile ? "center" : "end",
             },
             sx: {

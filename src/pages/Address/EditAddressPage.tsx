@@ -1,6 +1,6 @@
-import { Box, Button, Card, CardContent, Stack, Typography, Alert, Grid } from "@mui/material";
+import { Alert, Box, Button, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -87,11 +87,14 @@ export const EditAddressPage = () => {
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" } }}
-        mb={4}
-        gap={2}
+        sx={{
+          justifyContent: "space-between",
+          alignItems: { xs: "flex-start", sm: "center" },
+          mb: 4,
+          gap: 2,
+        }}
       >
-        <Typography variant="h4" fontWeight="bold">
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {t("address.edit.title", "Edit Address")}
         </Typography>
         <Button
@@ -113,13 +116,13 @@ export const EditAddressPage = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography variant="h6" gutterBottom color="textSecondary">
                   Basic Information
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Controller
                   name="id"
                   control={control}
@@ -129,7 +132,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
                   name="city"
                   control={control}
@@ -145,7 +148,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
                   name="street"
                   control={control}
@@ -161,7 +164,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
                   name="houseNumber"
                   control={control}
@@ -177,7 +180,7 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
                   name="flatNumber"
                   control={control}
@@ -185,12 +188,10 @@ export const EditAddressPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Stack
                   direction={{ xs: "column-reverse", sm: "row" }}
-                  sx={{ justifyContent: "flex-end" }}
-                  gap={2}
-                  mt={2}
+                  sx={{ justifyContent: "flex-end", gap: 2, mt: 2 }}
                 >
                   <Button
                     onClick={() => navigate("/address-list")}

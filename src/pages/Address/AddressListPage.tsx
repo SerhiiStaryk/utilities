@@ -1,18 +1,17 @@
 import AddIcon from "@mui/icons-material/Add";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
+  Box,
+  Button,
+  Card,
+  CardContent,
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
   ListItemIcon,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Button,
+  ListItemText,
   Stack,
-  Grid,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,11 +44,14 @@ export const AddressListPage = () => {
     <Box>
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        sx={{ justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" } }}
-        mb={4}
-        gap={2}
+        sx={{
+          justifyContent: "space-between",
+          alignItems: { xs: "flex-start", sm: "center" },
+          mb: 4,
+          gap: 2,
+        }}
       >
-        <Typography variant="h4" fontWeight="bold">
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {t("nav.addresses")}
         </Typography>
         {isAdmin && (
@@ -58,43 +60,40 @@ export const AddressListPage = () => {
             to="create"
             variant="contained"
             startIcon={<AddIcon />}
-            fullWidth={{ xs: true, sm: false } as any}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
           >
             {t("dashboard.new_address")}
           </Button>
         )}
       </Stack>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Card sx={{ height: "100%" }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom color="primary">
-                {t("address.list_title")}
-              </Typography>
-              <List>
-                {addresses.map((addr) => (
-                  <ListItem key={addr.id} disablePadding>
-                    <ListItemButton component={Link} to={addr.id}>
-                      <ListItemIcon>
-                        <LocationOnIcon color="secondary" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={`${addr.data.city}, ${addr.data.street} ${addr.data.house_number}${addr.data.flat_number ? `, кв. ${addr.data.flat_number}` : ""}`}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-                {addresses.length === 0 && (
-                  <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-                    No addresses found. Create one!
-                  </Typography>
-                )}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" gutterBottom color="primary">
+            {t("address.list_title")}
+          </Typography>
+          {addresses.length === 0 ? (
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+              {t("address.no_addresses", "No addresses found. Create one!")}
+            </Typography>
+          ) : (
+            <List>
+              {addresses.map((addr) => (
+                <ListItem key={addr.id} disablePadding>
+                  <ListItemButton component={Link} to={addr.id}>
+                    <ListItemIcon>
+                      <LocationOnIcon color="secondary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={`${addr.data.city}, ${addr.data.street} ${addr.data.house_number}${addr.data.flat_number ? `, ${t("address.flat_short", "кв.")} ${addr.data.flat_number}` : ""}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </CardContent>
+      </Card>
     </Box>
   );
 };

@@ -5,21 +5,21 @@ import {
   Card,
   CardContent,
   Chip,
+  IconButton,
+  Paper,
   Stack,
   TextField,
   Typography,
-  IconButton,
-  Paper,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { Loader } from "@/components/Loader";
-import { getAddress, addAddress } from "@/firebase/firestore"; // Reusing addAddress for update
+import { addAddress, getAddress } from "@/firebase/firestore"; // Reusing addAddress for update
 import { AddressDoc } from "@/types/firestore";
 
 export const AddressServicesPage = () => {
@@ -88,11 +88,11 @@ export const AddressServicesPage = () => {
 
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: { xs: 2, sm: 4 } }}>
-      <Stack direction="row" alignItems="center" mb={4} gap={1}>
+      <Stack direction="row" sx={{ alignItems: "center", mb: 4, gap: 1 }}>
         <IconButton onClick={() => navigate(-1)} sx={{ mr: { xs: 0, sm: 1 } }}>
           <ArrowBack />
         </IconButton>
-        <Typography variant={isMobile ? "h5" : "h4"} fontWeight="bold">
+        <Typography variant={isMobile ? "h5" : "h4"} sx={{ fontWeight: "bold" }}>
           {t("address.configure_services", "Configure Services")}
         </Typography>
       </Stack>
@@ -102,14 +102,17 @@ export const AddressServicesPage = () => {
           <Typography variant="h6" gutterBottom>
             {t("address.services_list", "Services List")}
           </Typography>
-          <Typography variant="body2" color="textSecondary" mb={3}>
+          <Typography variant="body2" sx={{ color: "textSecondary", mb: 3 }}>
             {t(
               "address.services_desc",
               "Define the default utility services for this address (e.g., Gas, Water, Internet). These will be automatically added when you create a new year.",
             )}
           </Typography>
 
-          <Stack direction={{ xs: "column", sm: "row" }} gap={2} mb={3} alignItems="stretch">
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            sx={{ gap: 2, mb: 3, alignItems: "stretch" }}
+          >
             <TextField
               label={t("address.new_service_name", "New Service Name")}
               value={newServiceName}
@@ -143,11 +146,11 @@ export const AddressServicesPage = () => {
 
           <Paper variant="outlined" sx={{ p: 2, minHeight: 100 }}>
             {services.length === 0 ? (
-              <Typography color="textSecondary" textAlign="center">
+              <Typography sx={{ color: "textSecondary", textAlign: "center" }}>
                 {t("address.no_services_configured", "No services configured yet.")}
               </Typography>
             ) : (
-              <Stack direction="row" flexWrap="wrap" gap={1}>
+              <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
                 {services.map((service) => (
                   <Chip
                     key={service.name}

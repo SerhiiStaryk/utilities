@@ -1,5 +1,5 @@
 import { ArrowBack, CameraAlt } from "@mui/icons-material";
-import { Box, Typography, Paper, Button, Stack, IconButton, Avatar, Divider } from "@mui/material";
+import { Avatar, Box, Button, Divider, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +35,7 @@ export const ProfilePage = () => {
   };
 
   return (
-    <Box maxWidth="sm" mx="auto">
+    <Box sx={{ maxWidth: "sm", mx: "auto" }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <IconButton onClick={() => navigate("/settings")} sx={{ mr: 2 }}>
           <ArrowBack />
@@ -47,7 +47,7 @@ export const ProfilePage = () => {
 
       <Paper sx={{ p: { xs: 2, sm: 4 } }}>
         <Stack sx={{ gap: 4, alignItems: "center" }}>
-          <Box position="relative">
+          <Box sx={{ position: "relative" }}>
             <Avatar src={photoURL} sx={{ width: 120, height: 120, fontSize: "3rem" }}>
               {displayName ? displayName[0].toUpperCase() : user?.email?.[0].toUpperCase()}
             </Avatar>
@@ -66,7 +66,7 @@ export const ProfilePage = () => {
             </IconButton>
           </Box>
 
-          <Box width="100%">
+          <Box sx={{ width: "100%" }}>
             <Typography variant="subtitle2" gutterBottom color="textSecondary">
               {t("common.email", "Email")}
             </Typography>

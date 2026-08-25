@@ -1,24 +1,24 @@
 import {
-  Logout,
-  Person,
   DarkMode,
-  Language,
   DeleteForever,
-  People,
   Download,
+  Language,
+  Logout,
+  People,
+  Person,
   Upload,
 } from "@mui/icons-material";
 import {
   Box,
-  Typography,
-  Paper,
+  Button,
+  Divider,
   List,
   ListItem,
-  ListItemText,
   ListItemIcon,
+  ListItemText,
+  Paper,
   Switch,
-  Divider,
-  Button,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -92,8 +92,8 @@ export const SettingsPage = () => {
   };
 
   return (
-    <Box maxWidth="md">
-      <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 4 }}>
+    <Box sx={{ maxWidth: "md" }}>
+      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold" }}>
         {t("settings.title")}
       </Typography>
 
@@ -173,10 +173,7 @@ export const SettingsPage = () => {
             <ListItemIcon>
               <Logout color="error" />
             </ListItemIcon>
-            <ListItemText
-              primary={t("settings.sign_out")}
-              primaryTypographyProps={{ color: "error" }}
-            />
+            <ListItemText primary={t("settings.sign_out")} sx={{ color: "error" }} />
             <Button variant="outlined" color="error" onClick={logout} size="small">
               {t("nav.logout")}
             </Button>

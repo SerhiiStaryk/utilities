@@ -1,32 +1,32 @@
-import { Add, Save, Delete } from "@mui/icons-material";
+import { Add, Delete, Save } from "@mui/icons-material";
 import {
   Box,
-  Typography,
-  Stack,
-  FormControl,
-  InputLabel,
-  Select as MuiSelect,
-  MenuItem,
+  Button,
   Card,
   CardContent,
-  Grid,
-  Button,
-  TextField,
-  Switch,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
   FormControlLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select as MuiSelect,
+  Paper,
+  Stack,
+  Switch,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  IconButton,
-  Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  TextField,
+  Typography,
   alpha,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -36,12 +36,22 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { getAddresses, getAddress, updateRentalInfo } from "@/firebase/firestore";
 import { MONTHS_META } from "@/constants/months";
+import { getAddress, getAddresses, updateRentalInfo } from "@/firebase/firestore";
 import { AddressDoc, RentalInfo, RentalPayment } from "@/types/firestore";
 
 // Use centralized months metadata
-const MONTHS = MONTHS_META.map((m) => m.id);
+
+const EMPTY_RENTAL_INFO: RentalInfo = {
+  isRented: false,
+  tenantName: "",
+  tenantPhone: "",
+  startDate: "",
+  monthlyRent: 0,
+  deposit: 0,
+  currency: "UAH",
+  payments: [],
+};
 
 export const RentalManagementPage = () => {
   const { t } = useTranslation();
@@ -67,53 +77,62 @@ export const RentalManagementPage = () => {
     }
   }, [selectedAddressId]);
 
-  const [rentalInfo, setRentalInfo] = useState<RentalInfo>({
-    isRented: false,
-    tenantName: "",
-    tenantPhone: "",
-    startDate: "",
-    monthlyRent: 0,
-    deposit: 0,
-    currency: "UAH",
-    payments: [],
-  });
+  const [rentalInfo, setRentalInfo] = useState<RentalInfo>(EMPTY_RENTAL_INFO);
 
-  const fetchAddresses = async () => {
-    try {
-      const all = await getAddresses();
-      const filtered = isAdmin ? all : all.filter((a) => allowedAddresses?.includes(a.id));
-      setAddresses(filtered);
-      if (filtered.length > 0 && !selectedAddressId) {
-        setSelectedAddressId(filtered[0].id);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
+  // Load address list whenever the auth context (admin flag / allowed addresses) changes.
   useEffect(() => {
-    fetchAddresses();
+    let ignore = false;
+
+    const loadAddresses = async () => {
+      try {
+        const all = await getAddresses();
+        const filtered = isAdmin ? all : all.filter((a) => allowedAddresses?.includes(a.id));
+
+        if (ignore) return;
+
+        setAddresses(filtered);
+        setSelectedAddressId((current) => {
+          if (current) return current;
+          return filtered.length > 0 ? filtered[0].id : current;
+        });
+      } catch (error) {
+        if (!ignore) {
+          console.error("Error fetching addresses:", error);
+        }
+      }
+    };
+
+    loadAddresses();
+
+    return () => {
+      ignore = true;
+    };
   }, [isAdmin, allowedAddresses]);
 
+  // Load rental info for the currently selected address.
   useEffect(() => {
-    if (selectedAddressId) {
-      getAddress(selectedAddressId).then((addr) => {
-        if (addr && addr.rental_info) {
-          setRentalInfo(addr.rental_info);
-        } else {
-          setRentalInfo({
-            isRented: false,
-            tenantName: "",
-            tenantPhone: "",
-            startDate: "",
-            monthlyRent: 0,
-            deposit: 0,
-            currency: "UAH",
-            payments: [],
-          });
+    if (!selectedAddressId) return;
+
+    let ignore = false;
+
+    const loadRentalInfo = async () => {
+      try {
+        const addr = await getAddress(selectedAddressId);
+        if (ignore) return;
+
+        setRentalInfo(addr?.rental_info ?? EMPTY_RENTAL_INFO);
+      } catch (error) {
+        if (!ignore) {
+          console.error("Error fetching address:", error);
         }
-      });
-    }
+      }
+    };
+
+    loadRentalInfo();
+
+    return () => {
+      ignore = true;
+    };
   }, [selectedAddressId]);
 
   const handleSaveInfo = async () => {
