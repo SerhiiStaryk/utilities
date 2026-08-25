@@ -40,13 +40,12 @@ export const PieChart = ({ data }: PieChartProps) => {
               // Adjust legend item mark size
               "& .MuiChartsLegend-itemMark": {
                 width: 8,
-                height: 8,
+                height: 4,
                 marginRight: 1,
               },
               // Gap between mark and label
               "& .MuiChartsLegend-item": {
                 gap: isMobile ? 12 : data.length > 12 ? 4 : 8,
-                marginBottom: 4,
               },
               // Label styling
               "& .MuiChartsLegend-label": {
