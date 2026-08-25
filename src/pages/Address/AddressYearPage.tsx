@@ -1,46 +1,46 @@
 import {
   ArrowBack,
-  Edit,
-  Delete,
-  ViewModule,
-  ViewList,
-  ExpandMore,
   CheckCircle,
-  ErrorOutlineOutlined as ErrorOutline,
-  FlashOn as ElectricityIcon,
-  WaterDrop as WaterIcon,
-  Whatshot as GasIcon,
-  Wifi as InternetIcon,
-  Home as HousingIcon,
-  DeleteOutlineOutlined as WasteIcon,
-  Thermostat as HeatingIcon,
   QuestionMark as DefaultIcon,
+  Delete,
+  Edit,
+  FlashOn as ElectricityIcon,
+  ErrorOutlineOutlined as ErrorOutline,
+  ExpandMore,
+  Whatshot as GasIcon,
+  Thermostat as HeatingIcon,
+  Home as HousingIcon,
+  Wifi as InternetIcon,
+  ViewList,
+  ViewModule,
+  DeleteOutlineOutlined as WasteIcon,
+  WaterDrop as WaterIcon,
 } from "@mui/icons-material";
 import {
-  Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  IconButton,
-  Paper,
+  Button,
   Card,
   CardContent,
-  Button,
-  ToggleButtonGroup,
-  ToggleButton,
+  Chip,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  useTheme,
-  useMediaQuery,
-  Stack,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Chip,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
-  LinearProgress,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
@@ -57,12 +57,12 @@ import { CreateUtilityModal } from "@/components/modal/CreateUtilityModal";
 import { Modal } from "@/components/modal/Modal";
 import { MONTHS } from "@/constants/months";
 import {
-  getAllUtilityServicesForYear,
-  updateUtilityService,
   deleteUtilityService,
   getAddress,
+  getAllUtilityServicesForYear,
+  updateUtilityService,
 } from "@/firebase/firestore";
-import { UtilityService, AddressDoc, MonthlyPayments } from "@/types/firestore";
+import { AddressDoc, MonthlyPayments, UtilityService } from "@/types/firestore";
 
 type ViewMode = "cards" | "table";
 
@@ -700,6 +700,7 @@ export const AddressYearPage = () => {
           showActions={false}
           currentMonth={currentMonth}
           services={services.map((s) => ({
+            id: s.id ?? s.name,
             name: s.name,
             accountNumber: s.account_number,
             monthly_payments: s.monthly_payments,

@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography, MenuItem, TextField, Divider } from "@mui/material";
+import { Box, Button, Divider, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { useForm, useFieldArray, useWatch } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
@@ -9,7 +9,7 @@ import { MONTHS_META } from "@/constants/months";
 interface QuickReadingFormProps {
   onSubmit: (data: any) => void;
   onCancel?: () => void;
-  services: { name: string; meter_number: string; monthly_readings?: any }[];
+  services: { id?: string; name: string; meter_number: string; monthly_readings?: any }[];
   currentMonth: string;
   showActions?: boolean;
   id?: string;
@@ -29,7 +29,7 @@ export const QuickReadingForm = ({
     defaultValues: {
       month: currentMonth,
       readings: services.map((s) => ({
-        serviceId: s.name,
+        serviceId: s.id ?? s.name,
         meterNumber: s.meter_number,
         value: s.monthly_readings?.[currentMonth]?.value || "",
       })),

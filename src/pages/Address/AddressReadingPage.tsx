@@ -1,23 +1,23 @@
-import { ArrowBack, Edit, Delete, ViewModule, ViewList } from "@mui/icons-material";
+import { ArrowBack, Delete, Edit, ViewList, ViewModule } from "@mui/icons-material";
 import {
-  Typography,
   Box,
-  IconButton,
-  Paper,
+  Button,
   Card,
   CardContent,
-  Button,
-  ToggleButtonGroup,
-  ToggleButton,
+  IconButton,
+  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  useTheme,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
   useMediaQuery,
-  Stack,
+  useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
@@ -32,12 +32,12 @@ import { ConfirmModal } from "@/components/modal/ConfirmModal";
 import { Modal } from "@/components/modal/Modal";
 import { MONTHS } from "@/constants/months";
 import {
-  getAllMeterReadingsForYear,
-  updateMeterReading,
   deleteMeterReading,
   getAddress,
+  getAllMeterReadingsForYear,
+  updateMeterReading,
 } from "@/firebase/firestore";
-import { MeterReadingService, AddressDoc } from "@/types/firestore";
+import { AddressDoc, MeterReadingService } from "@/types/firestore";
 
 type ViewMode = "cards" | "table";
 
@@ -441,6 +441,7 @@ export const AddressReadingPage = () => {
           showActions={false}
           currentMonth={currentMonth}
           services={readings.map((s) => ({
+            id: s.id ?? `${s.name}_${s.meter_number}`.replace(/\s+/g, "_"),
             name: s.name,
             meter_number: s.meter_number,
             monthly_readings: s.monthly_readings,

@@ -1,6 +1,6 @@
-import { Button, Box, Stack, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { useForm, Controller, useFieldArray, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/Input";
@@ -12,7 +12,7 @@ type QuickEntryFormProps = {
   onSubmit: (data: any) => void;
   onCancel: () => void;
   currentMonth: string;
-  services: { name: string; accountNumber: string; monthly_payments?: any }[];
+  services: { id?: string; name: string; accountNumber: string; monthly_payments?: any }[];
   showActions?: boolean;
   id?: string;
 };
@@ -32,7 +32,7 @@ export const QuickEntryForm = ({
       month: currentMonth,
       year: new Date().getFullYear().toString(),
       payments: services.map((s) => ({
-        serviceId: s.name,
+        serviceId: s.id ?? s.name,
         accountNumber: s.accountNumber,
         amount: s.monthly_payments?.[currentMonth]?.amount || "",
         currency: s.monthly_payments?.[currentMonth]?.currency || "UAH",
